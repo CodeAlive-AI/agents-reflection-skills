@@ -20,7 +20,7 @@
 
 ```bash
 # Step 1: Add the marketplace
-/plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
+/plugin marketplace add https://github.com/CodeAlive-AI/claude-code-reflection-skills.git
 
 # Step 2: Install the plugin
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
