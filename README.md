@@ -29,7 +29,7 @@
 
 ---
 
-## Top 10 Use Cases
+## Use Cases
 
 ### 1. Connect to Your Database
 
@@ -73,9 +73,9 @@ Adds deny rules to permissions. Sensitive files stay protected even if Claude tr
 
 ### 6. Create a Read-Only Code Reviewer
 
-> *"Create a reviewer subagent that can only read files, uses Haiku for speed"*
+> *"Create a reviewer subagent that can only read files, uses Opus for quality"*
 
-Creates a [custom subagent](https://code.claude.com/docs/en/sub-agents) with `tools: Read, Grep, Glob` and `model: haiku`. Fast, safe code reviews.
+Creates a [custom subagent](https://code.claude.com/docs/en/sub-agents) with `tools: Read, Grep, Glob` and `model: opus`. Thorough, insightful code reviews.
 
 ---
 
@@ -108,6 +108,14 @@ Adds a PreToolUse hook that appends commands to `~/.claude/command-log.txt`. Ful
 > *"Connect Claude to GitHub so it can create PRs and manage issues"*
 
 Installs the [official GitHub MCP server](https://github.com/github/github-mcp-server). Claude can now create branches, PRs, and work with issues directly.
+
+---
+
+### 11. Update MCP Server Credentials
+
+> *"Update my CodeAlive API key in the MCP config"*
+
+Edits your `~/.claude.json` or `.mcp.json` to update the API key without reinstalling the server. Perfect for rotating credentials.
 
 ---
 
