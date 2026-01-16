@@ -16,11 +16,7 @@
       "author": {
         "name": "CodeAlive-AI"
       },
-      "source": {
-        "source": "git",
-        "url": "https://github.com/CodeAlive-AI/claude-code-reflection-skills.git",
-        "ref": "main"
-      },
+      "source": "./plugins/claude-code-reflection-skills",
       "category": "developer-tools",
       "tags": ["meta-skills", "reflection", "self-management", "skills", "subagents", "plugins", "settings", "mcp", "hooks"],
       "keywords": ["claude-code", "meta-skills", "reflection", "self-management", "plugins", "settings", "mcp", "hooks", "subagents"]

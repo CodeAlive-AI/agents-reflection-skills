@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-Plugin-blueviolet?style=for-the-badge" alt="Claude Code Plugin">
-  <img src="https://img.shields.io/badge/Skills-6-blue?style=for-the-badge" alt="6 Skills">
+  <img src="https://img.shields.io/badge/Claude_Code-Marketplace-blueviolet?style=for-the-badge" alt="Claude Code Marketplace">
+  <img src="https://img.shields.io/badge/Plugins-1-blue?style=for-the-badge" alt="1 Plugin">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
 <h1 align="center">Claude Code Reflection Skills</h1>
 
 <p align="center">
-  <strong>Meta-skills that let Claude Code configure itself through conversation</strong>
+  <strong>A marketplace for meta-skills that let Claude Code configure itself</strong>
 </p>
 
 <p align="center">
@@ -16,7 +16,21 @@
 
 ---
 
+## Installation
+
+```bash
+# Step 1: Add the marketplace
+/plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
+
+# Step 2: Install the plugin
+/plugin install claude-code-reflection-skills@claude-code-reflection-skills
+```
+
+---
+
 ## What's Included
+
+The **claude-code-reflection-skills** plugin provides 6 skills:
 
 | Skill | What It Does |
 |-------|--------------|
@@ -26,26 +40,6 @@
 | **claude-subagents-manager** | Create specialized agents for specific tasks |
 | **claude-skills-manager** | Organize and share skills across projects |
 | **claude-plugins-manager** | Package and publish your own plugins |
-
----
-
-## Installation
-
-```bash
-/plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
-/plugin install claude-code-reflection-skills
-```
-
-Or directly:
-
-```bash
-/plugin install github:CodeAlive-AI/claude-code-reflection-skills
-```
-
-**Requirements:**
-- Claude Code CLI
-- Python 3.x (for skill scripts)
-- `gh` CLI (optional, for plugin publishing)
 
 ---
 
@@ -139,21 +133,36 @@ Edits your `~/.claude.json` or `.mcp.json` to update the API key without reinsta
 
 ---
 
+## Requirements
+
+- Claude Code CLI version 1.0.33 or later
+- Python 3.x (for skill scripts)
+- `gh` CLI (optional, for plugin publishing features)
+
+---
+
 ## Structure
 
 ```
 claude-code-reflection-skills/
 ├── .claude-plugin/
-│   └── plugin.json
-├── skills/
-│   ├── claude-mcp-installer/
-│   ├── claude-hooks-manager/
-│   ├── claude-settings-manager/
-│   ├── claude-subagents-manager/
-│   ├── claude-skills-manager/
-│   └── claude-plugins-manager/
-├── README.md
-└── LICENSE
+│   └── marketplace.json         (marketplace catalog)
+├── plugins/
+│   └── claude-code-reflection-skills/
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── skills/
+│       │   ├── claude-mcp-installer/
+│       │   ├── claude-hooks-manager/
+│       │   ├── claude-settings-manager/
+│       │   ├── claude-subagents-manager/
+│       │   ├── claude-skills-manager/
+│       │   └── claude-plugins-manager/
+│       ├── LICENSE
+│       └── README.md
+├── CLAUDE.md
+├── LICENSE
+└── README.md
 ```
 
 ---
