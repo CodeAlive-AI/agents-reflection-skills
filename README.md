@@ -7,113 +7,118 @@
 <h1 align="center">Claude Code Reflection Skills</h1>
 
 <p align="center">
-  <strong>Meta-skills that let Claude Code introspect and configure itself</strong>
+  <strong>Meta-skills that let Claude Code configure itself through conversation</strong>
 </p>
 
 <p align="center">
-  Manage skills, subagents, plugins, settings, MCP servers, and hooks — all through natural conversation.
+  No more editing JSON files. Just ask Claude to set things up.
 </p>
 
 ---
 
-## Why Reflection Skills?
+## What's Included
 
-Claude Code is powerful, but configuring it requires editing JSON files, running CLI commands, and understanding multiple configuration systems. **Reflection skills change that.**
-
-With this plugin, you can say things like:
-- *"Connect to my Postgres database"* → MCP server installed and configured
-- *"Create a read-only reviewer subagent"* → Custom agent with restricted permissions
-- *"Lock down Claude for our security audit"* → Sandbox enabled, permissions restricted, logging added
-
-**Claude configures itself through conversation.**
-
----
-
-## Included Skills
-
-| Skill | Purpose |
-|-------|---------|
-| **claude-skills-manager** | List, inspect, delete, move skills between user/project scopes |
-| **claude-subagents-manager** | Create specialized agents with custom tools, models, and restrictions |
-| **claude-plugins-manager** | Full plugin lifecycle: create, validate, publish, submit to Anthropic |
-| **claude-settings-manager** | Configure model, permissions, sandbox, thinking mode, and more |
-| **claude-mcp-installer** | Search MCP registry, install servers for databases, APIs, and services |
-| **claude-hooks-manager** | Add automation triggers for logging, validation, and custom workflows |
+| Skill | What It Does |
+|-------|--------------|
+| **claude-mcp-installer** | Connect to databases, GitHub, APIs via MCP servers |
+| **claude-hooks-manager** | Auto-format, auto-test, log commands after edits |
+| **claude-settings-manager** | Configure permissions, sandbox, model selection |
+| **claude-subagents-manager** | Create specialized agents for specific tasks |
+| **claude-skills-manager** | Organize and share skills across projects |
+| **claude-plugins-manager** | Package and publish your own plugins |
 
 ---
 
-## Use Cases
+## Top 10 Use Cases
 
-### 1. Instant Database Integration
+### 1. Connect to Your Database
 
-> *"Connect Claude to my Postgres database so I can query it directly"*
+> *"Connect Claude to my PostgreSQL database"*
 
-MCP Installer searches the registry, finds the right server, installs it with your connection string. Claude can now execute SQL queries conversationally — no manual configuration needed.
-
----
-
-### 2. Security-Hardened Compliance Mode
-
-> *"Lock down Claude for our security audit: sandbox all commands, block .env access, and log every file operation"*
-
-**Settings Manager** enables sandbox mode and deny rules. **Hooks Manager** adds PreToolUse logging to an audit trail. Result: a restricted, auditable assistant that meets compliance requirements.
+Installs the [database MCP server](https://github.com/modelcontextprotocol/servers), configures your connection string. Now you can query your data conversationally.
 
 ---
 
-### 3. One-Command Team Environment
+### 2. Auto-Format Code After Every Edit
 
-> *"Set up this project so my whole team gets: opus model, our internal API server, and auto-format on save"*
+> *"Run Prettier on TypeScript files after every edit"*
 
-All configured in project scope. Commit once to git, and every team member gets identical Claude configuration when they open the project.
-
----
-
-### 4. Specialized Code Review Pipeline
-
-> *"Create a reviewer subagent that only has read access, uses haiku for speed, and runs eslint before approving"*
-
-**Subagents Manager** creates a restricted agent with `tools: Read, Grep, Glob` and `model: haiku`. **Hooks Manager** adds eslint validation. Fast, safe, automated code reviews.
+Adds a PostToolUse hook. Every file Claude touches gets formatted automatically — no more style inconsistencies.
 
 ---
 
-### 5. Package and Distribute Team Tools
+### 3. Auto-Run Tests After Changes
 
-> *"Turn our custom skills into a plugin, publish to GitHub, and prepare for Anthropic's directory"*
+> *"Run pytest whenever Claude edits Python files"*
 
-**Plugins Manager** handles the full lifecycle:
-```
-init_plugin.py → validate_plugin.py → gh repo create → prepare_submission.py
-```
-From internal tools to official distribution in one conversation.
+Adds a PostToolUse hook for `*.py` files. Instant feedback on whether changes broke anything.
 
 ---
 
-### 6. Capability Audit and Cleanup
+### 4. Enable Sandbox Mode
 
-> *"Show me everything installed. Find duplicates, move my api-helper to project scope for the team, delete unused subagents"*
+> *"Turn on sandbox mode so Claude can work without asking permission for every command"*
 
-All managers work together to audit your setup across scopes, reorganize capabilities, and clean up what you no longer need.
+Enables [native sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing) — reduces permission prompts by 84% while keeping your system safe.
 
 ---
 
-### 7. Context-Aware Project Switching
+### 5. Block Access to Secrets
 
-> *"For my payments project: connect Stripe MCP, enable extended thinking, add a hook that blocks commits without tests"*
+> *"Block Claude from reading .env files and anything in /secrets"*
 
-Project-scoped configuration activates automatically when you enter the directory. Different projects get different Claude configurations — zero manual switching.
+Adds deny rules to permissions. Sensitive files stay protected even if Claude tries to access them.
+
+---
+
+### 6. Create a Read-Only Code Reviewer
+
+> *"Create a reviewer subagent that can only read files, uses Haiku for speed"*
+
+Creates a [custom subagent](https://code.claude.com/docs/en/sub-agents) with `tools: Read, Grep, Glob` and `model: haiku`. Fast, safe code reviews.
+
+---
+
+### 7. Switch to Opus for Complex Tasks
+
+> *"Use Opus model for this project"*
+
+Updates settings to use `claude-opus-4-5` — better reasoning for complex architectural decisions.
+
+---
+
+### 8. Share Team Configuration
+
+> *"Set up project settings so everyone gets the same Claude config"*
+
+Creates `.claude/settings.json` in project scope. Commit once, entire team gets identical setup.
+
+---
+
+### 9. Log All Bash Commands
+
+> *"Log every command Claude runs to an audit file"*
+
+Adds a PreToolUse hook that appends commands to `~/.claude/command-log.txt`. Full audit trail.
+
+---
+
+### 10. Install GitHub Integration
+
+> *"Connect Claude to GitHub so it can create PRs and manage issues"*
+
+Installs the [official GitHub MCP server](https://github.com/github/github-mcp-server). Claude can now create branches, PRs, and work with issues directly.
 
 ---
 
 ## Installation
-
-### From GitHub
 
 ```bash
 /plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
 /plugin install claude-code-reflection-skills
 ```
 
-### Direct Install
+Or directly:
 
 ```bash
 /plugin install github:CodeAlive-AI/claude-code-reflection-skills
@@ -124,8 +129,8 @@ Project-scoped configuration activates automatically when you enter the director
 ## Requirements
 
 - Claude Code CLI
-- `gh` CLI (for plugin publishing features)
 - Python 3.x (for skill scripts)
+- `gh` CLI (optional, for plugin publishing)
 
 ---
 
@@ -136,21 +141,30 @@ claude-code-reflection-skills/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── skills/
-│   ├── claude-skills-manager/
-│   ├── claude-subagents-manager/
-│   ├── claude-plugins-manager/
-│   ├── claude-settings-manager/
 │   ├── claude-mcp-installer/
-│   └── claude-hooks-manager/
+│   ├── claude-hooks-manager/
+│   ├── claude-settings-manager/
+│   ├── claude-subagents-manager/
+│   ├── claude-skills-manager/
+│   └── claude-plugins-manager/
 ├── README.md
 └── LICENSE
 ```
 
 ---
 
+## Learn More
+
+- [MCP Servers Guide](https://code.claude.com/docs/en/mcp)
+- [Hooks Documentation](https://code.claude.com/docs/en/hooks-guide)
+- [Custom Subagents](https://code.claude.com/docs/en/sub-agents)
+- [Sandboxing](https://code.claude.com/docs/en/sandboxing)
+
+---
+
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE)
 
 ---
 
