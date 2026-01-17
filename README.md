@@ -14,6 +14,12 @@
   No more editing JSON files. Just ask Claude to set things up.
 </p>
 
+<p align="center">
+  <a href="README.ru.md">Русский</a> •
+  <a href="README.zh.md">中文</a> •
+  <a href="README.pt-BR.md">Português</a>
+</p>
+
 ---
 
 ## Installation
@@ -44,7 +50,7 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 
 ---
 
-## Use Cases
+## Use Cases (skills)
 
 ### claude-mcp-manager
 
