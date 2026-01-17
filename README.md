@@ -48,6 +48,8 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 | **claude-plugins-manager** | Package and publish your own plugins |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
+> **Lightweight:** All 7 skill descriptions combined use less than 500 tokens in your context window.
+
 ---
 
 ## Use Cases (skills)

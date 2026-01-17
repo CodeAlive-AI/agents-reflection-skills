@@ -48,6 +48,8 @@
 | **claude-plugins-manager** | 打包和发布自己的插件 |
 | **optimizing-claude-code** | 审计仓库并优化 CLAUDE.md 配置 |
 
+> **轻量级：** 所有 7 个技能的描述总共只占用不到 500 个 token。
+
 ---
 
 ## 使用示例

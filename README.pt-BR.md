@@ -48,6 +48,8 @@ O plugin **claude-code-reflection-skills** oferece 7 habilidades:
 | **claude-plugins-manager** | Empacota e publica seus próprios plugins |
 | **optimizing-claude-code** | Audita repositórios e otimiza o CLAUDE.md |
 
+> **Leve:** As descrições de todas as 7 habilidades juntas usam menos de 500 tokens na janela de contexto.
+
 ---
 
 ## Exemplos de Uso

@@ -1,33 +1,36 @@
-# Claude Code Reflection Skills Plugin
+# Claude Code Reflection Skills
 
 Meta-skills that let Claude Code configure itself through conversation.
 
-## Included Skills
+## Skills
 
-- **claude-mcp-manager** - Connect to databases, GitHub, APIs via MCP servers
-- **claude-hooks-manager** - Auto-format, auto-test, log commands after edits
-- **claude-settings-manager** - Configure permissions, sandbox, model selection
-- **claude-subagents-manager** - Create specialized agents for specific tasks
-- **claude-skills-manager** - Organize and share skills across projects
-- **claude-plugins-manager** - Package and publish your own plugins
+| Skill | Description |
+|-------|-------------|
+| **claude-mcp-manager** | Connect to databases, GitHub, APIs via MCP servers |
+| **claude-hooks-manager** | Auto-format, auto-test, log commands after edits |
+| **claude-settings-manager** | Configure permissions, sandbox, model selection |
+| **claude-subagents-manager** | Create specialized agents for specific tasks |
+| **claude-skills-manager** | Organize and share skills across projects |
+| **claude-plugins-manager** | Package and publish your own plugins |
+| **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
+
+> All 7 skill descriptions use less than 500 tokens total.
 
 ## Installation
-
-This plugin is distributed through the CodeAlive-AI marketplace:
 
 ```bash
 /plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
 ```
 
-## Usage Examples
+## Examples
 
 - "Connect Claude to my PostgreSQL database"
-- "Run Prettier on TypeScript files after every edit"
+- "Run Prettier after every edit"
 - "Turn on sandbox mode"
-- "Block Claude from reading .env files"
-- "Create a reviewer subagent that can only read files"
+- "Create a reviewer subagent"
+- "Audit this repo for Claude Code readiness"
 
 ## License
 
-MIT - see LICENSE file for details
+MIT

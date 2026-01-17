@@ -30,6 +30,18 @@ Documentation-only changes do not require tagging:
 
 **Rationale:** Users install specific commits via SHA. Documentation updates don't affect functionality, so they don't need version bumps. This keeps the release history clean and meaningful.
 
+## README Maintenance
+
+Keep all README files in sync when updating documentation:
+
+- `README.md` - Main English documentation
+- `README.ru.md` - Russian translation
+- `README.zh.md` - Chinese translation
+- `README.pt-BR.md` - Brazilian Portuguese translation
+- `plugins/claude-code-reflection-skills/README.md` - Plugin README (required by plugin spec)
+
+When adding/removing skills or changing descriptions, update all five files.
+
 ## Versioning
 
 Follow semantic versioning (semver):
