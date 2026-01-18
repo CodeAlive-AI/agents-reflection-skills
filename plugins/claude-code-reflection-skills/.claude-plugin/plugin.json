@@ -1,7 +1,7 @@
 {
   "name": "claude-code-reflection-skills",
   "description": "A comprehensive collection of meta-skills for Claude Code that enable self-management and reflection capabilities. Includes skills for managing other skills, subagents, plugins, settings, MCP servers, and hooks. These reflection skills allow Claude Code to introspect and modify its own configuration, making it easier to customize and extend the AI assistant's capabilities.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "CodeAlive-AI"
   },
