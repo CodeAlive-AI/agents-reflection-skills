@@ -42,7 +42,7 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 
 | Skill | What It Does |
 |-------|--------------|
-| **claude-mcp-manager** | Connect to databases, GitHub, APIs via MCP servers |
+| **mcp-management** | Install and manage MCP servers across coding agents |
 | **claude-hooks-manager** | Auto-format, auto-test, log commands after edits |
 | **claude-settings-manager** | Configure permissions, sandbox, model selection |
 | **claude-subagents-manager** | Create specialized agents for specific tasks |
@@ -56,9 +56,14 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 
 ## Use Cases (skills)
 
-### claude-mcp-manager
+### mcp-management
 
-> Connect to databases, GitHub, APIs via MCP servers
+> Install and manage MCP servers across coding agents
+
+**Install to All Your Agents at Once**
+> *"Install the Postgres MCP server to Claude Code, Cursor, and VS Code"*
+
+Uses [add-mcp](https://github.com/neondatabase/add-mcp) to install MCP servers to 10+ coding agents with a single command. Handles config format differences automatically.
 
 **Connect to Your Database**
 > *"Connect Claude to my PostgreSQL database"*
@@ -70,15 +75,10 @@ Installs the [database MCP server](https://github.com/modelcontextprotocol/serve
 
 Installs the [official GitHub MCP server](https://github.com/github/github-mcp-server). Claude can now create branches, PRs, and work with issues directly.
 
-**Update API Keys**
-> *"Update my CodeAlive API key in the MCP config"*
+**Multi-Agent Sync**
+> *"Make sure all my coding agents have the same MCP servers"*
 
-Edits your `~/.claude.json` or `.mcp.json` to update API keys. Perfect for rotating credentials without reinstalling.
-
-**Bulk Update Server Config**
-> *"Change the timeout for all my MCP servers to 120 seconds"*
-
-Bulk updates MCP server configuration. Adjust timeouts, environment variables, or command args across all servers at once.
+Configures MCP servers consistently across Claude Code, Cursor, VS Code, Gemini CLI, and other agents, handling each agent's config format and paths.
 
 ---
 
@@ -222,7 +222,7 @@ claude-code-reflection-skills/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── skills/
-│       │   ├── claude-mcp-manager/
+│       │   ├── mcp-management/
 │       │   ├── claude-hooks-manager/
 │       │   ├── claude-settings-manager/
 │       │   ├── claude-subagents-manager/

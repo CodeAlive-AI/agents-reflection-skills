@@ -42,7 +42,7 @@
 
 | 技能 | 功能 |
 |------|------|
-| **claude-mcp-manager** | 通过 MCP 服务器连接数据库、GitHub 和各类 API |
+| **mcp-management** | 跨编码代理安装和管理 MCP 服务器 |
 | **claude-hooks-manager** | 自动格式化、自动测试、命令日志记录 |
 | **claude-settings-manager** | 配置权限、沙箱模式、模型选择 |
 | **claude-subagents-manager** | 创建专门处理特定任务的子代理 |
@@ -56,9 +56,14 @@
 
 ## 使用示例
 
-### claude-mcp-manager
+### mcp-management
 
-> 通过 MCP 服务器连接数据库、GitHub 和各类 API
+> 跨编码代理安装和管理 MCP 服务器
+
+**一次安装到所有代理**
+> *"把 Postgres MCP 服务器安装到 Claude Code、Cursor 和 VS Code"*
+
+使用 [add-mcp](https://github.com/neondatabase/add-mcp) 一条命令将 MCP 服务器安装到 10+ 编码代理。自动处理配置格式差异。
 
 **连接数据库**
 > *"把 Claude 连接到我的 PostgreSQL 数据库"*
@@ -70,15 +75,10 @@
 
 安装[官方 GitHub MCP 服务器](https://github.com/github/github-mcp-server)。Claude 可以直接创建分支、PR，处理 Issue。
 
-**更新 API 密钥**
-> *"更新 MCP 配置里的 CodeAlive API 密钥"*
+**多代理同步**
+> *"确保我所有的编码代理都有相同的 MCP 服务器"*
 
-编辑 `~/.claude.json` 或 `.mcp.json` 来更新密钥。轮换凭证时无需重新安装。
-
-**批量更新服务器配置**
-> *"把所有 MCP 服务器的超时时间改成 120 秒"*
-
-批量更新 MCP 服务器配置。可以一次性调整所有服务器的超时时间、环境变量或命令参数。
+跨 Claude Code、Cursor、VS Code、Gemini CLI 等代理统一配置 MCP 服务器，处理每个代理的配置格式和路径差异。
 
 ---
 
@@ -222,7 +222,7 @@ claude-code-reflection-skills/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── skills/
-│       │   ├── claude-mcp-manager/
+│       │   ├── mcp-management/
 │       │   ├── claude-hooks-manager/
 │       │   ├── claude-settings-manager/
 │       │   ├── claude-subagents-manager/

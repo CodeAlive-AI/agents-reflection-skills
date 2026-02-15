@@ -42,7 +42,7 @@ O plugin **claude-code-reflection-skills** oferece 7 habilidades:
 
 | Habilidade | O Que Faz |
 |------------|-----------|
-| **claude-mcp-manager** | Conecta a bancos de dados, GitHub e APIs via servidores MCP |
+| **mcp-management** | Instala e gerencia servidores MCP em agentes de codificacao |
 | **claude-hooks-manager** | Auto-formatação, auto-testes, log de comandos |
 | **claude-settings-manager** | Configura permissões, sandbox e seleção de modelo |
 | **claude-subagents-manager** | Cria agentes especializados para tarefas específicas |
@@ -56,29 +56,29 @@ O plugin **claude-code-reflection-skills** oferece 7 habilidades:
 
 ## Exemplos de Uso
 
-### claude-mcp-manager
+### mcp-management
 
-> Conecta a bancos de dados, GitHub e APIs via servidores MCP
+> Instala e gerencia servidores MCP em agentes de codificacao
+
+**Instalar em Todos os Agentes de Uma Vez**
+> *"Instala o servidor MCP do Postgres no Claude Code, Cursor e VS Code"*
+
+Usa o [add-mcp](https://github.com/neondatabase/add-mcp) pra instalar servidores MCP em 10+ agentes de codificacao com um unico comando. Lida com as diferencas de formato de configuracao automaticamente.
 
 **Conectar ao Banco de Dados**
 > *"Conecta o Claude ao meu banco PostgreSQL"*
 
-Instala o [servidor MCP de banco de dados](https://github.com/modelcontextprotocol/servers), configura a string de conexão. Agora você pode consultar seus dados de forma conversacional.
+Instala o [servidor MCP de banco de dados](https://github.com/modelcontextprotocol/servers), configura a string de conexao. Agora voce pode consultar seus dados de forma conversacional.
 
-**Integração com GitHub**
+**Integracao com GitHub**
 > *"Conecta o Claude ao GitHub pra ele poder criar PRs e gerenciar issues"*
 
 Instala o [servidor MCP oficial do GitHub](https://github.com/github/github-mcp-server). O Claude passa a criar branches, PRs e trabalhar com issues diretamente.
 
-**Atualizar Chaves de API**
-> *"Atualiza minha chave de API do CodeAlive na config do MCP"*
+**Sincronizacao Multi-Agente**
+> *"Garante que todos os meus agentes de codificacao tenham os mesmos servidores MCP"*
 
-Edita seu `~/.claude.json` ou `.mcp.json` para atualizar as chaves. Perfeito pra rotacionar credenciais sem reinstalar nada.
-
-**Atualização em Massa**
-> *"Muda o timeout de todos os meus servidores MCP pra 120 segundos"*
-
-Atualiza a configuração de todos os servidores MCP de uma vez. Ajusta timeouts, variáveis de ambiente ou argumentos de comando em massa.
+Configura servidores MCP de forma consistente no Claude Code, Cursor, VS Code, Gemini CLI e outros agentes, lidando com o formato de config e caminhos de cada agente.
 
 ---
 
@@ -222,7 +222,7 @@ claude-code-reflection-skills/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── skills/
-│       │   ├── claude-mcp-manager/
+│       │   ├── mcp-management/
 │       │   ├── claude-hooks-manager/
 │       │   ├── claude-settings-manager/
 │       │   ├── claude-subagents-manager/
