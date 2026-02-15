@@ -1,5 +1,5 @@
 ---
-name: claude-plugins-manager
+name: plugins-management
 description: Create, publish, delete, and submit Claude Code plugins. Use when user wants to (1) create a new plugin with proper structure, (2) create or configure a plugin marketplace, (3) publish plugins to GitHub/GitLab, (4) delete/uninstall plugins, (5) validate plugin structure, or (6) prepare and submit plugins to the official Anthropic directory.
 ---
 

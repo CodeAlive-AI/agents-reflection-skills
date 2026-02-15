@@ -43,11 +43,11 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 | Skill | What It Does |
 |-------|--------------|
 | **mcp-management** | Install and manage MCP servers across coding agents |
-| **claude-hooks-manager** | Auto-format, auto-test, log commands after edits |
-| **claude-settings-manager** | Configure permissions, sandbox, model selection |
-| **claude-subagents-manager** | Create specialized agents for specific tasks |
-| **skills-manager** | Organize and share skills across projects |
-| **claude-plugins-manager** | Package and publish your own plugins |
+| **hooks-management** | Auto-format, auto-test, log commands after edits |
+| **settings-management** | Configure permissions, sandbox, model selection |
+| **subagents-management** | Create specialized agents for specific tasks |
+| **skills-management** | Organize and share skills across projects |
+| **plugins-management** | Package and publish your own plugins |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
 > **Lightweight:** All 7 skill descriptions combined use less than 500 tokens in your context window.
@@ -82,7 +82,7 @@ Configures MCP servers consistently across Claude Code, Cursor, VS Code, Gemini 
 
 ---
 
-### claude-hooks-manager
+### hooks-management
 
 > Auto-format, auto-test, log commands after edits
 
@@ -113,7 +113,7 @@ Adds a PreToolUse hook that pauses and requests confirmation for database resets
 
 ---
 
-### claude-settings-manager
+### settings-management
 
 > Configure permissions, sandbox, model selection
 
@@ -139,7 +139,7 @@ Creates `.claude/settings.json` in project scope. Commit once, entire team gets 
 
 ---
 
-### claude-subagents-manager
+### subagents-management
 
 > Create specialized agents for specific tasks
 
@@ -155,7 +155,7 @@ Creates a specialized agent for running test suites with limited tool access for
 
 ---
 
-### skills-manager
+### skills-management
 
 > Organize and share skills across projects
 
@@ -171,7 +171,7 @@ Moves skills between project and user scopes for broader or narrower availabilit
 
 ---
 
-### claude-plugins-manager
+### plugins-management
 
 > Package and publish your own plugins
 
@@ -223,11 +223,11 @@ claude-code-reflection-skills/
 │       │   └── plugin.json
 │       ├── skills/
 │       │   ├── mcp-management/
-│       │   ├── claude-hooks-manager/
-│       │   ├── claude-settings-manager/
-│       │   ├── claude-subagents-manager/
-│       │   ├── skills-manager/
-│       │   ├── claude-plugins-manager/
+│       │   ├── hooks-management/
+│       │   ├── settings-management/
+│       │   ├── subagents-management/
+│       │   ├── skills-management/
+│       │   ├── plugins-management/
 │       │   └── optimizing-claude-code/
 │       ├── LICENSE
 │       └── README.md

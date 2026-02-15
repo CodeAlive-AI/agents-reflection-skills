@@ -7,11 +7,11 @@ Meta-skills that let Claude Code configure itself through conversation.
 | Skill | Description |
 |-------|-------------|
 | **mcp-management** | Install and manage MCP servers across coding agents |
-| **claude-hooks-manager** | Auto-format, auto-test, log commands after edits |
-| **claude-settings-manager** | Configure permissions, sandbox, model selection |
-| **claude-subagents-manager** | Create specialized agents for specific tasks |
-| **skills-manager** | Organize and share skills across projects |
-| **claude-plugins-manager** | Package and publish your own plugins |
+| **hooks-management** | Auto-format, auto-test, log commands after edits |
+| **settings-management** | Configure permissions, sandbox, model selection |
+| **subagents-management** | Create specialized agents for specific tasks |
+| **skills-management** | Organize and share skills across projects |
+| **plugins-management** | Package and publish your own plugins |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
 > All 7 skill descriptions use less than 500 tokens total.

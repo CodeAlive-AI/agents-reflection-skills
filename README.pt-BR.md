@@ -43,11 +43,11 @@ O plugin **claude-code-reflection-skills** oferece 7 habilidades:
 | Habilidade | O Que Faz |
 |------------|-----------|
 | **mcp-management** | Instala e gerencia servidores MCP em agentes de codificacao |
-| **claude-hooks-manager** | Auto-formatação, auto-testes, log de comandos |
-| **claude-settings-manager** | Configura permissões, sandbox e seleção de modelo |
-| **claude-subagents-manager** | Cria agentes especializados para tarefas específicas |
-| **skills-manager** | Organiza e compartilha habilidades entre projetos |
-| **claude-plugins-manager** | Empacota e publica seus próprios plugins |
+| **hooks-management** | Auto-formatação, auto-testes, log de comandos |
+| **settings-management** | Configura permissões, sandbox e seleção de modelo |
+| **subagents-management** | Cria agentes especializados para tarefas específicas |
+| **skills-management** | Organiza e compartilha habilidades entre projetos |
+| **plugins-management** | Empacota e publica seus próprios plugins |
 | **optimizing-claude-code** | Audita repositórios e otimiza o CLAUDE.md |
 
 > **Leve:** As descrições de todas as 7 habilidades juntas usam menos de 500 tokens na janela de contexto.
@@ -82,7 +82,7 @@ Configura servidores MCP de forma consistente no Claude Code, Cursor, VS Code, G
 
 ---
 
-### claude-hooks-manager
+### hooks-management
 
 > Auto-formatação, auto-testes, log de comandos
 
@@ -113,7 +113,7 @@ Adiciona um hook PreToolUse que pausa e pede confirmação para resets de banco 
 
 ---
 
-### claude-settings-manager
+### settings-management
 
 > Configura permissões, sandbox e seleção de modelo
 
@@ -139,7 +139,7 @@ Cria `.claude/settings.json` no escopo do projeto. Um commit e todo o time receb
 
 ---
 
-### claude-subagents-manager
+### subagents-management
 
 > Cria agentes especializados para tarefas específicas
 
@@ -155,7 +155,7 @@ Cria um agente especializado em rodar suítes de teste com acesso limitado a fer
 
 ---
 
-### skills-manager
+### skills-management
 
 > Organiza e compartilha habilidades entre projetos
 
@@ -171,7 +171,7 @@ Move habilidades entre escopos de projeto e usuário para disponibilidade mais a
 
 ---
 
-### claude-plugins-manager
+### plugins-management
 
 > Empacota e publica seus próprios plugins
 
@@ -223,11 +223,11 @@ claude-code-reflection-skills/
 │       │   └── plugin.json
 │       ├── skills/
 │       │   ├── mcp-management/
-│       │   ├── claude-hooks-manager/
-│       │   ├── claude-settings-manager/
-│       │   ├── claude-subagents-manager/
-│       │   ├── skills-manager/
-│       │   ├── claude-plugins-manager/
+│       │   ├── hooks-management/
+│       │   ├── settings-management/
+│       │   ├── subagents-management/
+│       │   ├── skills-management/
+│       │   ├── plugins-management/
 │       │   └── optimizing-claude-code/
 │       ├── LICENSE
 │       └── README.md

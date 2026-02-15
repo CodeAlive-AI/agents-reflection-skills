@@ -1,5 +1,5 @@
 ---
-name: claude-hooks-manager
+name: hooks-management
 description: Manage Claude Code hooks using natural language. Use when users want to add, list, remove, update, or validate hooks. Triggers on requests like "add a hook", "create a hook that...", "list my hooks", "remove the hook", "validate hooks", "show hook configuration", or any mention of automating Claude Code behavior with shell commands.
 ---
 

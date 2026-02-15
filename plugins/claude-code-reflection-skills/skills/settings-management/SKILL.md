@@ -1,5 +1,5 @@
 ---
-name: claude-settings-manager
+name: settings-management
 description: View and configure Claude Code settings.json files across user, project, local, and managed scopes.
 ---
 

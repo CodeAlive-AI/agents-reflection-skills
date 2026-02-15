@@ -43,11 +43,11 @@
 | Навык | Описание |
 |-------|----------|
 | **mcp-management** | Установка и управление MCP-серверами для кодинг-агентов |
-| **claude-hooks-manager** | Автоформатирование, автотесты, логирование команд |
-| **claude-settings-manager** | Настройка прав доступа, песочницы, выбора модели |
-| **claude-subagents-manager** | Создание специализированных агентов под конкретные задачи |
-| **skills-manager** | Организация и распространение навыков между проектами |
-| **claude-plugins-manager** | Упаковка и публикация собственных плагинов |
+| **hooks-management** | Автоформатирование, автотесты, логирование команд |
+| **settings-management** | Настройка прав доступа, песочницы, выбора модели |
+| **subagents-management** | Создание специализированных агентов под конкретные задачи |
+| **skills-management** | Организация и распространение навыков между проектами |
+| **plugins-management** | Упаковка и публикация собственных плагинов |
 | **optimizing-claude-code** | Аудит репозиториев и оптимизация CLAUDE.md |
 
 > **Легковесный:** Описания всех 7 навыков занимают менее 500 токенов в контекстном окне.
@@ -82,7 +82,7 @@
 
 ---
 
-### claude-hooks-manager
+### hooks-management
 
 > Автоформатирование, автотесты, логирование команд
 
@@ -113,7 +113,7 @@
 
 ---
 
-### claude-settings-manager
+### settings-management
 
 > Настройка прав доступа, песочницы, выбора модели
 
@@ -139,7 +139,7 @@
 
 ---
 
-### claude-subagents-manager
+### subagents-management
 
 > Создание специализированных агентов под конкретные задачи
 
@@ -155,7 +155,7 @@
 
 ---
 
-### skills-manager
+### skills-management
 
 > Организация и распространение навыков между проектами
 
@@ -171,7 +171,7 @@
 
 ---
 
-### claude-plugins-manager
+### plugins-management
 
 > Упаковка и публикация собственных плагинов
 
@@ -222,11 +222,11 @@ claude-code-reflection-skills/
 │       │   └── plugin.json
 │       ├── skills/
 │       │   ├── mcp-management/
-│       │   ├── claude-hooks-manager/
-│       │   ├── claude-settings-manager/
-│       │   ├── claude-subagents-manager/
-│       │   ├── skills-manager/
-│       │   ├── claude-plugins-manager/
+│       │   ├── hooks-management/
+│       │   ├── settings-management/
+│       │   ├── subagents-management/
+│       │   ├── skills-management/
+│       │   ├── plugins-management/
 │       │   └── optimizing-claude-code/
 │       ├── LICENSE
 │       └── README.md

@@ -43,11 +43,11 @@
 | 技能 | 功能 |
 |------|------|
 | **mcp-management** | 跨编码代理安装和管理 MCP 服务器 |
-| **claude-hooks-manager** | 自动格式化、自动测试、命令日志记录 |
-| **claude-settings-manager** | 配置权限、沙箱模式、模型选择 |
-| **claude-subagents-manager** | 创建专门处理特定任务的子代理 |
-| **skills-manager** | 跨项目管理和分享技能 |
-| **claude-plugins-manager** | 打包和发布自己的插件 |
+| **hooks-management** | 自动格式化、自动测试、命令日志记录 |
+| **settings-management** | 配置权限、沙箱模式、模型选择 |
+| **subagents-management** | 创建专门处理特定任务的子代理 |
+| **skills-management** | 跨项目管理和分享技能 |
+| **plugins-management** | 打包和发布自己的插件 |
 | **optimizing-claude-code** | 审计仓库并优化 CLAUDE.md 配置 |
 
 > **轻量级：** 所有 7 个技能的描述总共只占用不到 500 个 token。
@@ -82,7 +82,7 @@
 
 ---
 
-### claude-hooks-manager
+### hooks-management
 
 > 自动格式化、自动测试、命令日志记录
 
@@ -113,7 +113,7 @@
 
 ---
 
-### claude-settings-manager
+### settings-management
 
 > 配置权限、沙箱模式、模型选择
 
@@ -139,7 +139,7 @@
 
 ---
 
-### claude-subagents-manager
+### subagents-management
 
 > 创建专门处理特定任务的子代理
 
@@ -155,7 +155,7 @@
 
 ---
 
-### skills-manager
+### skills-management
 
 > 跨项目管理和分享技能
 
@@ -171,7 +171,7 @@
 
 ---
 
-### claude-plugins-manager
+### plugins-management
 
 > 打包和发布自己的插件
 
@@ -223,11 +223,11 @@ claude-code-reflection-skills/
 │       │   └── plugin.json
 │       ├── skills/
 │       │   ├── mcp-management/
-│       │   ├── claude-hooks-manager/
-│       │   ├── claude-settings-manager/
-│       │   ├── claude-subagents-manager/
-│       │   ├── skills-manager/
-│       │   ├── claude-plugins-manager/
+│       │   ├── hooks-management/
+│       │   ├── settings-management/
+│       │   ├── subagents-management/
+│       │   ├── skills-management/
+│       │   ├── plugins-management/
 │       │   └── optimizing-claude-code/
 │       ├── LICENSE
 │       └── README.md

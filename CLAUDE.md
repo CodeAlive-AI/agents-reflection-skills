@@ -67,11 +67,11 @@ claude-code-reflection-skills/
 │   └── plugin.json          # Version metadata - changes require release
 ├── skills/                  # All changes require release
 │   ├── mcp-management/
-│   ├── claude-hooks-manager/
-│   ├── claude-settings-manager/
-│   ├── claude-subagents-manager/
-│   ├── skills-manager/
-│   └── claude-plugins-manager/
+│   ├── hooks-management/
+│   ├── settings-management/
+│   ├── subagents-management/
+│   ├── skills-management/
+│   └── plugins-management/
 ├── README.md                # Documentation - no release needed
 ├── CLAUDE.md                # This file - no release needed
 └── LICENSE                  # Changes require release

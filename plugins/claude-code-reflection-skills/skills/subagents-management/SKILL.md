@@ -1,5 +1,5 @@
 ---
-name: claude-subagents-manager
+name: subagents-management
 description: Create, edit, list, move, and delete Claude Code subagents across user and project scopes.
 ---
 
