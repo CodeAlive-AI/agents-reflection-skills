@@ -14,6 +14,7 @@ description: Manages skills for AI coding agents: list, install, remove, update,
 | Show details | `python3 scripts/show_skill.py <name>` |
 | Review skill | `python3 scripts/review_skill.py <name>` |
 | Delete | `python3 scripts/delete_skill.py <name>` |
+| Delete from agents | `python3 scripts/delete_skill.py <name> --all-agents --force` |
 | Move to user | `python3 scripts/move_skill.py <name> user` |
 | Move to project | `python3 scripts/move_skill.py <name> project` |
 | Create new | Use `/skill-creator` |
@@ -85,10 +86,16 @@ python3 scripts/review_skill.py <name> -f json # JSON output for programmatic us
 **CRITICAL**: Always use `AskUserQuestion` to confirm before deleting: "Are you sure you want to delete the skill '[name]'? This cannot be undone."
 
 ```bash
-python3 scripts/delete_skill.py <name>              # With script confirmation
-python3 scripts/delete_skill.py <name> --force      # Skip script prompt
+python3 scripts/delete_skill.py <name>              # Claude Code only, with confirmation
+python3 scripts/delete_skill.py <name> --force      # Skip confirmation prompt
 python3 scripts/delete_skill.py <name> -s project   # Target specific scope
+python3 scripts/delete_skill.py <name> -a cursor    # Delete from specific agent
+python3 scripts/delete_skill.py <name> --all-agents --force  # Delete from all agents
 ```
+
+**Multi-agent deletion:** Skills installed via `npx skills add` may exist in multiple agent directories. The default mode (no flags) deletes from Claude Code only and warns if copies remain in other agents. Use `--all-agents` to delete from every detected agent at once.
+
+For ecosystem-installed skills, prefer `npx skills remove <name> -g -y` first. Use `delete_skill.py --all-agents` as fallback for manual cleanup.
 
 ### Move Skill
 

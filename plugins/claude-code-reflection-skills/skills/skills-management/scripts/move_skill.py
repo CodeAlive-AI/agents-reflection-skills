@@ -66,7 +66,10 @@ def move_skill(name: str, to_scope: str, force: bool = False) -> bool:
             print(f"Use --force to overwrite.")
             return False
         print(f"Overwriting existing skill in {to_scope} scope...")
-        shutil.rmtree(target_path)
+        if target_path.is_symlink():
+            target_path.unlink()
+        else:
+            shutil.rmtree(target_path)
 
     # Ensure target directory exists
     target_dir.mkdir(parents=True, exist_ok=True)

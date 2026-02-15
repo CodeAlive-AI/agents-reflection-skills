@@ -93,13 +93,19 @@ def move_skill(
     if target_path.exists():
         if not force:
             return False, f"Skill '{name}' already exists at {target_path}. Use --force to overwrite."
-        shutil.rmtree(target_path)
+        if target_path.is_symlink():
+            target_path.unlink()
+        else:
+            shutil.rmtree(target_path)
 
     # Move (copy + delete)
     try:
         target_base.mkdir(parents=True, exist_ok=True)
         shutil.copytree(source_path, target_path)
-        shutil.rmtree(source_path)
+        if source_path.is_symlink():
+            source_path.unlink()
+        else:
+            shutil.rmtree(source_path)
 
         from_config = get_agent_config(from_agent)
         to_config = get_agent_config(to_agent)

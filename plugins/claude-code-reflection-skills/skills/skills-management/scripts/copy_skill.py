@@ -93,7 +93,10 @@ def copy_skill(
     if target_path.exists():
         if not force:
             return False, f"Skill '{name}' already exists at {target_path}. Use --force to overwrite."
-        shutil.rmtree(target_path)
+        if target_path.is_symlink():
+            target_path.unlink()
+        else:
+            shutil.rmtree(target_path)
 
     # Copy
     try:
