@@ -1,6 +1,6 @@
 ---
 name: skills-management
-description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and installs skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, review remote skills, compare ecosystem skills, evaluate skill quality, or asks "how do I do X" where X might be a common task with an existing skill.
+description: Lists, inspects, deletes, modifies, moves, reviews, discovers, installs, removes, and updates skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, uninstall a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, remove an ecosystem skill, update skills, check for skill updates, update all skills, review remote skills, compare ecosystem skills, evaluate skill quality, or asks "how do I do X" where X might be a common task with an existing skill.
 ---
 
 # Skills Manager
@@ -20,7 +20,9 @@ description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and 
 | **Discovery & Install** | |
 | Find skills | `npx skills find [query]` |
 | Review remote skills | Fetch skills.sh pages, assess using [assessment framework](references/remote-skill-assessment.md) |
+| List ecosystem skills | `npx skills list` or `npx skills ls` |
 | Install from GitHub | `npx skills add <owner/repo@skill> -g -y` |
+| Remove ecosystem skill | `npx skills remove <name> -g -y` or `npx skills rm` |
 | Check for updates | `npx skills check` |
 | Update all | `npx skills update` |
 | Browse online | [skills.sh](https://skills.sh) |
@@ -124,12 +126,40 @@ npx skills add <owner/repo@skill> -g -y    # Install globally, skip prompts
 npx skills add vercel-labs/agent-skills@vercel-react-best-practices -g -y
 ```
 
+### List Ecosystem Skills
+
+```bash
+npx skills list                      # List all installed ecosystem skills
+npx skills ls                        # Alias
+npx skills list -g                   # Global skills only
+npx skills list -a cursor            # Skills for a specific agent
+```
+
+### Remove Ecosystem Skills
+
+Uninstalls skills installed via `npx skills add`. For locally-created skills, use `python3 scripts/delete_skill.py` instead.
+
+**CRITICAL**: Always confirm with the user before removing.
+
+```bash
+npx skills remove <name> -g -y       # Remove a global skill, skip prompt
+npx skills rm <name>                 # Alias, with confirmation prompt
+npx skills remove <name> -a cursor   # Remove from specific agent
+npx skills remove --all -g -y        # Remove all global ecosystem skills
+```
+
 ### Check & Update
 
 ```bash
-npx skills check                     # Check for updates
+npx skills check                     # Check for available updates
 npx skills update                    # Update all installed skills
 ```
+
+When the user asks to "update skills", "update all skills", "are my skills up to date?", or "check for updates":
+
+1. Run `npx skills check` first to show what has updates available
+2. If updates exist, confirm with user before running `npx skills update`
+3. After updating, remind user to restart the agent for changes to take effect
 
 ### When to Search
 
