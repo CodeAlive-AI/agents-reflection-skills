@@ -305,6 +305,7 @@ python3 scripts/move_skill_agent.py my-skill --from claude-code --to goose --for
 - **Restart required**: After adding, removing, or moving skills, restart the AI agent for changes to take effect
 - **Edits are immediate**: Changes to existing skill content work without restart
 - **Agent detection**: Uses config directory presence to detect installed agents
+- **Always update all agents**: When updating a locally-developed skill, use `install_skill.py --all -s global --force` to push changes to every detected agent — not just Claude Code. A skill updated only in `~/.claude/skills/` will be stale in all other agents
 
 ## References — The Complete Guide to Building Skills for Claude
 
