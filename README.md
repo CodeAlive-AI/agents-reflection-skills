@@ -252,6 +252,23 @@ agents-reflection-skills/
 
 ---
 
+## Changelog
+
+**v2.0.0** — Universal agent support
+- Renamed all skills: dropped `claude-` prefix, `manager` to `management`
+- MCP management now supports 10+ agents via `npx add-mcp` integration
+- Added Codex CLI references (TOML config, AGENTS.md, Starlark rules)
+- 42-agent registry for cross-agent skill operations
+- Remote skill assessment framework for evaluating ecosystem skills
+- Standardized reference file naming (`claude-*`, `codex-*`)
+
+**v1.1.1** — Hooks improvements
+- Script-first guidance for complex hooks
+- Recommended script location: `~/.claude/hooks/`
+
+**v1.1.0** — Multi-agent support
+**v1.0.0** — Initial release
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
