@@ -1,6 +1,6 @@
 ---
 name: skills-management
-description: Lists, inspects, deletes, modifies, moves, reviews, discovers, installs, removes, and updates skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, uninstall a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, remove an ecosystem skill, update skills, check for skill updates, update all skills, review remote skills, compare ecosystem skills, evaluate skill quality, or asks "how do I do X" where X might be a common task with an existing skill.
+description: Manages skills for AI coding agents: list, install, remove, update, review, move, and discover. Use when the user asks to find, install, remove, or update skills, review skill quality, move skills between scopes, check for updates, or asks "how do I do X" where X might have an existing skill.
 ---
 
 # Skills Manager
