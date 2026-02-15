@@ -35,7 +35,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ```bash
 /plugin marketplace add https://github.com/CodeAlive-AI/agents-reflection-skills.git
-/plugin install claude-code-reflection-skills@claude-code-reflection-skills
+/plugin install agents-reflection-skills@agents-reflection-skills
 # 重启 Claude Code 以使更改生效
 ```
 
@@ -223,7 +223,7 @@ agents-reflection-skills/
 ├── .claude-plugin/
 │   └── marketplace.json         (市场目录)
 ├── plugins/
-│   └── claude-code-reflection-skills/
+│   └── agents-reflection-skills/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── skills/

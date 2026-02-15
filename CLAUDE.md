@@ -38,7 +38,7 @@ Keep all README files in sync when updating documentation:
 - `README.ru.md` - Russian translation
 - `README.zh.md` - Chinese translation
 - `README.pt-BR.md` - Brazilian Portuguese translation
-- `plugins/claude-code-reflection-skills/README.md` - Plugin README (required by plugin spec)
+- `plugins/agents-reflection-skills/README.md` - Plugin README (required by plugin spec)
 
 When adding/removing skills or changing descriptions, update all five files.
 
