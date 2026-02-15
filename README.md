@@ -254,6 +254,12 @@ agents-reflection-skills/
 
 ## Changelog
 
+**v2.0.1** — Bug fixes and skill management improvements
+- Fixed `shutil.rmtree` crash on symlinked skills (installed via `npx skills add`)
+- Added multi-agent deletion: `--agent` and `--all-agents` flags for `delete_skill.py`
+- Added `npx skills remove`, `npx skills list`, and update workflow guidance
+- Renamed plugin directory to `agents-reflection-skills`
+
 **v2.0.0** — Universal agent support
 - Renamed all skills: dropped `claude-` prefix, `manager` to `management`
 - MCP management now supports 10+ agents via `npx add-mcp` integration
