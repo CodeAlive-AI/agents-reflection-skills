@@ -1,6 +1,6 @@
 ---
 name: skills-management
-description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and installs skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, or asks "how do I do X" where X might be a common task with an existing skill.
+description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and installs skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, review remote skills, compare ecosystem skills, evaluate skill quality, or asks "how do I do X" where X might be a common task with an existing skill.
 ---
 
 # Skills Manager
@@ -19,6 +19,7 @@ description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and 
 | Create new | Use `/skill-creator` |
 | **Discovery & Install** | |
 | Find skills | `npx skills find [query]` |
+| Review remote skills | Fetch skills.sh pages, assess using [assessment framework](references/remote-skill-assessment.md) |
 | Install from GitHub | `npx skills add <owner/repo@skill> -g -y` |
 | Check for updates | `npx skills check` |
 | Update all | `npx skills update` |
@@ -149,6 +150,24 @@ Use `npx skills find` when the user:
 | Design | ui, ux, design-system, accessibility |
 | Productivity | workflow, automation, git |
 
+### Review & Compare Results
+
+When search results are ambiguous (3+ results, similar names, or user asks to compare), assess candidates before recommending. This is agent-driven — use WebFetch on `https://skills.sh/<owner>/<repo>/<skill>` pages and apply judgment.
+
+**Trigger conditions:**
+- 3+ results returned for a query
+- Multiple results with similar names or overlapping descriptions
+- User asks to compare, review, evaluate, or pick the best
+- A result has suspicious metrics (niche topic with very high installs)
+
+**Process:**
+1. Fetch skills.sh pages for top 3-6 candidates
+2. Evaluate quality signals: install count, agent distribution, age, description, relevance, overlap with installed skills
+3. Assign verdict: Recommended / Consider / Skip
+4. Present ranked summary with 1-2 sentence assessments
+
+See [references/remote-skill-assessment.md](references/remote-skill-assessment.md) for the full assessment framework including red flags and scoring signals.
+
 ### No Results
 
 If no skills found: offer to help directly, then suggest `npx skills init <name>` to create a custom skill.
@@ -266,6 +285,7 @@ Consult these when reviewing skills or advising on skill structure and best prac
 | `references/ref-a-quick-checklist.md` | Pre-build, development, upload, and post-upload checklists |
 | `references/ref-b-yaml-frontmatter.md` | Required/optional fields, security restrictions |
 | `references/ref-c-complete-skill-examples.md` | Links to production-ready skill examples |
+| `references/remote-skill-assessment.md` | Framework for evaluating ecosystem skills before installation |
 
 ## Acknowledgments
 
