@@ -1,6 +1,6 @@
 ---
 name: skills-manager
-description: Lists, inspects, deletes, modifies, moves, and reviews skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, or improve a skill's quality.
+description: Lists, inspects, deletes, modifies, moves, reviews, discovers, and installs skills for AI coding agents. Use when the user asks to view installed skills, list skills, delete a skill, remove a skill, move skills between scopes, share a skill with the team, edit skill content, review a skill, audit a skill, improve a skill's quality, find a skill, search for skills, install a skill from GitHub, or asks "how do I do X" where X might be a common task with an existing skill.
 ---
 
 # Skills Manager
@@ -17,6 +17,12 @@ description: Lists, inspects, deletes, modifies, moves, and reviews skills for A
 | Move to user | `python3 scripts/move_skill.py <name> user` |
 | Move to project | `python3 scripts/move_skill.py <name> project` |
 | Create new | Use `/skill-creator` |
+| **Discovery & Install** | |
+| Find skills | `npx skills find [query]` |
+| Install from GitHub | `npx skills add <owner/repo@skill> -g -y` |
+| Check for updates | `npx skills check` |
+| Update all | `npx skills update` |
+| Browse online | [skills.sh](https://skills.sh) |
 | **Multi-Agent** | |
 | Detect agents | `python3 scripts/detect_agents.py` |
 | List agent skills | `python3 scripts/list_agent_skills.py --agent cursor` |
@@ -98,28 +104,102 @@ python3 scripts/move_skill.py <name> user -f   # Overwrite if exists
 
 Use the `/skill-creator` skill for guided creation with proper structure.
 
+## Discover & Install Skills
+
+Search and install skills from the open agent skills ecosystem via the [Skills CLI](https://github.com/vercel-labs/add-skill) (`npx skills`). Browse at [skills.sh](https://skills.sh).
+
+### Find Skills
+
+```bash
+npx skills find [query]              # Interactive search
+npx skills find react performance    # Keyword search
+npx skills find pr review            # Search by task
+```
+
+### Install from Ecosystem
+
+```bash
+npx skills add <owner/repo@skill> -g -y    # Install globally, skip prompts
+npx skills add vercel-labs/agent-skills@vercel-react-best-practices -g -y
+```
+
+### Check & Update
+
+```bash
+npx skills check                     # Check for updates
+npx skills update                    # Update all installed skills
+```
+
+### When to Search
+
+Use `npx skills find` when the user:
+- Asks "how do I do X" where X is a common task
+- Says "find a skill for X" or "is there a skill for X"
+- Wants specialized capabilities (design, testing, deployment, etc.)
+
+### Common Search Categories
+
+| Category | Example queries |
+|----------|----------------|
+| Web Dev | react, nextjs, typescript, tailwind |
+| Testing | testing, jest, playwright, e2e |
+| DevOps | deploy, docker, kubernetes, ci-cd |
+| Docs | docs, readme, changelog, api-docs |
+| Quality | review, lint, refactor, best-practices |
+| Design | ui, ux, design-system, accessibility |
+| Productivity | workflow, automation, git |
+
+### No Results
+
+If no skills found: offer to help directly, then suggest `npx skills init <name>` to create a custom skill.
+
 ## Multi-Agent Operations
 
-Manage skills across 15 supported AI coding agents.
+Manage skills across 42 supported AI coding agents. Full registry at [skills.sh](https://skills.sh).
 
 ### Supported Agents
 
 | Agent ID | Display Name | Project Skills Dir | Global Skills Dir |
 |----------|--------------|-------------------|-------------------|
-| `opencode` | OpenCode | `.opencode/skill` | `~/.config/opencode/skill` |
-| `claude-code` | Claude Code | `.claude/skills` | `~/.claude/skills` |
-| `codex` | Codex | `.codex/skills` | `~/.codex/skills` |
-| `cursor` | Cursor | `.cursor/skills` | `~/.cursor/skills` |
+| `adal` | AdaL | `.adal/skills` | `~/.adal/skills` |
 | `amp` | Amp | `.agents/skills` | `~/.config/agents/skills` |
-| `kilo` | Kilo Code | `.kilocode/skills` | `~/.kilocode/skills` |
-| `roo` | Roo Code | `.roo/skills` | `~/.roo/skills` |
-| `goose` | Goose | `.goose/skills` | `~/.config/goose/skills` |
-| `gemini-cli` | Gemini CLI | `.gemini/skills` | `~/.gemini/skills` |
 | `antigravity` | Antigravity | `.agent/skills` | `~/.gemini/antigravity/skills` |
-| `github-copilot` | GitHub Copilot | `.github/skills` | `~/.copilot/skills` |
-| `clawdbot` | Clawdbot | `skills` | `~/.clawdbot/skills` |
+| `augment` | Augment | `.augment/skills` | `~/.augment/skills` |
+| `claude-code` | Claude Code | `.claude/skills` | `~/.claude/skills` |
+| `cline` | Cline | `.cline/skills` | `~/.cline/skills` |
+| `codebuddy` | CodeBuddy | `.codebuddy/skills` | `~/.codebuddy/skills` |
+| `codex` | Codex | `.agents/skills` | `~/.codex/skills` |
+| `command-code` | Command Code | `.commandcode/skills` | `~/.commandcode/skills` |
+| `continue` | Continue | `.continue/skills` | `~/.continue/skills` |
+| `crush` | Crush | `.crush/skills` | `~/.config/crush/skills` |
+| `cursor` | Cursor | `.cursor/skills` | `~/.cursor/skills` |
 | `droid` | Droid | `.factory/skills` | `~/.factory/skills` |
+| `gemini-cli` | Gemini CLI | `.agents/skills` | `~/.gemini/skills` |
+| `github-copilot` | GitHub Copilot | `.agents/skills` | `~/.copilot/skills` |
+| `goose` | Goose | `.goose/skills` | `~/.config/goose/skills` |
+| `iflow-cli` | iFlow CLI | `.iflow/skills` | `~/.iflow/skills` |
+| `junie` | Junie | `.junie/skills` | `~/.junie/skills` |
+| `kilo` | Kilo Code | `.kilocode/skills` | `~/.kilocode/skills` |
+| `kimi-cli` | Kimi Code CLI | `.agents/skills` | `~/.config/agents/skills` |
+| `kiro-cli` | Kiro CLI | `.kiro/skills` | `~/.kiro/skills` |
+| `kode` | Kode | `.kode/skills` | `~/.kode/skills` |
+| `mcpjam` | MCPJam | `.mcpjam/skills` | `~/.mcpjam/skills` |
+| `mistral-vibe` | Mistral Vibe | `.vibe/skills` | `~/.vibe/skills` |
+| `mux` | Mux | `.mux/skills` | `~/.mux/skills` |
+| `neovate` | Neovate | `.neovate/skills` | `~/.neovate/skills` |
+| `openclaw` | OpenClaw | `skills` | `~/.openclaw/skills` |
+| `opencode` | OpenCode | `.agents/skills` | `~/.config/opencode/skills` |
+| `openhands` | OpenHands | `.openhands/skills` | `~/.openhands/skills` |
+| `pi` | Pi | `.pi/skills` | `~/.pi/agent/skills` |
+| `pochi` | Pochi | `.pochi/skills` | `~/.pochi/skills` |
+| `qoder` | Qoder | `.qoder/skills` | `~/.qoder/skills` |
+| `qwen-code` | Qwen Code | `.qwen/skills` | `~/.qwen/skills` |
+| `replit` | Replit | `.agents/skills` | `~/.config/agents/skills` |
+| `roo` | Roo Code | `.roo/skills` | `~/.roo/skills` |
+| `trae` | Trae | `.trae/skills` | `~/.trae/skills` |
+| `trae-cn` | Trae CN | `.trae/skills` | `~/.trae-cn/skills` |
 | `windsurf` | Windsurf | `.windsurf/skills` | `~/.codeium/windsurf/skills` |
+| `zencoder` | Zencoder | `.zencoder/skills` | `~/.zencoder/skills` |
 
 ### Detect Installed Agents
 
@@ -170,6 +250,23 @@ python3 scripts/move_skill_agent.py my-skill --from claude-code --to goose --for
 - **Edits are immediate**: Changes to existing skill content work without restart
 - **Agent detection**: Uses config directory presence to detect installed agents
 
+## References — The Complete Guide to Building Skills for Claude
+
+Consult these when reviewing skills or advising on skill structure and best practices.
+
+| File | Description |
+|------|-------------|
+| `references/01-introduction.md` | What skills are, who this guide is for, two learning paths |
+| `references/02-fundamentals.md` | Skill structure, progressive disclosure, composability, MCP integration |
+| `references/03-planning-and-design.md` | Use cases, categories, success criteria, YAML frontmatter, writing instructions |
+| `references/04-testing-and-iteration.md` | Trigger tests, functional tests, performance comparison, skill-creator usage |
+| `references/05-distribution-and-sharing.md` | Distribution model, API usage, GitHub hosting, positioning |
+| `references/06-patterns-and-troubleshooting.md` | 5 workflow patterns, common errors and fixes |
+| `references/07-resources-and-references.md` | Official docs, example skills, tools, support channels |
+| `references/ref-a-quick-checklist.md` | Pre-build, development, upload, and post-upload checklists |
+| `references/ref-b-yaml-frontmatter.md` | Required/optional fields, security restrictions |
+| `references/ref-c-complete-skill-examples.md` | Links to production-ready skill examples |
+
 ## Acknowledgments
 
-Multi-agent support is based on [add-skill](https://github.com/vercel-labs/add-skill) by Vercel Labs.
+Multi-agent support is based on the [Skills CLI](https://github.com/vercel-labs/add-skill) (`npx skills`) by Vercel Labs. Browse the open agent skills ecosystem at [skills.sh](https://skills.sh).
