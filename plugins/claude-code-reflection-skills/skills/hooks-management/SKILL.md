@@ -1,13 +1,13 @@
 ---
 name: hooks-management
-description: Manage Claude Code hooks using natural language. Use when users want to add, list, remove, update, or validate hooks. Triggers on requests like "add a hook", "create a hook that...", "list my hooks", "remove the hook", "validate hooks", "show hook configuration", or any mention of automating Claude Code behavior with shell commands.
+description: Manage hooks and automation for coding agents (Claude Code, Codex CLI). Use when users want to add, list, remove, update, or validate hooks. Triggers on requests like "add a hook", "create a hook that...", "list my hooks", "remove the hook", "validate hooks", or any mention of automating agent behavior with shell commands.
 ---
 
-# Claude Hooks Manager
+# Hooks Management
 
-Manage Claude Code hooks through natural language commands.
+Manage hooks and automation through natural language commands.
 
-**IMPORTANT**: After adding, modifying, or removing hooks, always inform the user that they need to **restart Claude Code** (exit and relaunch) for changes to take effect. Hooks are loaded at startup.
+**IMPORTANT**: After adding, modifying, or removing hooks, always inform the user that they need to **restart the agent** for changes to take effect. Hooks are loaded at startup.
 
 ## Quick Reference
 
@@ -169,9 +169,26 @@ exit 0  # Allow
 }
 ```
 
+## Codex CLI Hooks
+
+Codex CLI has a limited hook system. For blocking/allowing commands, use Starlark rules instead of hooks:
+
+```starlark
+# In .codex/rules/safety.rules
+prefix_rule(
+    pattern = ["rm", ["-rf", "-r"]],
+    decision = "forbidden",
+    justification = "Use git clean -fd instead.",
+)
+```
+
+For notifications: `notify = ["notify-send", "Codex"]` in `config.toml`.
+
+See [references/codex-hooks.md](references/codex-hooks.md) for full Codex hooks reference and migration patterns.
+
 ## Event Input Schemas
 
-See `references/event_schemas.md` for complete JSON input schemas for each event type.
+See [references/claude-event-schemas.md](references/claude-event-schemas.md) for complete JSON input schemas for each event type (Claude Code).
 
 ## Validation
 

@@ -137,6 +137,40 @@ npx add-mcp "python -m mcp_server --host localhost"
 | Format | TOML |
 | Transports | stdio, http, sse |
 
+**Advanced TOML fields** (beyond what add-mcp configures):
+
+```toml
+[mcp_servers.my-server]
+enabled = true                              # Enable/disable (default: true)
+required = true                             # Fail startup if can't init
+command = "npx"                             # Stdio: command to run
+args = ["-y", "@org/mcp-server"]            # Stdio: command arguments
+cwd = "/path/to/server"                     # Stdio: working directory
+url = "https://example.com/mcp"             # HTTP: server endpoint
+bearer_token_env_var = "MY_TOKEN"           # HTTP: auth token env var
+startup_timeout_sec = 10.0                  # Startup timeout (default: 10)
+tool_timeout_sec = 60.0                     # Per-tool timeout (default: 60)
+enabled_tools = ["search", "summarize"]     # Tool allowlist
+disabled_tools = ["slow-tool"]              # Tool denylist
+
+[mcp_servers.my-server.env]                 # Environment variables
+API_KEY = "value"
+
+[mcp_servers.my-server.http_headers]        # Static HTTP headers
+X-Custom = "value"
+
+[mcp_servers.my-server.env_http_headers]    # Headers from env vars
+Authorization = "AUTH_TOKEN_ENV"
+```
+
+**OAuth support:**
+```toml
+mcp_oauth_callback_port = 8080
+mcp_oauth_credentials_store = "auto"        # auto | file | keyring
+```
+
+**CLI commands:** `codex mcp add`, `codex mcp list`, `codex mcp get`, `codex mcp remove`, `codex mcp login`, `codex mcp logout`
+
 ### Goose
 
 | Property | Value |

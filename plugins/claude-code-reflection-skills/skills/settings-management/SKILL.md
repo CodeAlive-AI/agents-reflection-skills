@@ -1,13 +1,13 @@
 ---
 name: settings-management
-description: View and configure Claude Code settings.json files across user, project, local, and managed scopes.
+description: View and configure settings for coding agents (Claude Code, Codex CLI, and others). Covers JSON settings for Claude Code and TOML config for Codex CLI, including permissions, sandbox, model selection, and profiles.
 ---
 
-# Claude Code Settings Manager
+# Settings Management
 
-Manage Claude Code configuration through settings.json files.
+Manage configuration for coding agents.
 
-**IMPORTANT**: After modifying settings, always inform the user that they need to **restart Claude Code** (exit and relaunch) for changes to take effect. Most settings are only loaded at startup.
+**IMPORTANT**: After modifying settings, always inform the user that they need to **restart the agent** for changes to take effect. Most settings are only loaded at startup.
 
 ## Settings File Locations
 
@@ -125,6 +125,25 @@ Use the Edit or Write tool to modify settings files. Always read existing conten
 5. **Confirm changes**: Show user the final settings
 6. **Remind to restart**: Tell user to restart Claude Code for changes to take effect
 
+## Codex CLI Settings
+
+Codex uses TOML format in `~/.codex/config.toml` (user) and `.codex/config.toml` (project).
+
+```toml
+model = "gpt-5.2-codex"
+approval_policy = "on-request"    # untrusted | on-failure | on-request | never
+sandbox_mode = "workspace-write"  # read-only | workspace-write | danger-full-access
+```
+
+Key differences from Claude Code:
+- TOML format instead of JSON
+- Starlark rules for command policies (`.codex/rules/`)
+- Named profiles for different workflows
+- Feature flags system (`codex features list`)
+
+See [references/codex-settings.md](references/codex-settings.md) for full Codex config reference.
+
 ## Reference
 
-For complete settings reference including all available options, environment variables, and advanced configuration, see [references/settings-reference.md](references/settings-reference.md).
+- **Claude Code settings**: [references/claude-settings.md](references/claude-settings.md)
+- **Codex CLI settings**: [references/codex-settings.md](references/codex-settings.md)

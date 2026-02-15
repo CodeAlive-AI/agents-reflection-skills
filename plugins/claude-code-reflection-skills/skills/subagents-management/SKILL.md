@@ -1,13 +1,16 @@
 ---
 name: subagents-management
-description: Create, edit, list, move, and delete Claude Code subagents across user and project scopes.
+description: Create, edit, list, move, and delete subagents and skills for coding agents (Claude Code, Codex CLI). Manage AGENTS.md instructions, custom subagent definitions, and skill packages across user and project scopes.
 ---
 
-# Claude Subagents Manager
+# Subagents & Skills Management
 
-Manage Claude Code subagents stored in `~/.claude/agents/` (user) and `.claude/agents/` (project).
+Manage subagents, skills, and instruction files for coding agents.
 
-**IMPORTANT**: After creating, modifying, or deleting subagents, inform the user that they need to **restart Claude Code** (exit and relaunch) or run `/agents` command to reload the subagent list.
+- **Claude Code**: Subagents in `~/.claude/agents/` and `.claude/agents/`
+- **Codex CLI**: AGENTS.md instructions + skills in `~/.agents/skills/` and `.agents/skills/`
+
+**IMPORTANT**: After creating, modifying, or deleting subagents/skills, inform the user that they need to **restart the agent** for changes to take effect.
 
 **CRITICAL**: Before performing any deletion operation, you MUST use the `AskUserQuestion` tool to confirm with the user. Never delete a subagent without explicit user confirmation, even if using `--force` flag or direct `rm` commands.
 
@@ -74,12 +77,33 @@ python3 {SKILL_PATH}/scripts/delete_subagent.py {name} [--scope user|project] [-
 
 Or delete directly (still requires user confirmation via AskUserQuestion first): `rm ~/.claude/agents/{name}.md` or `rm .claude/agents/{name}.md`
 
-## Key Concepts
+## Codex CLI: AGENTS.md & Skills
+
+Codex uses `AGENTS.md` (equivalent to `CLAUDE.md`) for project instructions and a skills system for reusable capabilities.
+
+### AGENTS.md
+
+```
+~/.codex/AGENTS.md            # Global instructions
+<project-root>/AGENTS.md      # Project instructions
+<project-root>/sub/AGENTS.md  # Subdirectory instructions (additive)
+```
+
+### Skills
+
+```
+~/.agents/skills/my-skill/SKILL.md           # User skills
+<project-root>/.agents/skills/my-skill/SKILL.md  # Project skills
+```
+
+See [references/codex-agents.md](references/codex-agents.md) for Codex agents/skills reference.
+
+## Key Concepts (Claude Code)
 
 - **User scope** (`~/.claude/agents/`): Available in all projects
 - **Project scope** (`.claude/agents/`): Specific to current project, higher priority
 - Subagents reload on session restart or via `/agents` command
-- See [references/subagent-schema.md](references/subagent-schema.md) for complete field reference
+- See [references/claude-subagents.md](references/claude-subagents.md) for Claude Code subagent schema
 
 ## Common Patterns
 
