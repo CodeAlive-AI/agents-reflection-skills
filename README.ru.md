@@ -1,17 +1,18 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-Marketplace-blueviolet?style=for-the-badge" alt="Claude Code Marketplace">
-  <img src="https://img.shields.io/badge/Plugins-1-blue?style=for-the-badge" alt="1 Plugin">
+  <img src="https://img.shields.io/badge/Agent_Skills-Marketplace-blueviolet?style=for-the-badge" alt="Agent Skills Marketplace">
+  <img src="https://img.shields.io/badge/Skills-7-blue?style=for-the-badge" alt="7 Skills">
+  <img src="https://img.shields.io/badge/Agents-10+-orange?style=for-the-badge" alt="10+ Agents">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
-<h1 align="center">Claude Code Reflection Skills</h1>
+<h1 align="center">Agents Reflection Skills</h1>
 
 <p align="center">
-  <strong>Маркетплейс мета-навыков для самонастройки Claude Code</strong>
+  <strong>Мета-навыки для самонастройки AI-агентов кодирования</strong>
 </p>
 
 <p align="center">
-  Забудьте о ручном редактировании JSON. Просто попросите Claude настроить всё за вас.
+  Забудьте о ручном редактировании конфигов. Просто скажите агенту, что вам нужно.
 </p>
 
 <p align="center">
@@ -24,29 +25,33 @@
 
 ## Установка
 
+**Через Skills CLI (рекомендуется):**
+
 ```bash
-# Шаг 1: Добавьте маркетплейс
-/plugin marketplace add https://github.com/CodeAlive-AI/claude-code-reflection-skills.git
+claude install-skill CodeAlive-AI/agents-reflection-skills
+```
 
-# Шаг 2: Установите плагин
+**Через маркетплейс плагинов:**
+
+```bash
+/plugin marketplace add https://github.com/CodeAlive-AI/agents-reflection-skills.git
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
-
-# Шаг 3: Перезапустите Claude Code для применения изменений
+# Перезапустите Claude Code для применения изменений
 ```
 
 ---
 
 ## Что входит в комплект
 
-Плагин **claude-code-reflection-skills** включает 7 навыков:
+Плагин включает 7 навыков, работающих с **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI** и другими:
 
 | Навык | Описание |
 |-------|----------|
-| **mcp-management** | Установка и управление MCP-серверами для кодинг-агентов |
-| **hooks-management** | Автоформатирование, автотесты, логирование команд |
-| **settings-management** | Настройка прав доступа, песочницы, выбора модели |
-| **subagents-management** | Создание специализированных агентов под конкретные задачи |
-| **skills-management** | Организация и распространение навыков между проектами |
+| **mcp-management** | Установка и управление MCP-серверами для 10+ кодинг-агентов |
+| **hooks-management** | Управление хуками и автоматизацией для Claude Code и Codex CLI |
+| **settings-management** | Настройка Claude Code (JSON) и Codex CLI (TOML) |
+| **subagents-management** | Создание и управление субагентами в Claude Code и Codex CLI |
+| **skills-management** | Организация, поиск и распространение навыков для агентов |
 | **plugins-management** | Упаковка и публикация собственных плагинов |
 | **optimizing-claude-code** | Аудит репозиториев и оптимизация CLAUDE.md |
 
@@ -58,12 +63,12 @@
 
 ### mcp-management
 
-> Установка и управление MCP-серверами для кодинг-агентов
+> Установка и управление MCP-серверами для 10+ кодинг-агентов
 
 **Установка сразу во все агенты**
 > *«Установи Postgres MCP-сервер в Claude Code, Cursor и VS Code»*
 
-Использует [add-mcp](https://github.com/neondatabase/add-mcp) для установки MCP-серверов в 10+ кодинг-агентов одной командой. Автоматически обрабатывает различия форматов конфигурации.
+Использует [add-mcp](https://github.com/neondatabase/add-mcp) для установки MCP-серверов в 10+ кодинг-агентов (Claude Code, Cursor, VS Code, Claude Desktop, Gemini CLI, Codex, Goose, GitHub Copilot CLI, OpenCode, Zed) одной командой. Автоматически обрабатывает различия форматов (JSON, YAML, TOML).
 
 **Подключение к базе данных**
 > *«Подключи Claude к моей PostgreSQL базе»*
@@ -84,7 +89,7 @@
 
 ### hooks-management
 
-> Автоформатирование, автотесты, логирование команд
+> Управление хуками и автоматизацией для Claude Code и Codex CLI
 
 **Автоформатирование кода**
 > *«Запускай Prettier для TypeScript-файлов после каждого редактирования»*
@@ -115,7 +120,7 @@
 
 ### settings-management
 
-> Настройка прав доступа, песочницы, выбора модели
+> Настройка Claude Code (JSON) и Codex CLI (TOML)
 
 **Включение песочницы**
 > *«Включи режим песочницы, чтобы Claude мог работать без запроса разрешения на каждую команду»*
@@ -141,7 +146,7 @@
 
 ### subagents-management
 
-> Создание специализированных агентов под конкретные задачи
+> Создание и управление субагентами в Claude Code и Codex CLI
 
 **Создание код-ревьюера**
 > *«Создай субагента-ревьюера, который может только читать файлы и использует Opus»*
@@ -157,7 +162,7 @@
 
 ### skills-management
 
-> Организация и распространение навыков между проектами
+> Организация, поиск и распространение навыков для агентов
 
 **Список доступных навыков**
 > *«Покажи все мои установленные скиллы»*
@@ -205,6 +210,7 @@
 
 ## Требования
 
+- Claude Code CLI или Codex CLI
 - Python 3.x (для скриптов навыков)
 - `gh` CLI (опционально, для публикации плагинов)
 
@@ -213,7 +219,7 @@
 ## Структура
 
 ```
-claude-code-reflection-skills/
+agents-reflection-skills/
 ├── .claude-plugin/
 │   └── marketplace.json         (каталог маркетплейса)
 ├── plugins/

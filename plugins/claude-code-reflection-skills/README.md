@@ -1,16 +1,16 @@
-# Claude Code Reflection Skills
+# Agents Reflection Skills
 
-Meta-skills that let Claude Code configure itself through conversation.
+Meta-skills that let AI coding agents configure themselves through conversation.
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
-| **mcp-management** | Install and manage MCP servers across coding agents |
-| **hooks-management** | Auto-format, auto-test, log commands after edits |
-| **settings-management** | Configure permissions, sandbox, model selection |
-| **subagents-management** | Create specialized agents for specific tasks |
-| **skills-management** | Organize and share skills across projects |
+| **mcp-management** | Install and manage MCP servers across 10+ coding agents |
+| **hooks-management** | Manage hooks and automation for Claude Code and Codex CLI |
+| **settings-management** | Configure settings for Claude Code (JSON) and Codex CLI (TOML) |
+| **subagents-management** | Create and manage subagents across Claude Code and Codex CLI |
+| **skills-management** | Organize, discover, and share skills for coding agents |
 | **plugins-management** | Package and publish your own plugins |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
@@ -19,14 +19,12 @@ Meta-skills that let Claude Code configure itself through conversation.
 ## Installation
 
 ```bash
-/plugin marketplace add CodeAlive-AI/claude-code-reflection-skills
-/plugin install claude-code-reflection-skills@claude-code-reflection-skills
-# Restart Claude Code for changes to take effect
+claude install-skill CodeAlive-AI/agents-reflection-skills
 ```
 
 ## Examples
 
-- "Connect Claude to my PostgreSQL database"
+- "Install the Postgres MCP server to Claude Code, Cursor, and VS Code"
 - "Run Prettier after every edit"
 - "Turn on sandbox mode"
 - "Create a reviewer subagent"

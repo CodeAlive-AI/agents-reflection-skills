@@ -1,4 +1,4 @@
-# Claude Code Reflection Skills - Development Guide
+# Agents Reflection Skills - Development Guide
 
 ## When to Create Tags and Releases
 
@@ -62,7 +62,7 @@ When skill/plugin files change:
 ## Current Structure
 
 ```
-claude-code-reflection-skills/
+agents-reflection-skills/
 ├── .claude-plugin/
 │   └── plugin.json          # Version metadata - changes require release
 ├── skills/                  # All changes require release

@@ -1,17 +1,18 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-Marketplace-blueviolet?style=for-the-badge" alt="Claude Code Marketplace">
-  <img src="https://img.shields.io/badge/Plugins-1-blue?style=for-the-badge" alt="1 Plugin">
+  <img src="https://img.shields.io/badge/Agent_Skills-Marketplace-blueviolet?style=for-the-badge" alt="Agent Skills Marketplace">
+  <img src="https://img.shields.io/badge/Skills-7-blue?style=for-the-badge" alt="7 Skills">
+  <img src="https://img.shields.io/badge/Agents-10+-orange?style=for-the-badge" alt="10+ Agents">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
-<h1 align="center">Claude Code Reflection Skills</h1>
+<h1 align="center">Agents Reflection Skills</h1>
 
 <p align="center">
-  <strong>让 Claude Code 能够自我配置的元技能市场</strong>
+  <strong>让 AI 编码代理自我配置的元技能</strong>
 </p>
 
 <p align="center">
-  告别手动编辑 JSON 文件，直接让 Claude 帮你搞定一切。
+  告别手动编辑配置文件，直接告诉代理你需要什么。
 </p>
 
 <p align="center">
@@ -24,29 +25,33 @@
 
 ## 安装
 
+**通过 Skills CLI（推荐）：**
+
 ```bash
-# 第一步：添加市场源
-/plugin marketplace add https://github.com/CodeAlive-AI/claude-code-reflection-skills.git
+claude install-skill CodeAlive-AI/agents-reflection-skills
+```
 
-# 第二步：安装插件
+**通过插件市场：**
+
+```bash
+/plugin marketplace add https://github.com/CodeAlive-AI/agents-reflection-skills.git
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
-
-# 第三步：重启 Claude Code 以使更改生效
+# 重启 Claude Code 以使更改生效
 ```
 
 ---
 
 ## 包含内容
 
-**claude-code-reflection-skills** 插件提供 7 个技能：
+本插件提供 7 个技能，支持 **Claude Code、Codex CLI、Cursor、VS Code、Gemini CLI** 等：
 
 | 技能 | 功能 |
 |------|------|
-| **mcp-management** | 跨编码代理安装和管理 MCP 服务器 |
-| **hooks-management** | 自动格式化、自动测试、命令日志记录 |
-| **settings-management** | 配置权限、沙箱模式、模型选择 |
-| **subagents-management** | 创建专门处理特定任务的子代理 |
-| **skills-management** | 跨项目管理和分享技能 |
+| **mcp-management** | 跨 10+ 编码代理安装和管理 MCP 服务器 |
+| **hooks-management** | 管理 Claude Code 和 Codex CLI 的钩子与自动化 |
+| **settings-management** | 配置 Claude Code (JSON) 和 Codex CLI (TOML) |
+| **subagents-management** | 跨 Claude Code 和 Codex CLI 创建管理子代理 |
+| **skills-management** | 组织、发现和分享编码代理技能 |
 | **plugins-management** | 打包和发布自己的插件 |
 | **optimizing-claude-code** | 审计仓库并优化 CLAUDE.md 配置 |
 
@@ -58,12 +63,12 @@
 
 ### mcp-management
 
-> 跨编码代理安装和管理 MCP 服务器
+> 跨 10+ 编码代理安装和管理 MCP 服务器
 
 **一次安装到所有代理**
 > *"把 Postgres MCP 服务器安装到 Claude Code、Cursor 和 VS Code"*
 
-使用 [add-mcp](https://github.com/neondatabase/add-mcp) 一条命令将 MCP 服务器安装到 10+ 编码代理。自动处理配置格式差异。
+使用 [add-mcp](https://github.com/neondatabase/add-mcp) 一条命令将 MCP 服务器安装到 10+ 编码代理（Claude Code、Cursor、VS Code、Claude Desktop、Gemini CLI、Codex、Goose、GitHub Copilot CLI、OpenCode、Zed）。自动处理格式差异（JSON、YAML、TOML）。
 
 **连接数据库**
 > *"把 Claude 连接到我的 PostgreSQL 数据库"*
@@ -84,7 +89,7 @@
 
 ### hooks-management
 
-> 自动格式化、自动测试、命令日志记录
+> 管理 Claude Code 和 Codex CLI 的钩子与自动化
 
 **代码自动格式化**
 > *"每次编辑后对 TypeScript 文件运行 Prettier"*
@@ -115,7 +120,7 @@
 
 ### settings-management
 
-> 配置权限、沙箱模式、模型选择
+> 配置 Claude Code (JSON) 和 Codex CLI (TOML)
 
 **启用沙箱模式**
 > *"开启沙箱模式，让 Claude 不用每条命令都请求权限"*
@@ -141,7 +146,7 @@
 
 ### subagents-management
 
-> 创建专门处理特定任务的子代理
+> 跨 Claude Code 和 Codex CLI 创建管理子代理
 
 **创建代码审查员**
 > *"创建一个只能读取文件的审查子代理，使用 Opus 保证质量"*
@@ -157,7 +162,7 @@
 
 ### skills-management
 
-> 跨项目管理和分享技能
+> 组织、发现和分享编码代理技能
 
 **查看可用技能**
 > *"显示我所有已安装的技能"*
@@ -205,7 +210,7 @@
 
 ## 系统要求
 
-- Claude Code CLI 1.0.33 或更高版本
+- Claude Code CLI 或 Codex CLI
 - Python 3.x（用于技能脚本）
 - `gh` CLI（可选，用于插件发布功能）
 
@@ -214,7 +219,7 @@
 ## 目录结构
 
 ```
-claude-code-reflection-skills/
+agents-reflection-skills/
 ├── .claude-plugin/
 │   └── marketplace.json         (市场目录)
 ├── plugins/

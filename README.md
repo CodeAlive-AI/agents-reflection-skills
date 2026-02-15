@@ -1,17 +1,18 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-Marketplace-blueviolet?style=for-the-badge" alt="Claude Code Marketplace">
-  <img src="https://img.shields.io/badge/Plugins-1-blue?style=for-the-badge" alt="1 Plugin">
+  <img src="https://img.shields.io/badge/Agent_Skills-Marketplace-blueviolet?style=for-the-badge" alt="Agent Skills Marketplace">
+  <img src="https://img.shields.io/badge/Skills-7-blue?style=for-the-badge" alt="7 Skills">
+  <img src="https://img.shields.io/badge/Agents-10+-orange?style=for-the-badge" alt="10+ Agents">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
-<h1 align="center">Claude Code Reflection Skills</h1>
+<h1 align="center">Agents Reflection Skills</h1>
 
 <p align="center">
-  <strong>A marketplace for meta-skills that let Claude Code configure itself</strong>
+  <strong>Meta-skills that let AI coding agents configure themselves</strong>
 </p>
 
 <p align="center">
-  No more editing JSON files. Just ask Claude to set things up.
+  No more editing config files. Just tell your agent what you need.
 </p>
 
 <p align="center">
@@ -24,29 +25,33 @@
 
 ## Installation
 
+**Via Skills CLI (recommended):**
+
 ```bash
-# Step 1: Add the marketplace
-/plugin marketplace add https://github.com/CodeAlive-AI/claude-code-reflection-skills.git
+claude install-skill CodeAlive-AI/agents-reflection-skills
+```
 
-# Step 2: Install the plugin
+**Via plugin marketplace:**
+
+```bash
+/plugin marketplace add https://github.com/CodeAlive-AI/agents-reflection-skills.git
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
-
-# Step 3: Restart Claude Code for changes to take effect
+# Restart Claude Code for changes to take effect
 ```
 
 ---
 
 ## What's Included
 
-The **claude-code-reflection-skills** plugin provides 7 skills:
+This plugin provides 7 skills that work across **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI**, and more:
 
 | Skill | What It Does |
 |-------|--------------|
-| **mcp-management** | Install and manage MCP servers across coding agents |
-| **hooks-management** | Auto-format, auto-test, log commands after edits |
-| **settings-management** | Configure permissions, sandbox, model selection |
-| **subagents-management** | Create specialized agents for specific tasks |
-| **skills-management** | Organize and share skills across projects |
+| **mcp-management** | Install and manage MCP servers across 10+ coding agents |
+| **hooks-management** | Manage hooks and automation for Claude Code and Codex CLI |
+| **settings-management** | Configure settings for Claude Code (JSON) and Codex CLI (TOML) |
+| **subagents-management** | Create and manage subagents across Claude Code and Codex CLI |
+| **skills-management** | Organize, discover, and share skills for coding agents |
 | **plugins-management** | Package and publish your own plugins |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
@@ -58,12 +63,12 @@ The **claude-code-reflection-skills** plugin provides 7 skills:
 
 ### mcp-management
 
-> Install and manage MCP servers across coding agents
+> Install and manage MCP servers across 10+ coding agents
 
 **Install to All Your Agents at Once**
 > *"Install the Postgres MCP server to Claude Code, Cursor, and VS Code"*
 
-Uses [add-mcp](https://github.com/neondatabase/add-mcp) to install MCP servers to 10+ coding agents with a single command. Handles config format differences automatically.
+Uses [add-mcp](https://github.com/neondatabase/add-mcp) to install MCP servers to 10+ coding agents (Claude Code, Cursor, VS Code, Claude Desktop, Gemini CLI, Codex, Goose, GitHub Copilot CLI, OpenCode, Zed) with a single command. Handles config format differences (JSON, YAML, TOML) automatically.
 
 **Connect to Your Database**
 > *"Connect Claude to my PostgreSQL database"*
@@ -84,7 +89,7 @@ Configures MCP servers consistently across Claude Code, Cursor, VS Code, Gemini 
 
 ### hooks-management
 
-> Auto-format, auto-test, log commands after edits
+> Manage hooks and automation for Claude Code and Codex CLI
 
 **Auto-Format Code**
 > *"Run Prettier on TypeScript files after every edit"*
@@ -115,7 +120,7 @@ Adds a PreToolUse hook that pauses and requests confirmation for database resets
 
 ### settings-management
 
-> Configure permissions, sandbox, model selection
+> Configure settings for Claude Code (JSON) and Codex CLI (TOML)
 
 **Enable Sandbox Mode**
 > *"Turn on sandbox mode so Claude can work without asking permission for every command"*
@@ -141,7 +146,7 @@ Creates `.claude/settings.json` in project scope. Commit once, entire team gets 
 
 ### subagents-management
 
-> Create specialized agents for specific tasks
+> Create and manage subagents across Claude Code and Codex CLI
 
 **Create a Code Reviewer**
 > *"Create a reviewer subagent that can only read files, uses Opus for quality"*
@@ -157,7 +162,7 @@ Creates a specialized agent for running test suites with limited tool access for
 
 ### skills-management
 
-> Organize and share skills across projects
+> Organize, discover, and share skills for coding agents
 
 **List Available Skills**
 > *"Show me all my installed skills"*
@@ -205,7 +210,7 @@ Evaluates memory file quality: structure, conciseness, @import validation, essen
 
 ## Requirements
 
-- Claude Code CLI version 1.0.33 or later
+- Claude Code CLI or Codex CLI
 - Python 3.x (for skill scripts)
 - `gh` CLI (optional, for plugin publishing features)
 
@@ -214,7 +219,7 @@ Evaluates memory file quality: structure, conciseness, @import validation, essen
 ## Structure
 
 ```
-claude-code-reflection-skills/
+agents-reflection-skills/
 ├── .claude-plugin/
 │   └── marketplace.json         (marketplace catalog)
 ├── plugins/

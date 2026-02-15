@@ -1,17 +1,18 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-Marketplace-blueviolet?style=for-the-badge" alt="Claude Code Marketplace">
-  <img src="https://img.shields.io/badge/Plugins-1-blue?style=for-the-badge" alt="1 Plugin">
+  <img src="https://img.shields.io/badge/Agent_Skills-Marketplace-blueviolet?style=for-the-badge" alt="Agent Skills Marketplace">
+  <img src="https://img.shields.io/badge/Skills-7-blue?style=for-the-badge" alt="7 Skills">
+  <img src="https://img.shields.io/badge/Agents-10+-orange?style=for-the-badge" alt="10+ Agents">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
-<h1 align="center">Claude Code Reflection Skills</h1>
+<h1 align="center">Agents Reflection Skills</h1>
 
 <p align="center">
-  <strong>Um marketplace de meta-habilidades que permitem ao Claude Code se autoconfigurar</strong>
+  <strong>Meta-habilidades que permitem que agentes de codificacao AI se autoconfigurem</strong>
 </p>
 
 <p align="center">
-  Chega de editar arquivos JSON na mão. É só pedir pro Claude configurar tudo pra você.
+  Chega de editar arquivos de config na mao. So diga ao seu agente o que voce precisa.
 </p>
 
 <p align="center">
@@ -24,31 +25,35 @@
 
 ## Instalação
 
+**Via Skills CLI (recomendado):**
+
 ```bash
-# Passo 1: Adicione o marketplace
-/plugin marketplace add https://github.com/CodeAlive-AI/claude-code-reflection-skills.git
+claude install-skill CodeAlive-AI/agents-reflection-skills
+```
 
-# Passo 2: Instale o plugin
+**Via marketplace de plugins:**
+
+```bash
+/plugin marketplace add https://github.com/CodeAlive-AI/agents-reflection-skills.git
 /plugin install claude-code-reflection-skills@claude-code-reflection-skills
-
-# Passo 3: Reinicie o Claude Code para que as alterações entrem em vigor
+# Reinicie o Claude Code para que as alterações entrem em vigor
 ```
 
 ---
 
 ## O Que Está Incluído
 
-O plugin **claude-code-reflection-skills** oferece 7 habilidades:
+Este plugin oferece 7 habilidades que funcionam com **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI** e mais:
 
 | Habilidade | O Que Faz |
 |------------|-----------|
-| **mcp-management** | Instala e gerencia servidores MCP em agentes de codificacao |
-| **hooks-management** | Auto-formatação, auto-testes, log de comandos |
-| **settings-management** | Configura permissões, sandbox e seleção de modelo |
-| **subagents-management** | Cria agentes especializados para tarefas específicas |
-| **skills-management** | Organiza e compartilha habilidades entre projetos |
-| **plugins-management** | Empacota e publica seus próprios plugins |
-| **optimizing-claude-code** | Audita repositórios e otimiza o CLAUDE.md |
+| **mcp-management** | Instala e gerencia servidores MCP em 10+ agentes de codificacao |
+| **hooks-management** | Gerencia hooks e automacao para Claude Code e Codex CLI |
+| **settings-management** | Configura Claude Code (JSON) e Codex CLI (TOML) |
+| **subagents-management** | Cria e gerencia subagentes no Claude Code e Codex CLI |
+| **skills-management** | Organiza, descobre e compartilha habilidades para agentes |
+| **plugins-management** | Empacota e publica seus proprios plugins |
+| **optimizing-claude-code** | Audita repositorios e otimiza o CLAUDE.md |
 
 > **Leve:** As descrições de todas as 7 habilidades juntas usam menos de 500 tokens na janela de contexto.
 
@@ -58,12 +63,12 @@ O plugin **claude-code-reflection-skills** oferece 7 habilidades:
 
 ### mcp-management
 
-> Instala e gerencia servidores MCP em agentes de codificacao
+> Instala e gerencia servidores MCP em 10+ agentes de codificacao
 
 **Instalar em Todos os Agentes de Uma Vez**
 > *"Instala o servidor MCP do Postgres no Claude Code, Cursor e VS Code"*
 
-Usa o [add-mcp](https://github.com/neondatabase/add-mcp) pra instalar servidores MCP em 10+ agentes de codificacao com um unico comando. Lida com as diferencas de formato de configuracao automaticamente.
+Usa o [add-mcp](https://github.com/neondatabase/add-mcp) pra instalar servidores MCP em 10+ agentes (Claude Code, Cursor, VS Code, Claude Desktop, Gemini CLI, Codex, Goose, GitHub Copilot CLI, OpenCode, Zed) com um unico comando. Lida com diferencas de formato (JSON, YAML, TOML) automaticamente.
 
 **Conectar ao Banco de Dados**
 > *"Conecta o Claude ao meu banco PostgreSQL"*
@@ -84,7 +89,7 @@ Configura servidores MCP de forma consistente no Claude Code, Cursor, VS Code, G
 
 ### hooks-management
 
-> Auto-formatação, auto-testes, log de comandos
+> Gerencia hooks e automacao para Claude Code e Codex CLI
 
 **Auto-Formatação de Código**
 > *"Roda o Prettier nos arquivos TypeScript depois de cada edição"*
@@ -115,7 +120,7 @@ Adiciona um hook PreToolUse que pausa e pede confirmação para resets de banco 
 
 ### settings-management
 
-> Configura permissões, sandbox e seleção de modelo
+> Configura Claude Code (JSON) e Codex CLI (TOML)
 
 **Ativar Modo Sandbox**
 > *"Liga o modo sandbox pra o Claude poder trabalhar sem pedir permissão pra cada comando"*
@@ -141,7 +146,7 @@ Cria `.claude/settings.json` no escopo do projeto. Um commit e todo o time receb
 
 ### subagents-management
 
-> Cria agentes especializados para tarefas específicas
+> Cria e gerencia subagentes no Claude Code e Codex CLI
 
 **Criar um Revisor de Código**
 > *"Cria um subagente revisor que só pode ler arquivos, usando Opus pra qualidade"*
@@ -157,7 +162,7 @@ Cria um agente especializado em rodar suítes de teste com acesso limitado a fer
 
 ### skills-management
 
-> Organiza e compartilha habilidades entre projetos
+> Organiza, descobre e compartilha habilidades para agentes
 
 **Listar Habilidades Disponíveis**
 > *"Mostra todas as minhas habilidades instaladas"*
@@ -205,7 +210,7 @@ Avalia a qualidade do arquivo de memória: estrutura, concisão, validação de 
 
 ## Requisitos
 
-- Claude Code CLI versão 1.0.33 ou superior
+- Claude Code CLI ou Codex CLI
 - Python 3.x (para scripts das habilidades)
 - CLI `gh` (opcional, para funcionalidades de publicação de plugins)
 
@@ -214,7 +219,7 @@ Avalia a qualidade do arquivo de memória: estrutura, concisão, validação de 
 ## Estrutura
 
 ```
-claude-code-reflection-skills/
+agents-reflection-skills/
 ├── .claude-plugin/
 │   └── marketplace.json         (catálogo do marketplace)
 ├── plugins/

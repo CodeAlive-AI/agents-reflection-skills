@@ -1,19 +1,22 @@
 {
   "name": "claude-code-reflection-skills",
-  "description": "A comprehensive collection of meta-skills for Claude Code that enable self-management and reflection capabilities. Includes skills for managing other skills, subagents, plugins, settings, MCP servers, and hooks. These reflection skills allow Claude Code to introspect and modify its own configuration, making it easier to customize and extend the AI assistant's capabilities.",
+  "description": "Meta-skills that let AI coding agents configure themselves. Manage MCP servers across 10+ agents, hooks, settings, subagents, skills, and plugins for Claude Code, Codex CLI, Cursor, and more.",
   "version": "1.1.1",
   "author": {
     "name": "CodeAlive-AI"
   },
-  "homepage": "https://github.com/CodeAlive-AI/claude-code-reflection-skills",
-  "repository": "https://github.com/CodeAlive-AI/claude-code-reflection-skills",
+  "homepage": "https://github.com/CodeAlive-AI/agents-reflection-skills",
+  "repository": "https://github.com/CodeAlive-AI/agents-reflection-skills",
   "license": "MIT",
   "keywords": [
     "claude-code",
+    "codex-cli",
+    "cursor",
+    "multi-agent",
     "skills",
     "meta-skills",
     "reflection",
-    "self-management",
+    "self-configuration",
     "plugins",
     "settings",
     "mcp",
