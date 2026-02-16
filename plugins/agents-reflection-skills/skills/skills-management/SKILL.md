@@ -1,6 +1,6 @@
 ---
 name: skills-management
-description: Manages skills for AI coding agents: list, install, remove, update, review, move, and discover. Use when the user asks to find, install, remove, or update skills, review skill quality, move skills between scopes, check for updates, or asks "how do I do X" where X might have an existing skill.
+description: Search, find, discover, install, remove, update, review, list, and move skills for AI coding agents. Use when user asks "find a skill for X", "search for a skill", "is there a skill for X", "install skill", "remove skill", "update skills", "list skills", "review skill quality", "move skill", "check for updates", or "how do I do X" where X might have an existing skill. This is THE tool for skill discovery and ecosystem search.
 ---
 
 # Skills Manager
@@ -189,19 +189,24 @@ Use `npx skills find` when the user:
 
 ### Review & Compare Results
 
-When search results are ambiguous (3+ results, similar names, or user asks to compare), assess candidates before recommending. This is agent-driven — use WebFetch on `https://skills.sh/<owner>/<repo>/<skill>` pages and apply judgment.
+**Always suggest reviewing found skills after a search.** After presenting search results, ask the user if they'd like you to review and compare the top candidates before installing.
 
-**Trigger conditions:**
-- 3+ results returned for a query
+When there are 2+ results, proactively offer to fetch and assess the top candidates. This is agent-driven — use WebFetch on `https://skills.sh/<owner>/<repo>/<skill>` pages and apply judgment.
+
+**Always offer review when:**
+- Any search returns results (ask: "Want me to review these skills before you install?")
+- 3+ results returned — review is especially valuable
 - Multiple results with similar names or overlapping descriptions
 - User asks to compare, review, evaluate, or pick the best
 - A result has suspicious metrics (niche topic with very high installs)
 
 **Process:**
-1. Fetch skills.sh pages for top 3-6 candidates
-2. Evaluate quality signals: install count, agent distribution, age, description, relevance, overlap with installed skills
-3. Assign verdict: Recommended / Consider / Skip
-4. Present ranked summary with 1-2 sentence assessments
+1. Present the search results summary first
+2. Ask the user if they want you to review/compare the top candidates
+3. If yes: fetch skills.sh pages for top 3-6 candidates
+4. Evaluate quality signals: install count, agent distribution, age, description, relevance, overlap with installed skills
+5. Assign verdict: Recommended / Consider / Skip
+6. Present ranked summary with 1-2 sentence assessments
 
 See [references/remote-skill-assessment.md](references/remote-skill-assessment.md) for the full assessment framework including red flags and scoring signals.
 
