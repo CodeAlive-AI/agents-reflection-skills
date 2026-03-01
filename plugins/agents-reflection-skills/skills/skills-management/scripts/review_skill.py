@@ -169,6 +169,53 @@ def check_description(description: str) -> list[dict]:
             })
             break
 
+    # Check for negative triggers (reduces overtriggering)
+    negative_patterns = [
+        r"\bdon'?t use\b",
+        r"\bdo not use\b",
+        r"\bnot for\b",
+        r"\bnot when\b",
+        r"\bdon'?t trigger\b",
+        r"\bnot intended for\b",
+    ]
+    has_negative = any(re.search(p, description.lower()) for p in negative_patterns)
+    if not has_negative:
+        issues.append({
+            "severity": "info",
+            "rule": "missing-negative-triggers",
+            "message": "Description doesn't include negative triggers",
+            "suggestion": "Add 'Don't use for...' or 'Not for...' to prevent overtriggering on similar tasks"
+        })
+
+    return issues
+
+
+def check_name_matches_dir(name: str, skill_path: Path) -> list[dict]:
+    """Check that frontmatter name matches the parent directory name."""
+    issues = []
+    dir_name = skill_path.name
+    if name and name != dir_name:
+        issues.append({
+            "severity": "error",
+            "rule": "name-dir-mismatch",
+            "message": f"Frontmatter name '{name}' does not match directory name '{dir_name}'",
+            "suggestion": f"Rename the directory to '{name}' or change the name field to '{dir_name}'"
+        })
+    return issues
+
+
+def check_frontmatter_xml(metadata: dict) -> list[dict]:
+    """Check frontmatter fields for forbidden XML angle brackets."""
+    issues = []
+    for field in ("name", "description"):
+        value = metadata.get(field, "")
+        if re.search(r"[<>]", value):
+            issues.append({
+                "severity": "error",
+                "rule": "xml-in-frontmatter",
+                "message": f"Field '{field}' contains XML angle brackets (< >)",
+                "suggestion": "Remove < > characters — they can cause prompt injection in the system prompt"
+            })
     return issues
 
 
@@ -249,6 +296,18 @@ def check_structure(skill_path: Path) -> list[dict]:
     """Check skill directory structure."""
     issues = []
 
+    # Check for forbidden documentation files
+    forbidden_docs = ["README.md", "CHANGELOG.md", "INSTALLATION_GUIDE.md"]
+    for doc_name in forbidden_docs:
+        doc_path = skill_path / doc_name
+        if doc_path.exists():
+            issues.append({
+                "severity": "warning",
+                "rule": "forbidden-doc-file",
+                "message": f"Skill contains '{doc_name}' — not needed inside a skill folder",
+                "suggestion": "Move documentation to SKILL.md or references/. Skills are for agents, not humans"
+            })
+
     # Check for reference files longer than 100 lines without TOC
     for md_file in skill_path.glob("**/*.md"):
         if md_file.name == "SKILL.md":
@@ -293,7 +352,9 @@ def review_skill(name: str, scope: str | None = None, output_format: str = "text
 
     all_issues = []
     all_issues.extend(check_name(skill_name))
+    all_issues.extend(check_name_matches_dir(skill_name, skill_path))
     all_issues.extend(check_description(description))
+    all_issues.extend(check_frontmatter_xml(metadata))
     all_issues.extend(check_body(body, skill_path))
     all_issues.extend(check_structure(skill_path))
 

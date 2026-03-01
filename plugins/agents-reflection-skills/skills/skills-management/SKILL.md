@@ -72,7 +72,10 @@ python3 scripts/review_skill.py <name> -f json # JSON output for programmatic us
 
 **Checks performed:**
 - Name format (lowercase, hyphens, max 64 chars, gerund form)
-- Description quality (triggers, third person, specificity)
+- Name matches directory name
+- Description quality (triggers, negative triggers, third person, specificity)
+- XML angle brackets in frontmatter (security)
+- Forbidden docs files (README.md, CHANGELOG.md)
 - Body length (warns if >500 lines)
 - Time-sensitive content
 - Path format (no Windows backslashes)
