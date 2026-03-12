@@ -57,7 +57,7 @@ Use Edit tool for modifications, Write tool for new files.
 | "block .env file changes" | PreToolUse | Edit\|Write | Exit code 2 blocks |
 | "notify me when done" | Notification | "" | Desktop notification |
 | "run tests after code changes" | PostToolUse | Edit\|Write | Filter by extension |
-| "ask before dangerous commands" | PermissionRequest | Bash | Return allow/deny |
+| "ask before dangerous commands" | PreToolUse | Bash | Return `permissionDecision: "ask"` |
 
 ### Hook Configuration Template
 
@@ -103,8 +103,11 @@ cmd=$(echo "$input" | jq -r '.tool_input.command')
 
 # Your logic here
 if echo "$cmd" | grep -q 'pattern'; then
-    # Show dialog, log, or block
-    exit 2  # Block the operation
+    # Option 1: Block with exit code
+    exit 2
+
+    # Option 2 (preferred for PreToolUse): JSON decision control
+    # jq -n '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"ask",permissionDecisionReason:"Reason"}}'
 fi
 
 exit 0  # Allow
@@ -214,12 +217,60 @@ Validates:
 5. If event empty, remove event key
 6. Validate and save
 
+## Decision Control (PreToolUse)
+
+PreToolUse hooks can return JSON on stdout to control tool execution. This is **preferred over bare exit codes** for PreToolUse because it supports three outcomes and richer control.
+
+| `permissionDecision` | Behavior |
+|----------------------|----------|
+| `"allow"` | Bypass permissions, proceed silently |
+| `"deny"` | Block the tool call, reason shown to Claude |
+| `"ask"` | Prompt the user to confirm in the terminal |
+
+Additional JSON fields:
+- `permissionDecisionReason` — shown to user for `"allow"`/`"ask"`, shown to Claude for `"deny"`
+- `updatedInput` — modify tool input before execution
+- `additionalContext` — inject context for Claude before the tool executes
+
+**Ask user before dangerous command (PreToolUse)**:
+```bash
+#!/bin/bash
+set -euo pipefail
+input=$(cat)
+cmd=$(echo "$input" | jq -r '.tool_input.command // empty')
+
+if echo "$cmd" | grep -qE 'supabase\s+db\s+reset'; then
+    jq -n '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "ask",
+        permissionDecisionReason: "This will destroy and recreate the local database."
+      }
+    }'
+else
+    exit 0
+fi
+```
+
+**Deny with reason (PreToolUse)**:
+```bash
+jq -n '{
+  hookSpecificOutput: {
+    hookEventName: "PreToolUse",
+    permissionDecision: "deny",
+    permissionDecisionReason: "Destructive command blocked by hook"
+  }
+}'
+```
+
+See [references/claude-event-schemas.md](references/claude-event-schemas.md) for the full output schema.
+
 ## Exit Codes
 
 | Code | Meaning | Use Case |
 |------|---------|----------|
 | 0 | Success/Allow | Continue execution |
-| 2 | Block | PreToolUse: deny tool, PermissionRequest: deny permission |
+| 2 | Block | Simple blocking (prefer JSON decision control for PreToolUse) |
 | Other | Error | Log to stderr, shown in verbose mode |
 
 ## Security Checklist
