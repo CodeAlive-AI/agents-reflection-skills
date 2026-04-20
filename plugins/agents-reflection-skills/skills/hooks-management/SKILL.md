@@ -18,6 +18,8 @@ Manage hooks and automation through natural language commands.
 - Project: `.claude/settings.json`
 - Local (not committed): `.claude/settings.local.json`
 
+**Default control mechanism for PreToolUse**: emit JSON on stdout with `hookSpecificOutput.permissionDecision` set to `"allow"`, `"deny"`, or **`"ask"`** (triggers the built-in user confirmation prompt). See [Decision Control](#decision-control-pretooluse). Do NOT roll your own confirmation schemes (env-var flags, interactive `osascript` prompts, bypass tokens) — those break the built-in UX and silently fail under existing `permissions.allow` entries.
+
 ## Workflow
 
 ### 1. Understand the Request
@@ -57,7 +59,9 @@ Use Edit tool for modifications, Write tool for new files.
 | "block .env file changes" | PreToolUse | Edit\|Write | Exit code 2 blocks |
 | "notify me when done" | Notification | "" | Desktop notification |
 | "run tests after code changes" | PostToolUse | Edit\|Write | Filter by extension |
-| "ask before dangerous commands" | PreToolUse | Bash | Return `permissionDecision: "ask"` |
+| "ask before dangerous commands" | PreToolUse | Bash | Emit JSON `permissionDecision: "ask"` (built-in confirm UI) |
+| "require manual approval for X" | PreToolUse | Bash/Edit/Write | Same — emit JSON `permissionDecision: "ask"`, NOT exit 2 |
+| "block unless confirmed" | PreToolUse | Bash | Same — JSON `"ask"` lets the user approve per call |
 
 ### Hook Configuration Template
 
@@ -92,7 +96,8 @@ Use Edit tool for modifications, Write tool for new files.
 
 **Script location**: `~/.claude/hooks/` (create if needed)
 
-**Script template** (`~/.claude/hooks/my-hook.sh`):
+**Script template for PreToolUse** (`~/.claude/hooks/my-hook.sh`) — use JSON decision control as the primary mechanism; exit codes are a fallback for simple blocking only:
+
 ```bash
 #!/bin/bash
 set -euo pipefail
@@ -102,16 +107,38 @@ input=$(cat)
 cmd=$(echo "$input" | jq -r '.tool_input.command')
 
 # Your logic here
-if echo "$cmd" | grep -q 'pattern'; then
-    # Option 1: Block with exit code
-    exit 2
-
-    # Option 2 (preferred for PreToolUse): JSON decision control
-    # jq -n '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"ask",permissionDecisionReason:"Reason"}}'
+if echo "$cmd" | grep -q 'pattern-requiring-confirmation'; then
+    # PRIMARY PATTERN for "require user confirmation": emit JSON on stdout.
+    # Claude Code will show its built-in confirm prompt to the user.
+    jq -n '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "ask",
+        permissionDecisionReason: "Explain why this call is risky"
+      }
+    }'
+    exit 0
 fi
 
-exit 0  # Allow
+if echo "$cmd" | grep -q 'pattern-to-hard-block'; then
+    # Hard block (no user override possible): JSON deny, NOT exit 2.
+    jq -n '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: "Reason shown to Claude"
+      }
+    }'
+    exit 0
+fi
+
+exit 0  # Allow (silent)
 ```
+
+**Why JSON decisions, not exit 2 or home-grown prompts:**
+- `permissionDecision: "ask"` triggers the built-in Claude Code confirm UI — the user sees a clean prompt and can allow/deny per-call.
+- `exit 2` is a blunt block; the user cannot override it from the UI, and Claude often re-tries with workarounds.
+- Home-grown schemes (env-var flags like `CONFIRMED=1`, `osascript` dialogs, bypass tokens) break the native UX, leak into command history, and are silently bypassed if the tool already has a matching `permissions.allow` rule.
 
 **Hook config using script**:
 ```json
@@ -172,6 +199,62 @@ exit 0  # Allow
 }
 ```
 
+## Decision Control (PreToolUse)
+
+PreToolUse hooks control tool execution by emitting JSON on stdout. This is the **default mechanism** — use it instead of exit codes whenever the intent is richer than "silently allow / hard block", especially when the user should be asked to confirm.
+
+| `permissionDecision` | Behavior | Use for |
+|----------------------|----------|---------|
+| `"allow"` | Bypass permissions, proceed silently | Pre-approving a safe call |
+| `"deny"` | Block, reason shown to Claude | Hard block (no user override) |
+| `"ask"` | **Built-in Claude Code confirm UI** shown to user | "Require manual approval for X" — the canonical pattern |
+
+Additional JSON fields:
+- `permissionDecisionReason` — shown to the user for `"allow"`/`"ask"`, shown to Claude for `"deny"`
+- `updatedInput` — modify tool input before execution
+- `additionalContext` — inject context for Claude before the tool executes
+
+### Ask user before dangerous command (the canonical pattern)
+
+When the user says anything like **"require manual confirmation"**, **"ask before doing X"**, **"don't run Y without my approval"** — this is the pattern. Do not invent bypass env vars, `osascript` dialogs, or confirmation tokens. The built-in prompt already handles per-call allow/deny and is the only path that integrates with existing `permissions.allow` rules correctly.
+
+```bash
+#!/bin/bash
+set -euo pipefail
+input=$(cat)
+cmd=$(echo "$input" | jq -r '.tool_input.command // empty')
+
+if echo "$cmd" | grep -qE 'supabase\s+db\s+reset'; then
+    jq -n '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "ask",
+        permissionDecisionReason: "This will destroy and recreate the local database."
+      }
+    }'
+else
+    exit 0
+fi
+```
+
+### Deny with reason (hard block)
+
+```bash
+jq -n '{
+  hookSpecificOutput: {
+    hookEventName: "PreToolUse",
+    permissionDecision: "deny",
+    permissionDecisionReason: "Destructive command blocked by hook"
+  }
+}'
+```
+
+### Gotcha: `"ask"` vs existing `permissions.allow` rules
+
+If the tool call already matches an entry in `.claude/settings.local.json` → `permissions.allow` (for example, `"Bash"` is blanket-allowed for this session), the hook's `"ask"` is **bypassed** and the call proceeds silently. Symptom: the hook appears to do nothing. Diagnose by reading `.claude/settings.local.json` and narrowing the allow rule, or remove the blanket allow for the matcher while the hook is in effect.
+
+See [references/claude-event-schemas.md](references/claude-event-schemas.md) for the full output schema.
+
 ## Codex CLI Hooks
 
 Codex CLI has a limited hook system. For blocking/allowing commands, use Starlark rules instead of hooks:
@@ -216,54 +299,6 @@ Validates:
 4. If array empty, remove the matcher entry
 5. If event empty, remove event key
 6. Validate and save
-
-## Decision Control (PreToolUse)
-
-PreToolUse hooks can return JSON on stdout to control tool execution. This is **preferred over bare exit codes** for PreToolUse because it supports three outcomes and richer control.
-
-| `permissionDecision` | Behavior |
-|----------------------|----------|
-| `"allow"` | Bypass permissions, proceed silently |
-| `"deny"` | Block the tool call, reason shown to Claude |
-| `"ask"` | Prompt the user to confirm in the terminal |
-
-Additional JSON fields:
-- `permissionDecisionReason` — shown to user for `"allow"`/`"ask"`, shown to Claude for `"deny"`
-- `updatedInput` — modify tool input before execution
-- `additionalContext` — inject context for Claude before the tool executes
-
-**Ask user before dangerous command (PreToolUse)**:
-```bash
-#!/bin/bash
-set -euo pipefail
-input=$(cat)
-cmd=$(echo "$input" | jq -r '.tool_input.command // empty')
-
-if echo "$cmd" | grep -qE 'supabase\s+db\s+reset'; then
-    jq -n '{
-      hookSpecificOutput: {
-        hookEventName: "PreToolUse",
-        permissionDecision: "ask",
-        permissionDecisionReason: "This will destroy and recreate the local database."
-      }
-    }'
-else
-    exit 0
-fi
-```
-
-**Deny with reason (PreToolUse)**:
-```bash
-jq -n '{
-  hookSpecificOutput: {
-    hookEventName: "PreToolUse",
-    permissionDecision: "deny",
-    permissionDecisionReason: "Destructive command blocked by hook"
-  }
-}'
-```
-
-See [references/claude-event-schemas.md](references/claude-event-schemas.md) for the full output schema.
 
 ## Exit Codes
 
