@@ -1,6 +1,6 @@
 ---
 name: subagents-management
-description: Create, edit, list, move, and delete subagents and skills for coding agents (Claude Code, Codex CLI). Manage AGENTS.md instructions, custom subagent definitions, and skill packages across user and project scopes.
+description: Create, edit, list, move, and delete subagents and skills for coding agents (Claude Code, Codex CLI, OpenCode). Manage AGENTS.md instructions, custom subagent definitions, and skill packages across user and project scopes.
 ---
 
 # Subagents & Skills Management
@@ -9,6 +9,7 @@ Manage subagents, skills, and instruction files for coding agents.
 
 - **Claude Code**: Subagents in `~/.claude/agents/` and `.claude/agents/`
 - **Codex CLI**: AGENTS.md instructions + skills in `~/.agents/skills/` and `.agents/skills/`
+- **OpenCode**: `agent` blocks in `opencode.json` AND markdown agents in `~/.config/opencode/agents/` / `.opencode/agents/`; AGENTS.md for instructions
 
 **IMPORTANT**: After creating, modifying, or deleting subagents/skills, inform the user that they need to **restart the agent** for changes to take effect.
 
@@ -97,6 +98,69 @@ Codex uses `AGENTS.md` (equivalent to `CLAUDE.md`) for project instructions and 
 ```
 
 See [references/codex-agents.md](references/codex-agents.md) for Codex agents/skills reference.
+
+## OpenCode: agent blocks & AGENTS.md
+
+OpenCode (sst/opencode v1.14.x) supports both JSON `agent` blocks in `opencode.json` and markdown files in `agents/`.
+
+### AGENTS.md (instructions)
+
+```
+~/.config/opencode/AGENTS.md           # Global personal instructions
+<project>/AGENTS.md                    # Project instructions (commit to git)
+```
+
+Falls back to `CLAUDE.md` and `~/.claude/CLAUDE.md` automatically when the OpenCode equivalents are missing.
+
+### Subagents
+
+Two equivalent forms:
+
+**JSON in `opencode.json`:**
+```json
+{
+  "agent": {
+    "reviewer": {
+      "mode": "subagent",
+      "description": "Reviews PRs for security issues",
+      "model": "anthropic/claude-opus-4-5",
+      "temperature": 0.1,
+      "prompt": "{file:./prompts/reviewer.md}",
+      "permission": {
+        "edit": "deny",
+        "bash": { "*": "deny", "rg *": "allow" }
+      }
+    }
+  }
+}
+```
+
+**Markdown file** at `~/.config/opencode/agents/reviewer.md` or `<project>/.opencode/agents/reviewer.md`:
+```markdown
+---
+mode: subagent
+description: Reviews PRs for security issues
+model: anthropic/claude-opus-4-5
+temperature: 0.1
+permission:
+  edit: deny
+  bash:
+    "*": deny
+    "rg *": allow
+---
+
+You are a senior security reviewer...
+```
+
+OpenCode-specific fields not present in Claude Code subagents: `mode` (`primary`/`subagent`/`all`), `temperature`, `reasoningEffort`, `color`, granular `permission` glob rules, and full `provider/model-id` model strings.
+
+**CLI helpers:**
+```bash
+opencode agent create   # Interactive scaffolder
+opencode agent list     # List agents
+```
+
+See [references/opencode-agents.md](references/opencode-agents.md) for the complete OpenCode agents/AGENTS.md reference.
 
 ## Key Concepts (Claude Code)
 
