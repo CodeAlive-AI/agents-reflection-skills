@@ -24,6 +24,11 @@ Manage plugins across coding agents: create, validate, publish, delete, and subm
 | Prepare submission | `python scripts/prepare_submission.py <path> --email X --company-url Y` |
 | Install plugin | `/plugin install <name>@<marketplace>` |
 | Delete plugin | `/plugin uninstall <name>@<marketplace>` |
+| Test plugin (dev) | `claude --plugin-dir ./my-plugin` |
+| Reload after edits | `/reload-plugins` |
+| Cut release tag | `claude plugin tag --push` |
+| List installed | `claude plugin list [--json] [--available]` |
+| Update plugin | `claude plugin update <name>@<marketplace>` |
 
 ## Workflows
 
@@ -186,18 +191,26 @@ python scripts/prepare_submission.py ./my-plugin --open-form
 ```
 my-plugin/
 ├── .claude-plugin/
-│   └── plugin.json       # Required manifest
-├── commands/             # Slash commands
-│   └── *.md
-├── agents/               # AI agents
-│   └── *.md
-├── skills/               # Agent skills
+│   └── plugin.json       # Optional manifest (auto-discovered if absent)
+├── skills/               # Agent skills (preferred over commands/)
 │   └── */SKILL.md
+├── commands/             # Skills as flat .md files
+│   └── *.md
+├── agents/               # AI subagents
+│   └── *.md
+├── output-styles/        # Output style definitions (2026)
+├── themes/               # Color themes (2026)
+├── monitors/             # Background monitors (2026, v2.1.105+)
+│   └── monitors.json
 ├── hooks/
 │   └── hooks.json        # Event handlers
+├── bin/                  # Executables added to PATH (2026)
+├── settings.json         # Default agent / subagentStatusLine (2026)
 ├── .mcp.json             # MCP servers
-├── .lsp.json             # LSP server config (optional)
+├── .lsp.json             # LSP server config (since v2.0.74)
+├── package.json          # Auto-installed dependencies (2026)
 ├── README.md             # Documentation
+├── CHANGELOG.md
 └── LICENSE
 ```
 
@@ -267,11 +280,13 @@ See [references/opencode-plugins.md](references/opencode-plugins.md) for the ful
 
 ## Critical Rules (Avoid Silent Failures)
 
-- Keep `commands/`, `agents/`, `skills/`, and `hooks/` at the plugin root (never inside `.claude-plugin/`).
+- Keep `skills/`, `commands/`, `agents/`, `hooks/`, `monitors/`, `themes/`, `output-styles/`, `bin/` at the plugin root (never inside `.claude-plugin/`).
 - Do not add standard component paths to `plugin.json`. Only specify non-standard paths starting with `./`.
-- Use `${CLAUDE_PLUGIN_ROOT}` in hooks and MCP config paths (relative paths break after install).
+- Use `${CLAUDE_PLUGIN_ROOT}` (cache path, changes per version) and `${CLAUDE_PLUGIN_DATA}` (persistent across updates) in hooks and MCP/LSP/monitor config paths. Relative paths break after install.
 - Ensure hook scripts are executable (`chmod +x scripts/*`).
 - Marketplace `plugins[].name` must match the plugin's `plugin.json` `name`.
+- **Path traversal limit (2026)**: plugins cannot reference files outside their directory; use symlinks inside the plugin if needed.
+- **Versioning (2026)**: omit `version` to use git SHA (every commit is a new version). Set `version` and bump for stable releases. Use `claude plugin tag` to cut release tags.
 
 ## Common Patterns
 

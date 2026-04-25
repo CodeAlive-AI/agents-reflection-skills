@@ -36,7 +36,14 @@ Template:
 name: {name}
 description: {when Claude should use this subagent}
 tools: {comma-separated tools, or omit to inherit all}
-model: {sonnet|opus|haiku|inherit}
+disallowedTools: {optional denylist}
+model: {sonnet|opus|haiku|inherit, or full ID like claude-opus-4-7}
+effort: {low|medium|high|xhigh|max}
+maxTurns: {optional turn cap}
+permissionMode: {default|acceptEdits|plan|auto|dontAsk|bypassPermissions}
+isolation: worktree   # optional, runs agent in a fresh git worktree
+background: true       # optional, run concurrently
+color: blue            # optional UI color
 ---
 
 {System prompt - instructions for the subagent}
@@ -228,4 +235,24 @@ hooks:
       hooks:
         - type: command
           command: "./validate.sh"
+```
+
+**Parallel worktree-isolated worker (2026):**
+```yaml
+---
+name: parallel-fixer
+description: Fix lint errors in isolation
+isolation: worktree
+background: true
+model: sonnet
+maxTurns: 30
+---
+```
+
+**Tight allowlist + denylist (mind the ordering — `disallowedTools` is applied first):**
+```yaml
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit
+model: sonnet
+color: blue
 ```

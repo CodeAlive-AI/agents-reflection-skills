@@ -40,9 +40,12 @@ Use the Edit or Write tool to modify settings files. Always read existing conten
 
 ```json
 {
-  "model": "claude-sonnet-4-5-20250929"
+  "model": "claude-opus-4-7",
+  "effort": "high"
 }
 ```
+
+Effort levels: `low`, `medium`, `high`, `xhigh` (Opus 4.7 only), `max`. As of 2026, default effort is `high` for API-key, Bedrock/Vertex/Foundry, Team, and Enterprise users.
 
 ### Configure Permissions
 
@@ -51,10 +54,12 @@ Use the Edit or Write tool to modify settings files. Always read existing conten
   "permissions": {
     "allow": ["Bash(npm run:*)", "Bash(git:*)"],
     "deny": ["Read(.env)", "Read(.env.*)", "WebFetch"],
-    "defaultMode": "allowEdits"
+    "defaultMode": "acceptEdits"
   }
 }
 ```
+
+`defaultMode` accepts: `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions`. The new `auto` mode (March 2026) uses an LLM-based classifier and triggers `PermissionDenied` hooks on rejection.
 
 ### Add Environment Variables
 

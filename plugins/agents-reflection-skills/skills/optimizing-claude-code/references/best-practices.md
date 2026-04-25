@@ -1,4 +1,4 @@
-# Claude Code Best Practices
+# Claude Code Best Practices (2026-04)
 
 ## Contents
 1. Environment Setup
@@ -17,7 +17,9 @@
 ```json
 {
   "permissions": {
-    "allow": ["Edit", "Write", "Bash(git:*)", "Bash(npm:test)", "Bash(npm:build)"]
+    "allow": ["Edit", "Write", "Bash(git:*)", "Bash(npm:test)", "Bash(npm:build)"],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "WebFetch"],
+    "defaultMode": "acceptEdits"
   }
 }
 ```
@@ -25,6 +27,9 @@
 - Auto-allow benign operations (editing, git on feature branches)
 - Gate dangerous operations (database deletions, system configs)
 - Install `gh` CLI for issue/PR workflows
+- Cycle modes live with **Shift+Tab** (default → acceptEdits → plan)
+- For risky autonomous work, prefer the new **`auto`** mode (Sonnet/Opus classifier) over `bypassPermissions`. `auto` denies dangerous calls (mass deletion, exfiltration, malware) and triggers `PermissionDenied` hooks
+- `.git/`, `.claude/`, `.claude/skills/`, and `.husky/` are protected paths — even `bypassPermissions` will prompt for writes there (since v2.1.78–v2.1.81)
 
 ### Custom Commands
 
@@ -101,7 +106,9 @@ Brief description (2-5 bullets)
 
 - `think` - Standard reasoning
 - `think harder` - More computation
-- `ultrathink` - Maximum depth
+- `ultrathink` - Maximum depth (also activates extended thinking inside skills)
+
+**Effort levels (2026)**: control via `/effort` (interactive slider, arrow-key navigation), `--effort`, model picker, or skill `effort:` frontmatter. Levels: `low`, `medium`, `high`, `xhigh` (Opus 4.7 only), `max`.
 
 ### Be Specific
 
@@ -163,8 +170,16 @@ For 50+ items:
 ### Monitor
 
 - `/context` - Check usage
-- `/compact` - Reduce context
+- `/compact` - Reduce context (use `PreCompact`/`PostCompact` hooks to inject/preserve state)
+- `/usage` - Token + cost stats (replaces `/cost` and `/stats`, both still work as shortcuts)
 - Keep under 50-60% for complex tasks
+
+### Worktrees and Parallelism
+
+- `claude --worktree feature-x` — isolated git worktree per task
+- Subagent `isolation: worktree` — auto-isolates per spawn
+- Settings: `worktree.sparsePaths` for monorepos, `worktree.symlinkDirectories` for `node_modules`/caches
+- `WorktreeCreate` / `WorktreeRemove` hooks for custom lifecycle
 
 ---
 
@@ -178,10 +193,13 @@ For 50+ items:
 
 ### Sandboxed Autonomy
 
-For `--dangerously-skip-permissions`:
+For `--dangerously-skip-permissions` (alias of `--permission-mode bypassPermissions`):
 - Only in Docker/VMs
 - No credentials or external access
 - Review output, discard sandbox
+- Prefer `--permission-mode auto` (2026) for the same use case with classifier-backed safety (Team/Enterprise/Max)
+- Set `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` on Linux for PID-namespace subprocess isolation
+- Use `sandbox.failIfUnavailable: true` in CI to fail fast if the sandbox can't start
 
 ### Multi-Agent Validation
 

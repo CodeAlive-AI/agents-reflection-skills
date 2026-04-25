@@ -11,14 +11,31 @@ Manage hooks and automation through natural language commands.
 
 ## Quick Reference
 
-**Hook Events**: PreToolUse, PostToolUse, PermissionRequest, UserPromptSubmit, Notification, Stop, SubagentStop, PreCompact, SessionStart, SessionEnd
+**Hook Events** (Claude Code, as of 2026-04 — 28 events):
+
+- *Session lifecycle*: SessionStart, SessionEnd, InstructionsLoaded
+- *User input*: UserPromptSubmit, UserPromptExpansion
+- *Tool execution*: PreToolUse, PostToolUse, PostToolUseFailure, PostToolBatch
+- *Permissions*: PermissionRequest, PermissionDenied
+- *Model output*: Stop, StopFailure
+- *Subagents/tasks*: SubagentStart, SubagentStop, TaskCreated, TaskCompleted, TeammateIdle
+- *Config/state*: ConfigChange, FileChanged, CwdChanged
+- *Compaction*: PreCompact, PostCompact
+- *Worktree*: WorktreeCreate, WorktreeRemove
+- *MCP*: Elicitation, ElicitationResult
+- *Notifications*: Notification
+
+**Handler types**: `command`, `http`, `mcp_tool`, `prompt`, `agent`. Some events are command-only (PostCompact, PermissionDenied, Elicitation/ElicitationResult, FileChanged, CwdChanged, ConfigChange, InstructionsLoaded, WorktreeCreate/Remove, SubagentStart, StopFailure, TeammateIdle, Setup, SessionStart, SessionEnd, Notification).
 
 **Settings Files**:
 - User-wide: `~/.claude/settings.json`
 - Project: `.claude/settings.json`
 - Local (not committed): `.claude/settings.local.json`
+- Drop-in policy fragments: `~/.claude/managed-settings.d/` (managed-settings only)
 
-**Default control mechanism for PreToolUse**: emit JSON on stdout with `hookSpecificOutput.permissionDecision` set to `"allow"`, `"deny"`, or **`"ask"`** (triggers the built-in user confirmation prompt). See [Decision Control](#decision-control-pretooluse). Do NOT roll your own confirmation schemes (env-var flags, interactive `osascript` prompts, bypass tokens) — those break the built-in UX and silently fail under existing `permissions.allow` entries.
+**Default control mechanism for PreToolUse**: emit JSON on stdout with `hookSpecificOutput.permissionDecision` set to `"allow"`, `"deny"`, **`"ask"`** (triggers the built-in user confirmation prompt), or **`"defer"`** (pause headless tool calls; resume with `-p --resume`). See [Decision Control](#decision-control-pretooluse). Do NOT roll your own confirmation schemes (env-var flags, interactive `osascript` prompts, bypass tokens) — those break the built-in UX and silently fail under existing `permissions.allow` entries.
+
+**Disable all hooks**: set `disableAllHooks: true` in settings.json.
 
 ## Workflow
 
@@ -148,6 +165,8 @@ exit 0  # Allow (silent)
 }
 ```
 
+**Other handler types (2026)**: `http` (POSTs event JSON to a URL), `mcp_tool` (calls a tool on a configured MCP server), `prompt` (evaluates a prompt with an LLM, supports `$ARGUMENTS`), `agent` (runs an agentic verifier with tools). Some events are command-only (PostCompact, PermissionDenied, Elicitation/ElicitationResult, FileChanged, CwdChanged, ConfigChange, InstructionsLoaded, WorktreeCreate/Remove, SubagentStart, StopFailure, TeammateIdle, SessionStart/End, Notification).
+
 **Always**:
 1. Create script in `~/.claude/hooks/`
 2. Make executable: `chmod +x ~/.claude/hooks/my-hook.sh`
@@ -208,6 +227,7 @@ PreToolUse hooks control tool execution by emitting JSON on stdout. This is the 
 | `"allow"` | Bypass permissions, proceed silently | Pre-approving a safe call |
 | `"deny"` | Block, reason shown to Claude | Hard block (no user override) |
 | `"ask"` | **Built-in Claude Code confirm UI** shown to user | "Require manual approval for X" — the canonical pattern |
+| `"defer"` | Pause headless tool call, resume via `-p --resume` | External-system integrations in headless (`-p`) sessions |
 
 Additional JSON fields:
 - `permissionDecisionReason` — shown to the user for `"allow"`/`"ask"`, shown to Claude for `"deny"`
