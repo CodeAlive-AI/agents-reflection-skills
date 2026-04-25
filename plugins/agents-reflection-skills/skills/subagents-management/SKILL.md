@@ -8,7 +8,7 @@ description: Create, edit, list, move, and delete subagents and skills for codin
 Manage subagents, skills, and instruction files for coding agents.
 
 - **Claude Code**: Subagents in `~/.claude/agents/` and `.claude/agents/`
-- **Codex CLI**: AGENTS.md instructions + skills in `~/.agents/skills/` and `.agents/skills/`
+- **Codex CLI**: AGENTS.md instructions + custom subagents (TOML) in `~/.codex/agents/` + skills in `~/.codex/skills/` and `.agents/skills/`
 
 **IMPORTANT**: After creating, modifying, or deleting subagents/skills, inform the user that they need to **restart the agent** for changes to take effect.
 
@@ -77,26 +77,62 @@ python3 {SKILL_PATH}/scripts/delete_subagent.py {name} [--scope user|project] [-
 
 Or delete directly (still requires user confirmation via AskUserQuestion first): `rm ~/.claude/agents/{name}.md` or `rm .claude/agents/{name}.md`
 
-## Codex CLI: AGENTS.md & Skills
+## Codex CLI: AGENTS.md, Subagents & Skills
 
-Codex uses `AGENTS.md` (equivalent to `CLAUDE.md`) for project instructions and a skills system for reusable capabilities.
+Codex uses `AGENTS.md` (equivalent to `CLAUDE.md`) for project instructions, supports custom subagents via TOML files, and shares the SKILL.md format with Claude Code.
 
 ### AGENTS.md
 
 ```
-~/.codex/AGENTS.md            # Global instructions
-<project-root>/AGENTS.md      # Project instructions
-<project-root>/sub/AGENTS.md  # Subdirectory instructions (additive)
+~/.codex/AGENTS.md                # Global instructions
+<project-root>/AGENTS.md          # Project instructions
+<project-root>/sub/AGENTS.md      # Subdirectory instructions (additive, root → leaf)
+<any-dir>/AGENTS.override.md      # Replaces AGENTS.md at that level
 ```
+
+Configure size limits and fallbacks via `project_doc_max_bytes` (default 32 KiB) and `project_doc_fallback_filenames` in `~/.codex/config.toml`.
+
+### Subagents (GA March 2026)
+
+Codex ships three built-in subagents — `default`, `explorer`, `worker` — and lets you define custom ones as TOML files in `~/.codex/agents/`:
+
+```toml
+# ~/.codex/agents/security-reviewer.toml
+description = "Read-only security reviewer."
+model = "gpt-5.5"
+sandbox_mode = "read-only"
+approval_policy = "never"
+```
+
+Register and tune orchestration in the main config:
+
+```toml
+[features]
+multi_agent = true
+
+[agents]
+max_threads = 6                   # Concurrent agent threads (default 6)
+max_depth = 1                     # Max nesting; root = 0 (default 1)
+
+[agents.security-reviewer]
+config_file = "~/.codex/agents/security-reviewer.toml"
+description = "Read-only security reviewer."
+nickname_candidates = ["secrev"]
+```
+
+Custom agents may include any standard config keys (`model`, `model_reasoning_effort`, `sandbox_mode`, `mcp_servers`, `skills.config`). Subagents inherit the parent's interactive runtime overrides (e.g., `/approvals` changes, `--yolo`).
 
 ### Skills
 
 ```
-~/.agents/skills/my-skill/SKILL.md           # User skills
-<project-root>/.agents/skills/my-skill/SKILL.md  # Project skills
+~/.codex/skills/<skill>/SKILL.md           # User skills (canonical default; $CODEX_HOME/skills)
+~/.agents/skills/<skill>/SKILL.md          # User skills (cross-tool alias path)
+<project-root>/.agents/skills/<skill>/SKILL.md  # Project skills
 ```
 
-See [references/codex-agents.md](references/codex-agents.md) for Codex agents/skills reference.
+Skills use the same SKILL.md (YAML frontmatter) format as Claude Code and are cross-compatible across the Agent Skills standard. Stable in v0.124; the legacy `codex --enable skills` flag is still accepted but no longer required.
+
+See [references/codex-agents.md](references/codex-agents.md) for the full Codex agents/skills reference.
 
 ## Key Concepts (Claude Code)
 
