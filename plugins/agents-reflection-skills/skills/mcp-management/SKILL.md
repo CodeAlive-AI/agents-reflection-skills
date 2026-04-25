@@ -136,10 +136,23 @@ claude mcp remove <server-name>
 
 For project-scoped servers in `.mcp.json`, delete the entry from the file after user confirmation.
 
+## OpenCode-specific notes
+
+For OpenCode (sst/opencode v1.14.x):
+- Top-level key is `mcp` (not `mcpServers`); each server **must** declare `type: "local"` or `type: "remote"`
+- For local servers, `command` is a single array `["bin", "arg1", "arg2"]` — there's no separate `args` field
+- Env vars go under `environment` (not `env`)
+- Per-server `enabled: false` disables without removing
+- Use `opencode mcp auth <name>` / `opencode mcp logout <name>` for OAuth servers (e.g., GitHub)
+- Plugin `tool.execute.*` hooks **do not** fire for MCP tool calls in v1.14.x — use `permission` rules instead
+
+See [references/opencode-mcp.md](references/opencode-mcp.md) for the full OpenCode MCP reference.
+
 ## Reference
 
 - **Search and known servers**: [references/search.md](references/search.md)
 - **Multi-agent installation**: [references/multi-agent.md](references/multi-agent.md)
+- **OpenCode MCP**: [references/opencode-mcp.md](references/opencode-mcp.md)
 - **Transport types**: [references/transports.md](references/transports.md)
 - **Scopes and config files**: [references/scopes.md](references/scopes.md)
 - **Troubleshooting**: [references/troubleshooting.md](references/troubleshooting.md)

@@ -202,12 +202,43 @@ mcp_oauth_credentials_store = "auto"        # auto | file | keyring
 | Property | Value |
 |----------|-------|
 | Global config | `~/.config/opencode/opencode.json` |
-| Project config | `opencode.json` |
+| Project config | `opencode.json` (or `.opencode/opencode.json`) |
 | Config key | `mcp` |
-| Format | JSON |
-| Transports | stdio, http, sse |
+| Format | JSON / JSONC |
+| Transports | stdio (`type: "local"`), http (`type: "remote"`) |
 
-**Transformation:** Uses `type: "remote"` / `type: "local"`, `command` as array, `environment` instead of `env`.
+**Transformation:** Uses explicit `type: "remote"` / `type: "local"`, `command` as a single array (command + args together), `environment` instead of `env`, per-server `enabled` boolean, optional `oauth: true` for OAuth-protected remotes, and `timeout` in milliseconds.
+
+**Local example:**
+```json
+{
+  "mcp": {
+    "postgres": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-postgres"],
+      "environment": { "DATABASE_URL": "{env:DATABASE_URL}" },
+      "enabled": true,
+      "timeout": 5000
+    }
+  }
+}
+```
+
+**Remote example (OAuth):**
+```json
+{
+  "mcp": {
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "oauth": true,
+      "enabled": true
+    }
+  }
+}
+```
+
+**CLI:** `opencode mcp add`, `opencode mcp list`, `opencode mcp auth <name>`, `opencode mcp logout <name>`, `opencode mcp debug <name>`. Variable substitution via `{env:VAR}` and `{file:path}`. See [opencode-mcp.md](opencode-mcp.md) for the full reference, including known plugin-hook caveats for MCP calls.
 
 ### Zed
 
