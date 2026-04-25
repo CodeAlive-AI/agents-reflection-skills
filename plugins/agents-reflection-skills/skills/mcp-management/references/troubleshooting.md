@@ -108,6 +108,12 @@ The `--env` CLI flag can misinterpret arguments with special characters. Workaro
 |----------|---------|---------|
 | `MCP_TIMEOUT` | Server startup timeout (ms) | 10000 |
 | `MAX_MCP_OUTPUT_TOKENS` | Maximum output tokens | 25000 |
+| `CLAUDE_CODE_MCP_SERVER_NAME` | Set inside `headersHelper` scripts | (auto) |
+| `CLAUDE_CODE_MCP_SERVER_URL` | Set inside `headersHelper` scripts | (auto) |
+
+## Per-Response Output Limit Override
+
+For very large MCP results (DB schemas, large file listings) that would otherwise be truncated by `MAX_MCP_OUTPUT_TOKENS`, the server can annotate its response with `_meta["anthropic/maxResultSizeChars"]` (max 500_000 chars). Claude Code will pass through results up to that size.
 
 ## Security Notes
 

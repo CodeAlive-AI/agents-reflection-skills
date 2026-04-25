@@ -15,6 +15,7 @@ description: Search, install, configure, update, and remove MCP servers across c
 # Install
 claude mcp add --transport http <name> <url>
 claude mcp add --transport stdio <name> -- <command> [args...]
+claude mcp add-json <name> '<json>'              # Full JSON config in one shot
 
 # List/inspect
 claude mcp list
@@ -22,9 +23,15 @@ claude mcp get <name>
 
 # Remove (confirm with user first!)
 claude mcp remove <name>
+
+# OAuth login/logout (for OAuth-protected HTTP servers)
+claude mcp login <name>
+claude mcp logout <name>
 ```
 
-Options must come BEFORE the server name.
+Options must come BEFORE the server name. As of 2026-04, `--transport http` (Streamable HTTP) is recommended; `sse` is end-of-life.
+
+Plugin MCP servers connect automatically at session start. Use `/reload-plugins` to re-init after enabling/disabling a plugin mid-session.
 
 ## Multi-Agent Installation (npx add-mcp)
 

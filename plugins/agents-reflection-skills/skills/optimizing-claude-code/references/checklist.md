@@ -1,6 +1,6 @@
 # Audit Checklist
 
-Quick-reference checklist for auditing Claude Code readiness.
+Quick-reference checklist for auditing Claude Code readiness. Updated for Claude Code 2.1.x (2026-04).
 
 ---
 
@@ -54,6 +54,11 @@ Quick-reference checklist for auditing Claude Code readiness.
 - [ ] Flag overly permissive Bash permissions
 - [ ] Check for MCP server configurations
 - [ ] Verify no conflicting settings across scopes
+- [ ] Confirm `defaultMode` matches workflow (consider `auto` for autonomous work since 2026)
+- [ ] Check `disableSkillShellExecution` if managed-settings is in use
+- [ ] Audit `sandbox.network.deniedDomains` for sensitive endpoints
+- [ ] Review `enabledPlugins` and `extraKnownMarketplaces`
+- [ ] Validate `worktree.sparsePaths` for monorepos
 
 ---
 
@@ -80,13 +85,17 @@ Quick-reference checklist for auditing Claude Code readiness.
 
 - [ ] Check `~/.claude/skills/` (user scope)
 - [ ] Check `.claude/skills/` (project scope)
+- [ ] Check `.claude/skills/` in subdirectories (auto-discovered in monorepos since 2026)
+- [ ] Check enterprise skills via managed settings
 
 ### Per-Skill Analysis
 
 - [ ] SKILL.md has description in frontmatter?
+- [ ] `description + when_to_use` ≤ 1,536 characters? (truncation cap)
 - [ ] SKILL.md under 500 lines?
 - [ ] Scripts tested and working?
 - [ ] References organized appropriately?
+- [ ] Inline `` !`shell` `` blocks reviewed for security?
 
 ---
 

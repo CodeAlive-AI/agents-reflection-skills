@@ -310,10 +310,13 @@ python3 scripts/move_skill_agent.py my-skill --from claude-code --to goose --for
 
 ## Important Notes
 
-- **Restart required**: After adding, removing, or moving skills, restart the AI agent for changes to take effect
+- **Restart required for new top-level dirs**: Creating a top-level `skills/` directory that did not exist when the session started requires restarting Claude Code so the directory can be watched
+- **Live change detection (Claude Code, 2026)**: Adding, editing, or removing a skill under `~/.claude/skills/`, project `.claude/skills/`, or `.claude/skills/` inside an `--add-dir` directory takes effect within the current Claude Code session — no restart needed
 - **Edits are immediate**: Changes to existing skill content work without restart
 - **Agent detection**: Uses config directory presence to detect installed agents
 - **Always update all agents**: When updating a locally-developed skill, use `install_skill.py --all -s global --force` to push changes to every detected agent — not just Claude Code. A skill updated only in `~/.claude/skills/` will be stale in all other agents
+- **Custom commands have merged into skills (Claude Code, 2026)**: A file at `.claude/commands/deploy.md` and a skill at `.claude/skills/deploy/SKILL.md` both create `/deploy`. Existing `.claude/commands/` files keep working; skills add a directory for supporting files, frontmatter, and auto-invocation.
+- **Plugin skills are namespaced** as `plugin-name:skill-name` and cannot conflict with user/project skills
 
 ## References — The Complete Guide to Building Skills for Claude
 

@@ -79,7 +79,10 @@ npx add-mcp "python -m mcp_server --host localhost"
 | Project config | `.mcp.json` |
 | Config key | `mcpServers` |
 | Format | JSON |
-| Transports | stdio, http, sse |
+| Transports | stdio, http (Streamable HTTP, recommended); sse (legacy, end-of-life April 2026) |
+| OAuth | OAuth 2.1, RFC 9728 PRM discovery, CIMD/SEP-991 |
+| Large output | `_meta["anthropic/maxResultSizeChars"]` up to 500K |
+| Plugin MCP | servers from enabled plugins auto-connect; `/reload-plugins` to re-init |
 
 ### Claude Desktop
 
