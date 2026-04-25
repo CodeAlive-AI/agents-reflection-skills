@@ -315,6 +315,26 @@ python3 scripts/move_skill_agent.py my-skill --from claude-code --to goose --for
 - **Agent detection**: Uses config directory presence to detect installed agents
 - **Always update all agents**: When updating a locally-developed skill, use `install_skill.py --all -s global --force` to push changes to every detected agent — not just Claude Code. A skill updated only in `~/.claude/skills/` will be stale in all other agents
 
+## OpenCode-specific notes
+
+OpenCode (sst/opencode v1.14.x) reads skills from **multiple compatible locations** in addition to its native paths:
+
+- Project: `.opencode/skills/`, `.claude/skills/`, `.agents/skills/` — all loaded
+- Global: `~/.config/opencode/skills/`, `~/.claude/skills/`, `~/.agents/skills/` — all loaded
+- Walks up from CWD to the git worktree root, collecting skills along the way
+
+This means a single Anthropic-format `SKILL.md` skill works across Claude Code, Codex, and OpenCode unchanged. Optional polish for OpenCode users:
+- Add `compatibility: opencode,claude-code,codex` to the frontmatter
+- Use lowercase tool names if your skill body invokes tools (`bash`, `edit`, `read` — not `Bash`/`Edit`/`Read`)
+
+Skill access can be gated per-name with the `permission.skill` block in `opencode.json`:
+
+```json
+{ "permission": { "skill": { "*": "allow", "internal-*": "deny" } } }
+```
+
+See [references/opencode-skills.md](references/opencode-skills.md) for the full OpenCode skills reference.
+
 ## References — The Complete Guide to Building Skills for Claude
 
 Consult these when reviewing skills or advising on skill structure and best practices.
