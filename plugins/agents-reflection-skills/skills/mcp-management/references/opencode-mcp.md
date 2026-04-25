@@ -1,6 +1,6 @@
 # OpenCode MCP Reference
 
-Detailed MCP server configuration for [sst/opencode](https://github.com/sst/opencode) (v1.14.x).
+Detailed MCP server configuration for [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x).
 
 ## Contents
 

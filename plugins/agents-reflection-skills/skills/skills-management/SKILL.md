@@ -320,7 +320,7 @@ python3 scripts/move_skill_agent.py my-skill --from claude-code --to goose --for
 
 ## OpenCode-specific notes
 
-OpenCode (sst/opencode v1.14.x) reads skills from **multiple compatible locations** in addition to its native paths:
+OpenCode (anomalyco/opencode v1.14.x) reads skills from **multiple compatible locations** in addition to its native paths:
 
 - Project: `.opencode/skills/`, `.claude/skills/`, `.agents/skills/` — all loaded
 - Global: `~/.config/opencode/skills/`, `~/.claude/skills/`, `~/.agents/skills/` — all loaded

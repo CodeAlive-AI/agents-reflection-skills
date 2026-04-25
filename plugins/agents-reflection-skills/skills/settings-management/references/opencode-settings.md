@@ -1,6 +1,6 @@
 # OpenCode Settings Reference
 
-Configuration for [sst/opencode](https://github.com/sst/opencode) (v1.14.x, Go-based, npm/Bun runtime).
+Configuration for [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x, Go-based, npm/Bun runtime).
 
 ## Contents
 
@@ -277,4 +277,4 @@ Auth credentials live in `~/.local/share/opencode/auth.json`.
 - https://opencode.ai/docs/themes/
 - https://opencode.ai/docs/keybinds/
 - https://opencode.ai/docs/tools/
-- https://github.com/sst/opencode
+- https://github.com/anomalyco/opencode

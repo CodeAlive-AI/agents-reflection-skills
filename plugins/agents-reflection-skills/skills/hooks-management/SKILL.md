@@ -304,7 +304,7 @@ See [references/codex-hooks.md](references/codex-hooks.md) for full Codex hooks 
 
 ## OpenCode Hooks (Plugin-based)
 
-OpenCode (sst/opencode v1.14.x) does NOT use config-based shell hooks. Hooks are TypeScript/JavaScript **plugins** that subscribe to lifecycle events. The closest analogue to `PreToolUse` is `tool.execute.before` — throwing inside it blocks the tool call.
+OpenCode (anomalyco/opencode v1.14.x) does NOT use config-based shell hooks. Hooks are TypeScript/JavaScript **plugins** that subscribe to lifecycle events. The closest analogue to `PreToolUse` is `tool.execute.before` — throwing inside it blocks the tool call.
 
 ```typescript
 // .opencode/plugins/env-protection.ts

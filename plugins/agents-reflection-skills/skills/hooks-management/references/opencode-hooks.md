@@ -1,6 +1,6 @@
 # OpenCode Hooks Reference
 
-Hook/lifecycle event support in [sst/opencode](https://github.com/sst/opencode) (v1.14.x).
+Hook/lifecycle event support in [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x).
 
 OpenCode does **not** have a config-based shell hooks system like Claude Code. Instead, hooks are TypeScript/JavaScript **plugins** that subscribe to lifecycle events and can intercept/block tool calls.
 
@@ -332,6 +332,6 @@ OpenCode runs `bun install` at startup, caches under `~/.cache/opencode/node_mod
 - https://opencode.ai/docs/plugins/
 - https://opencode.ai/docs/tools/
 - https://www.npmjs.com/package/@opencode-ai/plugin
-- https://github.com/sst/opencode/issues/2319 (MCP-hook caveat)
+- https://github.com/anomalyco/opencode/issues/2319 (MCP-hook caveat)
 - https://dev.to/einarcesar/does-opencode-support-hooks-a-complete-guide-to-extensibility-k3p
 - https://lushbinary.com/blog/opencode-plugin-development-custom-tools-hooks-guide/

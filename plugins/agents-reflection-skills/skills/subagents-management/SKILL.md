@@ -144,7 +144,7 @@ See [references/codex-agents.md](references/codex-agents.md) for the full Codex 
 
 ## OpenCode: agent blocks & AGENTS.md
 
-OpenCode (sst/opencode v1.14.x) supports both JSON `agent` blocks in `opencode.json` and markdown files in `agents/`.
+OpenCode (anomalyco/opencode v1.14.x) supports both JSON `agent` blocks in `opencode.json` and markdown files in `agents/`.
 
 ### AGENTS.md (instructions)
 

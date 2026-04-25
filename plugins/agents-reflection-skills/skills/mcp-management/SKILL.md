@@ -145,7 +145,7 @@ For project-scoped servers in `.mcp.json`, delete the entry from the file after 
 
 ## OpenCode-specific notes
 
-For OpenCode (sst/opencode v1.14.x):
+For OpenCode (anomalyco/opencode v1.14.x):
 - Top-level key is `mcp` (not `mcpServers`); each server **must** declare `type: "local"` or `type: "remote"`
 - For local servers, `command` is a single array `["bin", "arg1", "arg2"]` — there's no separate `args` field
 - Env vars go under `environment` (not `env`)

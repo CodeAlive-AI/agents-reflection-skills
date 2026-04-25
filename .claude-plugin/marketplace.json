@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Meta-skills for AI coding agent self-configuration and reflection",
-    "version": "1.0.0"
+    "version": "2.1.0"
   },
   "plugins": [
     {
       "name": "agents-reflection-skills",
-      "description": "Meta-skills that let AI coding agents configure themselves. Manage MCP servers across 10+ agents, hooks, settings, subagents, skills, and plugins for Claude Code, Codex CLI, Cursor, and more.",
-      "version": "1.0.0",
+      "description": "Meta-skills that let AI coding agents configure themselves. Manage MCP servers across 10+ agents, hooks, settings, subagents, skills, and plugins for Claude Code, Codex CLI, OpenCode, Cursor, and more.",
+      "version": "2.1.0",
       "author": {
         "name": "CodeAlive-AI"
       },

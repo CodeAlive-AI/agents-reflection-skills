@@ -1,6 +1,6 @@
 # OpenCode Skills Reference
 
-Skills system for [sst/opencode](https://github.com/sst/opencode) (v1.14.x).
+Skills system for [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x).
 
 OpenCode supports the standard Anthropic skill format (`SKILL.md` with YAML frontmatter) plus Claude-Code-compatible fallback paths. Skills are discovered automatically — no installation step needed beyond placing the directory.
 

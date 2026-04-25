@@ -159,7 +159,7 @@ See [references/codex-settings.md](references/codex-settings.md) for the full Co
 
 ## OpenCode Settings
 
-OpenCode (sst/opencode v1.14.x) uses JSON/JSONC in `~/.config/opencode/opencode.json` (user) and `opencode.json` (project root, or under `.opencode/`).
+OpenCode (anomalyco/opencode v1.14.x) uses JSON/JSONC in `~/.config/opencode/opencode.json` (user) and `opencode.json` (project root, or under `.opencode/`).
 
 ```json
 {

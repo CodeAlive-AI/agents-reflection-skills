@@ -218,7 +218,7 @@ my-plugin/
 
 ## OpenCode Plugins
 
-OpenCode (sst/opencode v1.14.x) plugins are TypeScript/JavaScript modules — fundamentally different from Claude Code plugins.
+OpenCode (anomalyco/opencode v1.14.x) plugins are TypeScript/JavaScript modules — fundamentally different from Claude Code plugins.
 
 ### Quick reference
 

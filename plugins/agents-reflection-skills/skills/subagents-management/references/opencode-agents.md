@@ -1,6 +1,6 @@
 # OpenCode Agents & AGENTS.md Reference
 
-Agent and instruction configuration for [sst/opencode](https://github.com/sst/opencode) (v1.14.x).
+Agent and instruction configuration for [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x).
 
 ## Contents
 
@@ -220,4 +220,4 @@ opencode agent list
 - https://opencode.ai/docs/rules/
 - https://opencode.ai/docs/permissions/
 - https://opencode.ai/docs/cli/
-- https://github.com/sst/opencode
+- https://github.com/anomalyco/opencode

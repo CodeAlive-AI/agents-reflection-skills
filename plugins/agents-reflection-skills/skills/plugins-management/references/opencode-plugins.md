@@ -1,6 +1,6 @@
 # OpenCode Plugins Reference
 
-Plugin system for [sst/opencode](https://github.com/sst/opencode) (v1.14.x).
+Plugin system for [anomalyco/opencode](https://github.com/anomalyco/opencode) (v1.14.x).
 
 OpenCode plugins are TypeScript/JavaScript modules that extend the agent with custom tools and lifecycle hooks. They are fundamentally different from Claude Code plugins (`.claude-plugin/`):
 
