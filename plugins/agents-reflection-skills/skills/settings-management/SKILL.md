@@ -1,6 +1,6 @@
 ---
 name: settings-management
-description: View and configure settings for coding agents (Claude Code, Codex CLI, and others). Covers JSON settings for Claude Code and TOML config for Codex CLI, including permissions, sandbox, model selection, and profiles.
+description: View and configure settings for coding agents (Claude Code, Codex CLI, and others). Covers JSON settings for Claude Code and TOML config for Codex CLI, including permissions, sandbox, model selection, profiles, feature flags, hooks, subagents, and skills.
 ---
 
 # Settings Management
@@ -127,21 +127,30 @@ Use the Edit or Write tool to modify settings files. Always read existing conten
 
 ## Codex CLI Settings
 
-Codex uses TOML format in `~/.codex/config.toml` (user) and `.codex/config.toml` (project).
+Codex uses TOML format in `~/.codex/config.toml` (user) and `.codex/config.toml` (project, trusted projects only).
 
 ```toml
-model = "gpt-5.2-codex"
-approval_policy = "on-request"    # untrusted | on-failure | on-request | never
-sandbox_mode = "workspace-write"  # read-only | workspace-write | danger-full-access
+model = "gpt-5.5"                  # As of April 2026; gpt-5.4 is a valid fallback
+approval_policy = "on-request"     # untrusted | on-request | never (or { granular = { ... } })
+                                    # NOTE: "on-failure" is DEPRECATED — migrate to on-request or never
+sandbox_mode = "workspace-write"   # read-only | workspace-write | danger-full-access
+
+[features]
+codex_hooks = true                 # Lifecycle hooks (stable in v0.124, April 2026)
+multi_agent = true                 # Subagent orchestration (GA March 2026)
 ```
 
 Key differences from Claude Code:
-- TOML format instead of JSON
-- Starlark rules for command policies (`.codex/rules/`)
-- Named profiles for different workflows
-- Feature flags system (`codex features list`)
+- TOML format instead of JSON; project config requires explicit trust
+- Starlark rules for command policies in `.codex/rules/`
+- Named profiles (`[profiles.NAME]`) for different workflows
+- Feature flags system (`codex features list`, `codex --enable feature`)
+- Lifecycle hooks live inline as `[[hooks.PreToolUse]]` (etc.) blocks in `config.toml`
+- `[agents]` block for subagent orchestration (`max_threads`, `max_depth`)
+- `[[skills.config]]` for per-skill enable/disable overrides
+- Custom model providers via `[model_providers.NAME]`, including `amazon-bedrock` since v0.123
 
-See [references/codex-settings.md](references/codex-settings.md) for full Codex config reference.
+See [references/codex-settings.md](references/codex-settings.md) for the full Codex config reference (covers approval/sandbox/profiles/features/agents/skills/hooks/rules/providers/admin enforcement).
 
 ## Reference
 
