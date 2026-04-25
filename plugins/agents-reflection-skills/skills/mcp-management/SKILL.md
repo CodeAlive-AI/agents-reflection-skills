@@ -65,7 +65,7 @@ npx add-mcp https://mcp.example.com/sse --transport sse
 | Cursor | `cursor` | Yes (`.cursor/mcp.json`) |
 | VS Code | `vscode` | Yes (`.vscode/mcp.json`) |
 | Gemini CLI | `gemini-cli` | Yes (`.gemini/settings.json`) |
-| Codex | `codex` | Yes (`.codex/config.toml`) |
+| Codex | `codex` | Yes (`.codex/config.toml`, trusted projects only) |
 | Goose | `goose` | No (global only) |
 | GitHub Copilot CLI | `github-copilot-cli` | Yes (`.vscode/mcp.json`) |
 | OpenCode | `opencode` | Yes (`opencode.json`) |

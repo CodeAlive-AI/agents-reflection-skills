@@ -132,10 +132,10 @@ npx add-mcp "python -m mcp_server --host localhost"
 | Property | Value |
 |----------|-------|
 | Global config | `~/.codex/config.toml` |
-| Project config | `.codex/config.toml` |
+| Project config | `.codex/config.toml` (trusted projects only) |
 | Config key | `mcp_servers` |
 | Format | TOML |
-| Transports | stdio, http, sse |
+| Transports | stdio, **streamable HTTP** (SSE for local servers is **not supported**; legacy HTTP+SSE remote endpoints are accepted) |
 
 **Advanced TOML fields** (beyond what add-mcp configures):
 
@@ -152,6 +152,13 @@ startup_timeout_sec = 10.0                  # Startup timeout (default: 10)
 tool_timeout_sec = 60.0                     # Per-tool timeout (default: 60)
 enabled_tools = ["search", "summarize"]     # Tool allowlist
 disabled_tools = ["slow-tool"]              # Tool denylist
+supports_parallel_tool_calls = false        # Allow parallel calls (default false; only for stateless tools)
+default_tools_approval_mode = "on-request"  # Per-server default approval mode
+oauth_scopes = ["read", "write"]            # Scopes to request during MCP OAuth login
+
+[mcp_servers.my-server.approval_mode]       # Per-tool approval overrides
+search = "never"
+delete = "untrusted"
 
 [mcp_servers.my-server.env]                 # Environment variables
 API_KEY = "value"
@@ -163,13 +170,38 @@ X-Custom = "value"
 Authorization = "AUTH_TOKEN_ENV"
 ```
 
-**OAuth support:**
+**Remote-executor stdio (experimental):**
 ```toml
-mcp_oauth_callback_port = 8080
-mcp_oauth_credentials_store = "auto"        # auto | file | keyring
+[mcp_servers.my-server]
+experimental_environment = "remote"
+env_vars = ["LOCAL_TOKEN", { name = "REMOTE_TOKEN", source = "remote" }]
 ```
 
-**CLI commands:** `codex mcp add`, `codex mcp list`, `codex mcp get`, `codex mcp remove`, `codex mcp login`, `codex mcp logout`
+**OAuth support:**
+```toml
+mcp_oauth_callback_port = 8080              # Fixed port for OAuth callback (else ephemeral)
+mcp_oauth_callback_url  = "http://localhost:8080/cb"  # Override redirect_uri
+mcp_oauth_credentials_store = "auto"        # auto | file | keyring
+mcp_oauth_resource = "https://example.com"  # Optional RFC 8707 resource parameter
+
+[features]
+experimental_use_rmcp_client = true         # Required for new OAuth flow on first MCP setup
+```
+
+**Allowlist (admin / `requirements.toml`):**
+```toml
+[mcp_servers.docs]
+identity = { command = "codex-mcp" }        # Stdio: only allow when command matches
+# identity = { url = "https://...mcp" }     # HTTP: only allow when URL matches
+```
+
+**Built-in commands:** `codex mcp add`, `codex mcp list [--json]`, `codex mcp get`, `codex mcp remove`, `codex mcp login <server>` (OAuth), `codex mcp logout <server>`. The `/mcp verbose` slash command (added v0.123) provides full server diagnostics inside the TUI.
+
+**Add server example:**
+```bash
+codex mcp add context7 -- npx -y @upstash/context7-mcp
+codex mcp add sentry --env SENTRY_AUTH_TOKEN=... -- url=https://mcp.sentry.dev/mcp
+```
 
 ### Goose
 
@@ -293,7 +325,7 @@ When installing manually (without add-mcp), be aware of these config variations:
 | Cursor | `mcpServers` | `url` | `command` | `env` | No `type` for remote |
 | VS Code | `servers` | `url` | `command` | `env` | - |
 | Gemini CLI | `mcpServers` | `url` | `command` | `env` | - |
-| Codex | `mcp_servers` | `url` | `command` | `env` | - |
+| Codex | `mcp_servers` | `url` | `command` | `env` | TOML; HTTP-only remote (no local SSE); `bearer_token_env_var`, `oauth_scopes`, `supports_parallel_tool_calls` |
 | Goose | `extensions` | `uri` | `cmd` | `envs` | `name`, `enabled`, `timeout` |
 | GitHub Copilot CLI | `mcpServers` | `url` | `command` | `env` | `tools: ["*"]` (global) |
 | OpenCode | `mcp` | `url` | `command` (array) | `environment` | `type: "remote"/"local"` |
