@@ -43,16 +43,16 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## 包含内容
 
-本插件提供 7 个技能，支持 **Claude Code、Codex CLI、Cursor、VS Code、Gemini CLI** 等：
+本插件提供 7 个技能，支持 **Claude Code、Codex CLI、OpenCode、Cursor、VS Code、Gemini CLI** 等：
 
 | 技能 | 功能 |
 |------|------|
 | **mcp-management** | 跨 10+ 编码代理安装和管理 MCP 服务器 |
-| **hooks-management** | 管理 Claude Code 和 Codex CLI 的钩子与自动化 |
-| **settings-management** | 配置 Claude Code (JSON) 和 Codex CLI (TOML) |
-| **subagents-management** | 跨 Claude Code 和 Codex CLI 创建管理子代理 |
+| **hooks-management** | 管理 Claude Code、Codex CLI 和 OpenCode 的钩子与自动化 |
+| **settings-management** | 配置 Claude Code (JSON)、Codex CLI (TOML) 和 OpenCode (JSON/JSONC) |
+| **subagents-management** | 跨 Claude Code、Codex CLI 和 OpenCode 创建管理子代理 |
 | **skills-management** | 组织、发现和分享编码代理技能 |
-| **plugins-management** | 打包和发布自己的插件 |
+| **plugins-management** | 为 Claude Code 和 OpenCode 打包发布插件 |
 | **optimizing-claude-code** | 审计仓库并优化 CLAUDE.md 配置 |
 
 > **轻量级：** 所有 7 个技能的描述总共只占用不到 500 个 token。
@@ -89,7 +89,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### hooks-management
 
-> 管理 Claude Code 和 Codex CLI 的钩子与自动化
+> 管理 Claude Code、Codex CLI 和 OpenCode 的钩子与自动化
 
 **代码自动格式化**
 > *"每次编辑后对 TypeScript 文件运行 Prettier"*
@@ -120,7 +120,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### settings-management
 
-> 配置 Claude Code (JSON) 和 Codex CLI (TOML)
+> 配置 Claude Code (JSON)、Codex CLI (TOML) 和 OpenCode (JSON/JSONC)
 
 **启用沙箱模式**
 > *"开启沙箱模式，让 Claude 不用每条命令都请求权限"*
@@ -146,7 +146,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### subagents-management
 
-> 跨 Claude Code 和 Codex CLI 创建管理子代理
+> 跨 Claude Code、Codex CLI 和 OpenCode 创建管理子代理
 
 **创建代码审查员**
 > *"创建一个只能读取文件的审查子代理，使用 Opus 保证质量"*
@@ -178,7 +178,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### plugins-management
 
-> 打包和发布自己的插件
+> 为 Claude Code 和 OpenCode 打包发布插件
 
 **创建插件**
 > *"用我的自定义技能创建一个新插件"*
@@ -210,7 +210,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## 系统要求
 
-- Claude Code CLI 或 Codex CLI
+- Claude Code CLI、Codex CLI 或 OpenCode
 - Python 3.x（用于技能脚本）
 - `gh` CLI（可选，用于插件发布功能）
 

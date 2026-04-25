@@ -43,16 +43,16 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## O Que Está Incluído
 
-Este plugin oferece 7 habilidades que funcionam com **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI** e mais:
+Este plugin oferece 7 habilidades que funcionam com **Claude Code, Codex CLI, OpenCode, Cursor, VS Code, Gemini CLI** e mais:
 
 | Habilidade | O Que Faz |
 |------------|-----------|
 | **mcp-management** | Instala e gerencia servidores MCP em 10+ agentes de codificacao |
-| **hooks-management** | Gerencia hooks e automacao para Claude Code e Codex CLI |
-| **settings-management** | Configura Claude Code (JSON) e Codex CLI (TOML) |
-| **subagents-management** | Cria e gerencia subagentes no Claude Code e Codex CLI |
+| **hooks-management** | Gerencia hooks e automacao para Claude Code, Codex CLI e OpenCode |
+| **settings-management** | Configura Claude Code (JSON), Codex CLI (TOML) e OpenCode (JSON/JSONC) |
+| **subagents-management** | Cria e gerencia subagentes no Claude Code, Codex CLI e OpenCode |
 | **skills-management** | Organiza, descobre e compartilha habilidades para agentes |
-| **plugins-management** | Empacota e publica seus proprios plugins |
+| **plugins-management** | Empacota e publica plugins para Claude Code e OpenCode |
 | **optimizing-claude-code** | Audita repositorios e otimiza o CLAUDE.md |
 
 > **Leve:** As descrições de todas as 7 habilidades juntas usam menos de 500 tokens na janela de contexto.
@@ -89,7 +89,7 @@ Configura servidores MCP de forma consistente no Claude Code, Cursor, VS Code, G
 
 ### hooks-management
 
-> Gerencia hooks e automacao para Claude Code e Codex CLI
+> Gerencia hooks e automacao para Claude Code, Codex CLI e OpenCode
 
 **Auto-Formatação de Código**
 > *"Roda o Prettier nos arquivos TypeScript depois de cada edição"*
@@ -120,7 +120,7 @@ Adiciona um hook PreToolUse que pausa e pede confirmação para resets de banco 
 
 ### settings-management
 
-> Configura Claude Code (JSON) e Codex CLI (TOML)
+> Configura Claude Code (JSON), Codex CLI (TOML) e OpenCode (JSON/JSONC)
 
 **Ativar Modo Sandbox**
 > *"Liga o modo sandbox pra o Claude poder trabalhar sem pedir permissão pra cada comando"*
@@ -146,7 +146,7 @@ Cria `.claude/settings.json` no escopo do projeto. Um commit e todo o time receb
 
 ### subagents-management
 
-> Cria e gerencia subagentes no Claude Code e Codex CLI
+> Cria e gerencia subagentes no Claude Code, Codex CLI e OpenCode
 
 **Criar um Revisor de Código**
 > *"Cria um subagente revisor que só pode ler arquivos, usando Opus pra qualidade"*
@@ -178,7 +178,7 @@ Move habilidades entre escopos de projeto e usuário para disponibilidade mais a
 
 ### plugins-management
 
-> Empacota e publica seus próprios plugins
+> Empacota e publica plugins para Claude Code e OpenCode
 
 **Criar um Plugin**
 > *"Cria um novo plugin com minhas habilidades personalizadas"*
@@ -210,7 +210,7 @@ Avalia a qualidade do arquivo de memória: estrutura, concisão, validação de 
 
 ## Requisitos
 
-- Claude Code CLI ou Codex CLI
+- Claude Code CLI, Codex CLI ou OpenCode
 - Python 3.x (para scripts das habilidades)
 - CLI `gh` (opcional, para funcionalidades de publicação de plugins)
 

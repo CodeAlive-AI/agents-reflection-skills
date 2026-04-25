@@ -43,16 +43,16 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## Что входит в комплект
 
-Плагин включает 7 навыков, работающих с **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI** и другими:
+Плагин включает 7 навыков, работающих с **Claude Code, Codex CLI, OpenCode, Cursor, VS Code, Gemini CLI** и другими:
 
 | Навык | Описание |
 |-------|----------|
 | **mcp-management** | Установка и управление MCP-серверами для 10+ кодинг-агентов |
-| **hooks-management** | Управление хуками и автоматизацией для Claude Code и Codex CLI |
-| **settings-management** | Настройка Claude Code (JSON) и Codex CLI (TOML) |
-| **subagents-management** | Создание и управление субагентами в Claude Code и Codex CLI |
+| **hooks-management** | Управление хуками и автоматизацией для Claude Code, Codex CLI и OpenCode |
+| **settings-management** | Настройка Claude Code (JSON), Codex CLI (TOML) и OpenCode (JSON/JSONC) |
+| **subagents-management** | Создание и управление субагентами в Claude Code, Codex CLI и OpenCode |
 | **skills-management** | Организация, поиск и распространение навыков для агентов |
-| **plugins-management** | Упаковка и публикация собственных плагинов |
+| **plugins-management** | Упаковка и публикация плагинов для Claude Code и OpenCode |
 | **optimizing-claude-code** | Аудит репозиториев и оптимизация CLAUDE.md |
 
 > **Легковесный:** Описания всех 7 навыков занимают менее 500 токенов в контекстном окне.
@@ -89,7 +89,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### hooks-management
 
-> Управление хуками и автоматизацией для Claude Code и Codex CLI
+> Управление хуками и автоматизацией для Claude Code, Codex CLI и OpenCode
 
 **Автоформатирование кода**
 > *«Запускай Prettier для TypeScript-файлов после каждого редактирования»*
@@ -120,7 +120,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### settings-management
 
-> Настройка Claude Code (JSON) и Codex CLI (TOML)
+> Настройка Claude Code (JSON), Codex CLI (TOML) и OpenCode (JSON/JSONC)
 
 **Включение песочницы**
 > *«Включи режим песочницы, чтобы Claude мог работать без запроса разрешения на каждую команду»*
@@ -146,7 +146,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### subagents-management
 
-> Создание и управление субагентами в Claude Code и Codex CLI
+> Создание и управление субагентами в Claude Code, Codex CLI и OpenCode
 
 **Создание код-ревьюера**
 > *«Создай субагента-ревьюера, который может только читать файлы и использует Opus»*
@@ -178,7 +178,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ### plugins-management
 
-> Упаковка и публикация собственных плагинов
+> Упаковка и публикация плагинов для Claude Code и OpenCode
 
 **Создание плагина**
 > *«Создай новый плагин с моими навыками»*
@@ -210,7 +210,7 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## Требования
 
-- Claude Code CLI или Codex CLI
+- Claude Code CLI, Codex CLI или OpenCode
 - Python 3.x (для скриптов навыков)
 - `gh` CLI (опционально, для публикации плагинов)
 

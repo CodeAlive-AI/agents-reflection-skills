@@ -43,16 +43,16 @@ claude install-skill CodeAlive-AI/agents-reflection-skills
 
 ## What's Included
 
-This plugin provides 7 skills that work across **Claude Code, Codex CLI, Cursor, VS Code, Gemini CLI**, and more:
+This plugin provides 7 skills that work across **Claude Code, Codex CLI, OpenCode, Cursor, VS Code, Gemini CLI**, and more:
 
 | Skill | What It Does |
 |-------|--------------|
 | **mcp-management** | Install and manage MCP servers across 10+ coding agents |
-| **hooks-management** | Manage hooks and automation for Claude Code and Codex CLI |
-| **settings-management** | Configure settings for Claude Code (JSON) and Codex CLI (TOML) |
-| **subagents-management** | Create and manage subagents across Claude Code and Codex CLI |
+| **hooks-management** | Manage hooks and automation for Claude Code, Codex CLI, and OpenCode |
+| **settings-management** | Configure settings for Claude Code (JSON), Codex CLI (TOML), and OpenCode (JSON/JSONC) |
+| **subagents-management** | Create and manage subagents across Claude Code, Codex CLI, and OpenCode |
 | **skills-management** | Organize, discover, and share skills for coding agents |
-| **plugins-management** | Package and publish your own plugins |
+| **plugins-management** | Package and publish plugins for Claude Code and OpenCode |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
 > **Lightweight:** All 7 skill descriptions combined use less than 500 tokens in your context window.
@@ -89,7 +89,7 @@ Configures MCP servers consistently across Claude Code, Cursor, VS Code, Gemini 
 
 ### hooks-management
 
-> Manage hooks and automation for Claude Code and Codex CLI
+> Manage hooks and automation for Claude Code, Codex CLI, and OpenCode
 
 **Auto-Format Code**
 > *"Run Prettier on TypeScript files after every edit"*
@@ -120,7 +120,7 @@ Adds a PreToolUse hook that pauses and requests confirmation for database resets
 
 ### settings-management
 
-> Configure settings for Claude Code (JSON) and Codex CLI (TOML)
+> Configure settings for Claude Code (JSON), Codex CLI (TOML), and OpenCode (JSON/JSONC)
 
 **Enable Sandbox Mode**
 > *"Turn on sandbox mode so Claude can work without asking permission for every command"*
@@ -146,7 +146,7 @@ Creates `.claude/settings.json` in project scope. Commit once, entire team gets 
 
 ### subagents-management
 
-> Create and manage subagents across Claude Code and Codex CLI
+> Create and manage subagents across Claude Code, Codex CLI, and OpenCode
 
 **Create a Code Reviewer**
 > *"Create a reviewer subagent that can only read files, uses Opus for quality"*
@@ -178,7 +178,7 @@ Moves skills between project and user scopes for broader or narrower availabilit
 
 ### plugins-management
 
-> Package and publish your own plugins
+> Package and publish plugins for Claude Code and OpenCode
 
 **Create a Plugin**
 > *"Create a new plugin with my custom skills"*
@@ -210,7 +210,7 @@ Evaluates memory file quality: structure, conciseness, @import validation, essen
 
 ## Requirements
 
-- Claude Code CLI or Codex CLI
+- Claude Code CLI, Codex CLI, or OpenCode
 - Python 3.x (for skill scripts)
 - `gh` CLI (optional, for plugin publishing features)
 
@@ -253,6 +253,13 @@ agents-reflection-skills/
 ---
 
 ## Changelog
+
+**v2.1.0** — OpenCode full support + 2026 actualization
+- Full OpenCode (sst/opencode v1.14.x) coverage across 6 skills: settings, subagents, mcp, hooks, plugins, skills
+- New OpenCode references: `opencode-settings.md`, `opencode-agents.md`, `opencode-mcp.md`, `opencode-hooks.md`, `opencode-plugins.md`, `opencode-skills.md`
+- Codex CLI: hooks GA in v0.124.0 (April 2026), subagents GA (March 2026), `[agents]`/`[features]`/`[hooks]` blocks, gpt-5.5 default, granular approvals, OAuth 2.1 in MCP
+- Claude Code: 14 new hook events (PostCompact, SubagentStart, TaskCreated, etc.), `auto` permission mode, OAuth 2.1 + RFC 9728 PRM, plugin manifest extensions (outputStyles, themes, lspServers, monitors, userConfig, channels, dependencies)
+- Refreshed MCP transports (SSE marked end-of-life April 2026, Streamable HTTP promoted)
 
 **v2.0.1** — Bug fixes and skill management improvements
 - Fixed `shutil.rmtree` crash on symlinked skills (installed via `npx skills add`)

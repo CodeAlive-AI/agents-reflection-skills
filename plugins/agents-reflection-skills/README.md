@@ -7,11 +7,11 @@ Meta-skills that let AI coding agents configure themselves through conversation.
 | Skill | Description |
 |-------|-------------|
 | **mcp-management** | Install and manage MCP servers across 10+ coding agents |
-| **hooks-management** | Manage hooks and automation for Claude Code and Codex CLI |
-| **settings-management** | Configure settings for Claude Code (JSON) and Codex CLI (TOML) |
-| **subagents-management** | Create and manage subagents across Claude Code and Codex CLI |
+| **hooks-management** | Manage hooks and automation for Claude Code, Codex CLI, and OpenCode |
+| **settings-management** | Configure settings for Claude Code (JSON), Codex CLI (TOML), and OpenCode (JSON/JSONC) |
+| **subagents-management** | Create and manage subagents across Claude Code, Codex CLI, and OpenCode |
 | **skills-management** | Organize, discover, and share skills for coding agents |
-| **plugins-management** | Package and publish your own plugins |
+| **plugins-management** | Package and publish plugins for Claude Code and OpenCode |
 | **optimizing-claude-code** | Audit repos and optimize CLAUDE.md for agent work |
 
 > All 7 skill descriptions use less than 500 tokens total.
