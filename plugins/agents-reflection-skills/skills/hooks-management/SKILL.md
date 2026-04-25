@@ -1,6 +1,6 @@
 ---
 name: hooks-management
-description: Manage hooks and automation for coding agents (Claude Code, Codex CLI). Use when users want to add, list, remove, update, or validate hooks. Triggers on requests like "add a hook", "create a hook that...", "list my hooks", "remove the hook", "validate hooks", or any mention of automating agent behavior with shell commands.
+description: Manage hooks and automation for coding agents (Claude Code, Codex CLI, OpenCode). Use when users want to add, list, remove, update, or validate hooks. Triggers on requests like "add a hook", "create a hook that...", "list my hooks", "remove the hook", "validate hooks", or any mention of automating agent behavior with shell commands or plugins.
 ---
 
 # Hooks Management
@@ -281,6 +281,43 @@ statusMessage = "Checking Bash command"
 Blocking semantics: exit code `2` blocks (stderr is reason), or emit JSON `{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "..."}}`. Starlark rules in `.codex/rules/` are still useful for static command policy and complement hooks.
 
 See [references/codex-hooks.md](references/codex-hooks.md) for full Codex hooks reference, all event input/output schemas, common patterns, and migration from the legacy `AfterAgent` / `AfterToolUse` events.
+
+## OpenCode Hooks (Plugin-based)
+
+OpenCode (sst/opencode v1.14.x) does NOT use config-based shell hooks. Hooks are TypeScript/JavaScript **plugins** that subscribe to lifecycle events. The closest analogue to `PreToolUse` is `tool.execute.before` — throwing inside it blocks the tool call.
+
+```typescript
+// .opencode/plugins/env-protection.ts
+import type { Plugin } from "@opencode-ai/plugin"
+
+export default (async () => ({
+  tool: {
+    execute: {
+      before: async (input, output) => {
+        if (output.args.filePath?.includes(".env")) {
+          throw new Error("Reading .env is forbidden")
+        }
+      },
+    },
+  },
+})) satisfies Plugin
+```
+
+**Plugin locations**:
+- Project: `.opencode/plugins/*.ts`
+- Global: `~/.config/opencode/plugins/*.ts`
+- npm packages: listed in `opencode.json` under `plugin: []`
+
+**Common events**: `tool.execute.before`, `tool.execute.after`, `session.idle`, `session.created`, `file.edited`, `permission.asked`, `command.executed` (~25 total).
+
+**Critical caveat (v1.14.x)**: `tool.execute.*` hooks **do NOT** fire for MCP tool calls — use the `permission` block in `opencode.json` to control MCP tool access instead.
+
+For "ask before" semantics, prefer `permission` rules over plugin throws — they integrate with the built-in confirm UI:
+```json
+{ "permission": { "bash": { "rm -rf *": "ask" } } }
+```
+
+See [references/opencode-hooks.md](references/opencode-hooks.md) for the full event catalog, migration patterns from Claude Code hooks, and npm plugin distribution.
 
 ## Event Input Schemas
 

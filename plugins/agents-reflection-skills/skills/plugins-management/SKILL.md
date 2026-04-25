@@ -1,11 +1,15 @@
 ---
 name: plugins-management
-description: Create, publish, delete, and submit Claude Code plugins. Use when user wants to (1) create a new plugin with proper structure, (2) create or configure a plugin marketplace, (3) publish plugins to GitHub/GitLab, (4) delete/uninstall plugins, (5) validate plugin structure, or (6) prepare and submit plugins to the official Anthropic directory.
+description: Create, publish, delete, and submit plugins for coding agents (Claude Code, OpenCode). Use when user wants to (1) create a new plugin with proper structure, (2) create or configure a plugin marketplace, (3) publish plugins to GitHub/GitLab/npm, (4) delete/uninstall plugins, (5) validate plugin structure, or (6) prepare and submit plugins to the official Anthropic directory or the OpenCode ecosystem.
 ---
 
-# Claude Plugins Manager
+# Plugins Manager
 
-Manage Claude Code plugins: create, validate, publish, delete, and submit to official directory.
+Manage plugins across coding agents: create, validate, publish, delete, and submit to official directories or npm.
+
+**Supported agents:**
+- **Claude Code**: `.claude-plugin/plugin.json`-based plugins, distributed via marketplaces
+- **OpenCode**: TypeScript/JavaScript plugins in `.opencode/plugins/` or npm packages listed in `opencode.json`
 
 **CRITICAL**: Before performing any deletion, uninstall, or removal operation, you MUST use the `AskUserQuestion` tool to confirm with the user. Never delete/uninstall plugins or remove marketplaces without explicit user confirmation.
 
@@ -198,6 +202,68 @@ my-plugin/
 ```
 
 **For detailed reference:** See [references/plugin-guide.md](references/plugin-guide.md)
+
+## OpenCode Plugins
+
+OpenCode (sst/opencode v1.14.x) plugins are TypeScript/JavaScript modules — fundamentally different from Claude Code plugins.
+
+### Quick reference
+
+| Task | Approach |
+|------|----------|
+| Create local plugin | Drop `.ts` file in `.opencode/plugins/` (project) or `~/.config/opencode/plugins/` (global) |
+| Author npm plugin | `npm init`, add `keywords: ["opencode-plugin"]`, depend on `@opencode-ai/plugin` |
+| Install npm plugin | Add package name to `opencode.json` → `"plugin": [...]`; restart |
+| Distribute | Publish to npm (no central marketplace) |
+
+### Minimal plugin
+
+```typescript
+// .opencode/plugins/env-protection.ts
+import type { Plugin } from "@opencode-ai/plugin"
+
+export default (async () => ({
+  tool: {
+    execute: {
+      before: async (input, output) => {
+        if (output.args.filePath?.includes(".env")) {
+          throw new Error("Reading .env is forbidden")
+        }
+      },
+    },
+  },
+})) satisfies Plugin
+```
+
+### Register npm plugins
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-helicone-session",
+    "@my-org/custom-plugin"
+  ]
+}
+```
+
+OpenCode runs `bun install` at startup. Cached at `~/.cache/opencode/node_modules/`.
+
+### What plugins can do
+
+- Add custom tools the AI can call (Zod-validated args)
+- Intercept/block tool calls (`tool.execute.before` throws to block)
+- Subscribe to ~25 lifecycle events (`session.idle`, `file.edited`, `permission.asked`, ...)
+- Register custom slash commands and auth providers
+- Transform messages or system prompts during context compaction (experimental)
+
+### Critical caveats (v1.14.x)
+
+- `tool.execute.*` hooks **do not fire** for MCP tool calls — use the `permission` block in `opencode.json`
+- No central marketplace — distribute via npm and aggregators like [awesome-opencode](https://github.com/awesome-opencode/awesome-opencode)
+- Plugins run in-process with full SDK access — audit third-party code before installing
+
+See [references/opencode-plugins.md](references/opencode-plugins.md) for the full OpenCode plugin reference.
 
 ## Critical Rules (Avoid Silent Failures)
 

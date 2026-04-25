@@ -1,6 +1,6 @@
 ---
 name: settings-management
-description: View and configure settings for coding agents (Claude Code, Codex CLI, and others). Covers JSON settings for Claude Code and TOML config for Codex CLI, including permissions, sandbox, model selection, profiles, feature flags, hooks, subagents, and skills.
+description: View and configure settings for coding agents (Claude Code, Codex CLI, OpenCode, and others). Covers JSON settings for Claude Code, TOML for Codex CLI, and JSON/JSONC for OpenCode, including permissions, sandbox, model selection, profiles, feature flags, providers, hooks, subagents, and skills.
 ---
 
 # Settings Management
@@ -152,7 +152,34 @@ Key differences from Claude Code:
 
 See [references/codex-settings.md](references/codex-settings.md) for the full Codex config reference (covers approval/sandbox/profiles/features/agents/skills/hooks/rules/providers/admin enforcement).
 
+## OpenCode Settings
+
+OpenCode (sst/opencode v1.14.x) uses JSON/JSONC in `~/.config/opencode/opencode.json` (user) and `opencode.json` (project root, or under `.opencode/`).
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "permission": {
+    "edit": "ask",
+    "bash": { "*": "ask", "git status *": "allow" }
+  },
+  "instructions": ["AGENTS.md", "docs/style.md"]
+}
+```
+
+Key differences from Claude Code:
+- Schema-validated JSON/JSONC, not plain JSON
+- Configs are **deep-merged** (later wins; arrays like `instructions` are concatenated, not replaced)
+- Permissions are an object of `allow`/`ask`/`deny` per tool with glob patterns, not separate `allow`/`deny`/`ask` arrays
+- Theme/keybinds live in a separate `tui.json` file
+- Multi-provider via `model: "<provider>/<model-id>"` and a top-level `provider` block
+- Variable substitution: `{env:VAR}` and `{file:path}`
+
+See [references/opencode-settings.md](references/opencode-settings.md) for full OpenCode config reference.
+
 ## Reference
 
 - **Claude Code settings**: [references/claude-settings.md](references/claude-settings.md)
 - **Codex CLI settings**: [references/codex-settings.md](references/codex-settings.md)
+- **OpenCode settings**: [references/opencode-settings.md](references/opencode-settings.md)
