@@ -257,20 +257,30 @@ See [references/claude-event-schemas.md](references/claude-event-schemas.md) for
 
 ## Codex CLI Hooks
 
-Codex CLI has a limited hook system. For blocking/allowing commands, use Starlark rules instead of hooks:
+As of CLI v0.124.0 (April 2026) Codex hooks are **stable** and support six lifecycle events: `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `PermissionRequest`, `PostToolUse`, `Stop`. Hooks live inline in `config.toml` (preferred) or in `hooks.json`.
 
-```starlark
-# In .codex/rules/safety.rules
-prefix_rule(
-    pattern = ["rm", ["-rf", "-r"]],
-    decision = "forbidden",
-    justification = "Use git clean -fd instead.",
-)
+Enable the feature flag:
+```toml
+# ~/.codex/config.toml
+[features]
+codex_hooks = true
 ```
 
-For notifications: `notify = ["notify-send", "Codex"]` in `config.toml`.
+Minimal PreToolUse blocking hook:
+```toml
+[[hooks.PreToolUse]]
+matcher = "^Bash$"
 
-See [references/codex-hooks.md](references/codex-hooks.md) for full Codex hooks reference and migration patterns.
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = '/usr/bin/python3 ~/.codex/hooks/policy.py'
+timeout = 30
+statusMessage = "Checking Bash command"
+```
+
+Blocking semantics: exit code `2` blocks (stderr is reason), or emit JSON `{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "..."}}`. Starlark rules in `.codex/rules/` are still useful for static command policy and complement hooks.
+
+See [references/codex-hooks.md](references/codex-hooks.md) for full Codex hooks reference, all event input/output schemas, common patterns, and migration from the legacy `AfterAgent` / `AfterToolUse` events.
 
 ## Event Input Schemas
 

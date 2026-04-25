@@ -1,188 +1,364 @@
 # Codex CLI Hooks Reference
 
-Hook support in [OpenAI Codex CLI](https://github.com/openai/codex).
+Hook support in [OpenAI Codex CLI](https://github.com/openai/codex). Hooks went **stable in April 2026** (CLI v0.124.0) and now offer a lifecycle model very similar to Claude Code's.
 
 ## Contents
 
 - [Current State](#current-state)
-- [Notify Setting](#notify-setting)
+- [Enabling Hooks](#enabling-hooks)
 - [Hook Events](#hook-events)
-- [Hook Payload Format](#hook-payload-format)
-- [Rules as Hook Alternative](#rules-as-hook-alternative)
-- [Comparison with Claude Code Hooks](#comparison-with-claude-code-hooks)
+- [Configuration Format](#configuration-format)
+- [Matchers](#matchers)
+- [Blocking and Decision Control](#blocking-and-decision-control)
+- [Hook Input Schema](#hook-input-schema)
+- [Hook Output Schema](#hook-output-schema)
+- [Common Patterns](#common-patterns)
+- [Notify Setting](#notify-setting)
+- [Rules vs Hooks](#rules-vs-hooks)
+- [Comparison with Claude Code](#comparison-with-claude-code)
+- [Migration from earlier Codex versions](#migration-from-earlier-codex-versions)
+- [Trust Requirements](#trust-requirements)
 
 ## Current State
 
-Codex CLI has a **limited hook system** compared to Claude Code. The full lifecycle hook system (PreToolUse/PostToolUse with blocking) is under active design by OpenAI but not yet fully released.
+As of CLI **v0.124.0 (2026-04-23)**, lifecycle hooks are stable. Codex supports six events that mirror Claude Code's model and can intercept Bash, `apply_patch` file edits, and MCP tool calls.
 
-What exists today:
-- **`notify`** setting for external program notifications
-- **`AfterAgent`** and **`AfterToolUse`** hook events (fire-and-forget)
-- **Rules** (Starlark-based) for command approval/blocking (closest equivalent to PreToolUse blocking)
+What changed in 2026:
+- **Feb 2026 (v0.117.0)**: PreToolUse + PostToolUse landed (originally only `SessionStart` and `Stop` existed).
+- **Mar 2026 (PR #14626)**: `UserPromptSubmit` hook added.
+- **Apr 2026 (v0.124.0)**: Hooks promoted to stable. Inline `[hooks.*]` tables in `config.toml` and `requirements.toml` are now supported in addition to legacy `hooks.json`.
 
-## Notify Setting
+## Enabling Hooks
 
-Trigger an external program on specific events:
+Hooks are gated behind the `codex_hooks` feature flag:
 
 ```toml
 # In ~/.codex/config.toml
-
-# Linux desktop notification
-notify = ["notify-send", "Codex"]
-
-# macOS sound
-notify = ["bash", "-lc", "afplay /System/Library/Sounds/Blow.aiff"]
-
-# Custom script
-notify = ["/path/to/notify-script.sh"]
+[features]
+codex_hooks = true
 ```
 
-### TUI Notification Filtering
+Or per-invocation: `codex --enable codex_hooks`.
 
-```toml
-[tui]
-# All notifications
-notifications = true
-
-# Filter by event type
-notifications = ["agent-turn-complete", "approval-requested"]
-```
+> **Known issue (v0.124.0):** [openai/codex#19199](https://github.com/openai/codex/issues/19199) — Codex fails to start when hook config is present and `codex_hooks` is enabled in some setups. Workaround: pin to v0.123 or follow the upstream fix.
 
 ## Hook Events
 
-### AfterAgent
+| Event | Scope | When it fires |
+|-------|-------|---------------|
+| `SessionStart` | session | Session initialization or resume |
+| `UserPromptSubmit` | turn | User submits a prompt (can block) |
+| `PreToolUse` | turn | Before a tool runs (can block) |
+| `PermissionRequest` | turn | When approval is needed (can deny) |
+| `PostToolUse` | turn | After tool completes |
+| `Stop` | turn | When the agent's turn ends |
 
-Fires after the agent completes a turn.
+**`PreToolUse` interception scope:** Bash commands, file edits via `apply_patch`, and MCP tool calls. It is a guardrail — Codex may still accomplish equivalent work via another tool path, so do not treat hooks as a complete enforcement boundary.
 
+## Configuration Format
+
+Hooks live inline in `config.toml` (preferred) or in a sibling `hooks.json`. Do **not** mix both representations in the same config layer — Codex loads both and warns.
+
+### Inline TOML (preferred)
+
+```toml
+[features]
+codex_hooks = true
+
+# PreToolUse: gate Bash commands
+[[hooks.PreToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = '/usr/bin/python3 "$(git rev-parse --show-toplevel)/.codex/hooks/pre_tool_use_policy.py"'
+timeout = 30                           # seconds; default 600
+statusMessage = "Checking Bash command"
+
+# PostToolUse: review Bash output
+[[hooks.PostToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = '/usr/bin/python3 "$(git rev-parse --show-toplevel)/.codex/hooks/post_tool_use_review.py"'
+timeout = 30
+statusMessage = "Reviewing Bash output"
+```
+
+### Enterprise-managed hooks
+
+`requirements.toml` (admin-controlled) supports the same `[hooks.*]` blocks plus a `managed_dir` for MDM-distributed scripts:
+
+```toml
+[features]
+codex_hooks = true
+
+[hooks]
+managed_dir = "/enterprise/hooks"
+windows_managed_dir = 'C:\enterprise\hooks'
+
+[[hooks.PreToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "python3 /enterprise/hooks/pre_tool_use_policy.py"
+```
+
+### Concurrency
+
+When the same event matches in multiple config layers (user, project, requirements), **all matching hooks run** — higher-precedence layers do not replace lower ones. Multiple hooks for the same event run **concurrently**; one cannot prevent another from starting.
+
+## Matchers
+
+The `matcher` field is a regex matched against `tool_name` and tool aliases.
+
+- `matcher = "^Bash$"` — only Bash
+- `matcher = ""`, `matcher = "*"`, or omit `matcher` — every event
+- `matcher = "apply_patch|Edit|Write"` — file edits via `apply_patch` (the alias also accepts `Edit` and `Write` for parity with Claude Code; `tool_name` in the input is still `apply_patch`)
+- `matcher = "mcp__github__.*"` — all tools from a specific MCP server
+
+## Blocking and Decision Control
+
+Codex offers **two blocking mechanisms**: exit code 2 (simple) and JSON `permissionDecision` (rich).
+
+### Exit code semantics
+
+| Exit code | Meaning |
+|-----------|---------|
+| `0` (no output) | Allow, continue silently |
+| `2` | Block; `stderr` is shown to Codex as the reason |
+| Other | Logged as error in verbose mode; non-blocking |
+
+### JSON output (richer control)
+
+PreToolUse and PermissionRequest accept a `hookSpecificOutput` JSON envelope. PostToolUse, UserPromptSubmit, and Stop accept a top-level decision object.
+
+**PreToolUse — block with reason:**
 ```json
 {
-  "hook_event": "AfterAgent",
-  "thread_id": "string",
-  "turn_id": "string",
-  "triggered_at": "2025-01-15T10:30:00Z",
-  "cwd": "/path/to/project",
-  "input_messages": ["user message"],
-  "last_assistant_message": "agent response"
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Destructive command blocked."
+  }
 }
 ```
 
-### AfterToolUse
-
-Fires after a tool execution completes.
-
+**PermissionRequest — deny with user-facing message:**
 ```json
 {
-  "hook_event": "AfterToolUse",
-  "thread_id": "string",
-  "turn_id": "string",
-  "triggered_at": "2025-01-15T10:30:00Z",
-  "cwd": "/path/to/project",
-  "call_id": "string",
-  "tool_name": "shell",
-  "tool_kind": "LocalShell",
-  "command": ["git", "status"],
-  "workdir": "/path/to/project",
-  "output_preview": "On branch main...",
-  "sandbox": "seatbelt",
-  "sandbox_policy": "workspace-write"
+  "hookSpecificOutput": {
+    "hookEventName": "PermissionRequest",
+    "decision": {
+      "behavior": "deny",
+      "message": "Blocked by repository policy."
+    }
+  }
 }
 ```
 
-### Execution Model
+**UserPromptSubmit — refuse a prompt:**
+```json
+{
+  "decision": "block",
+  "reason": "Ask for confirmation before doing that."
+}
+```
 
-- Hooks are **fire-and-forget** (cannot block operations)
-- JSON payload is passed as the final command-line argument
-- Hooks execute asynchronously after the event
+### Common output fields
 
-## Hook Payload Format
+All events accept these top-level keys:
 
-All hook payloads include common fields:
+| Key | Type | Effect |
+|-----|------|--------|
+| `continue` | boolean | `false` halts the turn |
+| `stopReason` | string | Why we stopped (paired with `continue: false`) |
+| `systemMessage` | string | Injected as a system note (PostToolUse only fully supports it) |
+| `suppressOutput` | boolean | Hide hook stdout from the user (PostToolUse parses but does not currently honor) |
+
+> **Capability gaps as of v0.124.0:** `continue`, `stopReason`, and `suppressOutput` are **not yet supported** for PreToolUse and PermissionRequest. PostToolUse supports `systemMessage`, `continue: false`, and `stopReason`.
+
+## Hook Input Schema
+
+Every event receives JSON on stdin with these common fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `hook_event` | string | Event name (`AfterAgent`, `AfterToolUse`) |
-| `thread_id` | string | Conversation thread ID |
-| `turn_id` | string | Current turn ID |
-| `triggered_at` | string | ISO 8601 timestamp |
+| `session_id` | string | Conversation/session ID |
+| `transcript_path` | string | Path to the running transcript |
 | `cwd` | string | Working directory |
+| `hook_event_name` | string | Event name (`PreToolUse`, etc.) |
+| `model` | string | Model in use this turn |
 
-### AfterToolUse-Specific Fields
+### Per-event additions
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `call_id` | string | Tool call identifier |
-| `tool_name` | string | Tool that was executed |
-| `tool_kind` | string | Tool type (LocalShell, ApplyPatch, etc.) |
-| `command` | string[] | Command and arguments |
-| `workdir` | string | Tool working directory |
-| `output_preview` | string | Truncated output |
-| `sandbox` | string | Sandbox type (none, seatbelt, bwrap) |
-| `sandbox_policy` | string | Sandbox mode used |
+| Event | Extra fields |
+|-------|--------------|
+| `SessionStart` | `source` ∈ {`startup`, `resume`, `clear`} |
+| `UserPromptSubmit` | `turn_id`, `prompt` |
+| `PreToolUse` | `turn_id`, `tool_name`, `tool_use_id`, `tool_input` |
+| `PermissionRequest` | `turn_id`, `tool_name`, `tool_input` (incl. `description`) |
+| `PostToolUse` | `turn_id`, `tool_name`, `tool_use_id`, `tool_input`, `tool_response` |
+| `Stop` | `turn_id`, `stop_hook_active`, `last_assistant_message` |
 
-## Rules as Hook Alternative
+## Hook Output Schema
 
-For **blocking/allowing commands** (the primary use case of Claude Code's PreToolUse hooks), Codex uses Starlark rules instead:
+The complete output schema lives in [docs](https://developers.openai.com/codex/hooks). Quick reference:
+
+```json
+{
+  "continue": true,
+  "stopReason": "optional reason",
+  "systemMessage": "optional banner",
+  "suppressOutput": false,
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "allow|deny",
+    "permissionDecisionReason": "string"
+  }
+}
+```
+
+## Common Patterns
+
+### Block destructive commands
+
+```bash
+#!/usr/bin/env python3
+# .codex/hooks/pre_tool_use_policy.py
+import json, sys
+
+inp = json.load(sys.stdin)
+cmd = " ".join(inp.get("tool_input", {}).get("command", []))
+
+if "rm -rf" in cmd or "sudo " in cmd:
+    print(json.dumps({
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "deny",
+            "permissionDecisionReason": "Destructive command blocked by hook."
+        }
+    }))
+    sys.exit(0)
+
+sys.exit(0)
+```
+
+### Scan for credentials in user prompts
+
+```bash
+#!/usr/bin/env python3
+# .codex/hooks/scan_prompt.py
+import json, sys, re
+
+inp = json.load(sys.stdin)
+prompt = inp.get("prompt", "")
+
+if re.search(r"sk-[a-zA-Z0-9]{20,}|AKIA[0-9A-Z]{16}", prompt):
+    print(json.dumps({
+        "decision": "block",
+        "reason": "API key or AWS access key detected in prompt."
+    }))
+    sys.exit(0)
+
+sys.exit(0)
+```
+
+### Log every shell command (PostToolUse, fire-and-forget)
+
+```toml
+[[hooks.PostToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'jq -r ".tool_input.command | join(\" \")" >> ~/.codex/command-log.txt'
+```
+
+### Auto-format after `apply_patch`
+
+```toml
+[[hooks.PostToolUse]]
+matcher = "apply_patch"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = '~/.codex/hooks/format_changed.sh'
+timeout = 60
+```
+
+## Notify Setting
+
+Independent of `[hooks]`. Trigger an external program on lifecycle events (still useful for desktop notifications):
+
+```toml
+notify = ["notify-send", "Codex"]                         # Linux
+notify = ["bash", "-lc", "afplay /System/Library/Sounds/Blow.aiff"]  # macOS
+
+[tui]
+notifications = ["agent-turn-complete", "approval-requested"]  # Filter
+```
+
+## Rules vs Hooks
+
+Starlark rules in `.codex/rules/` and `~/.codex/rules/` are still useful — they fire **before** the model decides whether to invoke a tool, are cheap, and integrate with smart-approval learning:
 
 ```starlark
-# In .codex/rules/safety.rules or ~/.codex/rules/default.rules
-
-# Block dangerous commands (like PreToolUse exit 2)
 prefix_rule(
     pattern = ["rm", ["-rf", "-r"]],
     decision = "forbidden",
     justification = "Use git clean -fd instead.",
 )
-
-# Auto-allow safe commands (like PreToolUse exit 0)
-prefix_rule(
-    pattern = ["git", "status"],
-    decision = "allow",
-    justification = "Read-only operation.",
-)
-
-# Require confirmation (like PreToolUse with dialog)
-prefix_rule(
-    pattern = ["docker", "rm"],
-    decision = "prompt",
-    justification = "Container removal needs review.",
-)
 ```
 
-Rules support compound command splitting -- `git add . && rm -rf /` is evaluated per-segment.
+Rules cover **command policy** (allow / prompt / forbidden). Hooks cover **scripted automation**: logging, secret scanning, formatting, custom validators. Use both: rules for static policy, hooks for dynamic checks and side effects.
 
-### Smart Approvals
+## Comparison with Claude Code
 
-```toml
-[features]
-request_rule = true  # Default: true
-```
+| Feature | Claude Code | Codex CLI (v0.124+) |
+|---------|------------|--------------------|
+| **Total events** | 10 | 6 |
+| **PreToolUse blocking** | Full (exit 2 or JSON) | Full (exit 2 or JSON) |
+| **PostToolUse** | Full | Full |
+| **PreToolUse `updatedInput`** | Yes | Not yet |
+| **`additionalContext` injection** | Yes | Not yet |
+| **PermissionRequest event** | Equivalent | Yes |
+| **UserPromptSubmit** | Yes | Yes |
+| **SessionStart / Stop** | Yes | Yes |
+| **SubagentStop, PreCompact, SessionEnd, Notification** | Yes | Not yet |
+| **MCP tool interception** | Yes | Yes (in `PreToolUse`) |
+| **File edit interception** | Yes (Edit/Write) | Yes (`apply_patch`) |
+| **Concurrent hooks** | Yes | Yes |
+| **Config format** | JSON (`settings.json`) | TOML (`[hooks.*]` in `config.toml`) or `hooks.json` |
+| **Config locations** | `~/.claude/settings.json`, `.claude/settings.json` | `~/.codex/config.toml`, `.codex/config.toml`, `requirements.toml` |
+| **Trust gating** | None for user scope | Project hooks load only for trusted projects |
 
-When enabled, Codex suggests creating rules when you approve commands, learning your preferences over time.
+## Migration from earlier Codex versions
 
-## Comparison with Claude Code Hooks
+If you previously used `AfterAgent` / `AfterToolUse` (the original fire-and-forget events), migrate to the stable equivalents:
 
-| Feature | Claude Code | Codex CLI |
-|---------|------------|-----------|
-| **PreToolUse blocking** | Full support (exit 2 blocks) | Use Starlark rules instead |
-| **PostToolUse** | Full support | AfterToolUse (fire-and-forget) |
-| **PreToolUse modification** | Can modify tool input | Not supported |
-| **Notifications** | Notification event + hooks | `notify` config setting |
-| **Session lifecycle** | SessionStart, SessionEnd, Stop | AfterAgent event |
-| **File protection** | PreToolUse matcher on Edit/Write | Sandbox + rules |
-| **Auto-formatting** | PostToolUse on Edit/Write | AfterToolUse (no blocking) |
-| **Command logging** | PreToolUse on Bash | AfterToolUse |
-| **Permission control** | PermissionRequest event | approval_policy + rules |
-| **Config format** | JSON (settings.json) | TOML (config.toml) |
-| **Config location** | `~/.claude/settings.json` | `~/.codex/config.toml` |
+| Legacy event | Replace with |
+|--------------|--------------|
+| `AfterAgent` | `Stop` |
+| `AfterToolUse` | `PostToolUse` |
 
-### Migration Patterns
+Legacy fields:
+- `hook_event` → `hook_event_name`
+- `thread_id` → `session_id`
+- `triggered_at` → not provided; compute in your hook if needed
+- Argv-style payload → all events now read JSON from stdin
 
-| Claude Code Hook | Codex Equivalent |
-|-----------------|------------------|
-| Block dangerous commands | Starlark rule with `decision = "forbidden"` |
-| Auto-allow safe commands | Starlark rule with `decision = "allow"` |
-| Require confirmation | Starlark rule with `decision = "prompt"` |
-| Log commands | AfterToolUse hook script |
-| Desktop notifications | `notify` config |
-| Auto-format after edit | AfterToolUse hook (non-blocking) |
-| File protection | Sandbox writable_roots + rules |
+## Trust Requirements
+
+- **User-level hooks** (`~/.codex/config.toml`, `~/.codex/hooks.json`): always loaded.
+- **Project-level hooks** (`.codex/config.toml`, `.codex/hooks.json`): loaded **only** for trusted projects. Use `codex trust` (or accept the trust prompt) to enable.
+- **Managed hooks** (`requirements.toml` + `managed_dir`): always loaded; not user-overridable.
+
+## Sources
+
+- [Codex hooks docs](https://developers.openai.com/codex/hooks)
+- [Codex configuration reference](https://developers.openai.com/codex/config-reference)
+- [Codex changelog](https://developers.openai.com/codex/changelog)
+- [v0.124.0 known hook bug — openai/codex#19199](https://github.com/openai/codex/issues/19199)
