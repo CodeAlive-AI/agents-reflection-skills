@@ -5,8 +5,9 @@ import (
 )
 
 // InfraRule covers destructive infra-mutation commands across the toolchain:
-// kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil, git push -f,
-// curl-vs-OpenSearch. Ports `~/.claude/hooks/infra-safety.sh` and
+// kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil,
+// curl-vs-OpenSearch + cloud control-plane API. Git lives in `rule_git.go`.
+// Ports `~/.claude/hooks/infra-safety.sh` and
 // `~/.claude/hooks/docker-prune-permission.sh`.
 //
 // Rationale: these are infrequent, high-impact commands where a confirmation
@@ -24,7 +25,6 @@ func (InfraRule) Triggers() []string {
 		"mongo", "mongosh", "mongodump", "mongorestore",
 		"terraform", "tofu",
 		"gsutil",
-		"git",
 		"curl",
 		// Hyperscaler CLIs (PocketOS-class coverage)
 		"aws", "az", "oci", "ibmcloud",
@@ -156,25 +156,6 @@ func (r InfraRule) Check(cmd ExecutedCommand, _ *RuleEnv) *Decision {
 		if contains(gsutilDestructive, firstNonFlag(cmd.Args)) {
 			return mkAsk(r.Name(), "infra.gsutil_mutation",
 				"GCS mutation: gsutil "+firstNonFlag(cmd.Args), argv(cmd))
-		}
-	case "git":
-		// git push --force / -f
-		if firstNonFlag(cmd.Args) == "push" {
-			for _, a := range cmd.Args {
-				if a == "--force" || a == "-f" || a == "--force-with-lease" || a == "+HEAD" {
-					return mkAsk(r.Name(), "infra.git_force_push",
-						"Git force push", argv(cmd))
-				}
-				if strings.HasPrefix(a, "--force-with-lease=") {
-					return mkAsk(r.Name(), "infra.git_force_push",
-						"Git force push with lease", argv(cmd))
-				}
-				// short-flag combo like -fu
-				if strings.HasPrefix(a, "-") && len(a) >= 2 && a[1] != '-' && strings.ContainsRune(a, 'f') {
-					return mkAsk(r.Name(), "infra.git_force_push",
-						"Git force push", argv(cmd))
-				}
-			}
 		}
 	case "curl":
 		method := curlMethod(cmd.Args)

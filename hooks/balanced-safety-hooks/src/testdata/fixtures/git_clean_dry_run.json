@@ -1,0 +1,16 @@
+{
+  "name": "git_clean_dry_run",
+  "description": "git clean -n is dry-run only — safe",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git clean -n"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "git_restore_source",
+  "description": "git restore --source=… is intentional restore, allow",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git restore --source=HEAD~1 ."
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

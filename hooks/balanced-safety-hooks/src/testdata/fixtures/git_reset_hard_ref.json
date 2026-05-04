@@ -1,0 +1,16 @@
+{
+  "name": "git_reset_hard_ref",
+  "description": "git reset --hard HEAD~3 — also drops commits, not just working tree",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git reset --hard HEAD~3"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.reset_hard"
+  }
+}

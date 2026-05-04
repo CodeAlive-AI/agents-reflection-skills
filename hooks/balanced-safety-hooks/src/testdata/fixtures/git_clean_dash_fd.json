@@ -1,0 +1,16 @@
+{
+  "name": "git_clean_dash_fd",
+  "description": "git clean -fd — short-flag bundle including 'f'",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git clean -fd"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.clean_force"
+  }
+}

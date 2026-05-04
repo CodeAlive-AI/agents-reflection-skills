@@ -1,0 +1,16 @@
+{
+  "name": "git_push_colon_branch",
+  "description": "git push origin :branch — empty source refspec deletes remote ref",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git push origin :feature"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.push_delete"
+  }
+}

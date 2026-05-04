@@ -1,0 +1,16 @@
+{
+  "name": "git_restore_staged",
+  "description": "git restore --staged just unstages — safe",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git restore --staged ."
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

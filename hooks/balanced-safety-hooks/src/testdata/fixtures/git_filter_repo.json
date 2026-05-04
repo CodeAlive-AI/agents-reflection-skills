@@ -1,0 +1,16 @@
+{
+  "name": "git_filter_repo",
+  "description": "git filter-repo rewrites history",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git filter-repo --invert-paths --path secret.env"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.history_rewrite"
+  }
+}

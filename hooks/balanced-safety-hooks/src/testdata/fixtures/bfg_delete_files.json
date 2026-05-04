@@ -1,0 +1,16 @@
+{
+  "name": "bfg_delete_files",
+  "description": "BFG Repo-Cleaner — purpose-built history rewriter",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "bfg --delete-files secrets.txt"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.history_rewrite"
+  }
+}

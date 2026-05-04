@@ -30,7 +30,7 @@ For tight iteration use `make watch` (requires `entr`; `brew install entr`).
 
 ## Testing protocol
 
-Every behavioural change must come with a fixture. Tests are golden-table style under `testdata/fixtures/*.json` — one file per case, ~35 covered today. Pattern:
+Every behavioural change must come with a fixture. Tests are golden-table style under `testdata/fixtures/*.json` — one file per case, ~155 covered today. Pattern:
 
 ```json
 {
@@ -118,7 +118,8 @@ If you change anything in `parser.go` or `unwrap.go`, run a manual sanity check 
 - `rule_rm.go`: rm/unlink/rmdir/shred logic
 - `rule_supabase.go`: Supabase CLI + ORM migrations (Alembic, Django, Prisma, Drizzle, Knex, Sequelize, Flyway, Liquibase, Rails, TypeORM, Goose)
 - `rule_bw.go`: BitWarden vault operations
-- `rule_infra.go`: kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil, git push -f, curl-vs-OpenSearch
+- `rule_infra.go`: kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil, curl-vs-OpenSearch + cloud control-plane API
+- `rule_git.go`: git operations that lose work or rewrite history (push -f / --delete, reset --hard, clean -f, checkout/restore pathspec, branch -D, stash drop/clear, filter-branch, filter-repo, bfg)
 - `rule.go`: Rule interface + registry
 - `decision.go`: Decision type + aggregation (no deny tier)
 - `audit.go`: JSONL log + rotation + 0o600 perms

@@ -1,0 +1,16 @@
+{
+  "name": "git_checkout_branch",
+  "description": "git checkout main — branch switch, no pathspec, safe",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git checkout main"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

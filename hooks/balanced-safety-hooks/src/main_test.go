@@ -107,7 +107,7 @@ func decisionFor(in FixtureInput) Decision {
 	if cmd == "" {
 		return Decision{Level: LevelAllow, Rule: "default", ReasonCode: "no_rule_matched"}
 	}
-	reg := newRegistry(RmRule{}, SupabaseRule{}, InfraRule{}, PaasRule{}, DbClientRule{})
+	reg := newRegistry(RmRule{}, SupabaseRule{}, InfraRule{}, PaasRule{}, DbClientRule{}, GitRule{})
 	triggers := reg.triggerSet()
 	sp := NewSafePaths(in.Cwd, nil)
 	return evaluate(cmd, triggers, reg, &RuleEnv{HookCwd: in.Cwd, SafePaths: sp})
@@ -120,7 +120,7 @@ func decisionFor(in FixtureInput) Decision {
 //   - "trigger + ask" path: a command that hits a destructive rule, exercising
 //     parser, unwrap, rule eval, and aggregation.
 func BenchmarkEvaluate(b *testing.B) {
-	reg := newRegistry(RmRule{}, SupabaseRule{}, InfraRule{}, PaasRule{}, DbClientRule{})
+	reg := newRegistry(RmRule{}, SupabaseRule{}, InfraRule{}, PaasRule{}, DbClientRule{}, GitRule{})
 	triggers := reg.triggerSet()
 	env := &RuleEnv{HookCwd: "/Users/test/myproject", SafePaths: NewSafePaths("/Users/test/myproject", nil)}
 

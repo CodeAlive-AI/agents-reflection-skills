@@ -10,7 +10,7 @@
   },
   "expect": {
     "decision": "ask",
-    "rule": "infra",
-    "reason_code": "infra.git_force_push"
+    "rule": "git",
+    "reason_code": "git.force_push"
   }
 }

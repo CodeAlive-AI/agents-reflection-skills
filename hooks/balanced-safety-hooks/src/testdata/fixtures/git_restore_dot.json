@@ -1,0 +1,16 @@
+{
+  "name": "git_restore_dot",
+  "description": "git restore . — wipes working tree, no --source",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git restore ."
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.restore_pathspec"
+  }
+}

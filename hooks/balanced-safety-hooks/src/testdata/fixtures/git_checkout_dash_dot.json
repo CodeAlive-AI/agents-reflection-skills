@@ -1,0 +1,16 @@
+{
+  "name": "git_checkout_dash_dot",
+  "description": "git checkout -- . — explicit pathspec, wipes working tree",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git checkout -- ."
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.checkout_pathspec"
+  }
+}

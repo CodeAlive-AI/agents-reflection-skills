@@ -1,0 +1,16 @@
+{
+  "name": "git_branch_dash_capital_d",
+  "description": "git branch -D feature — force-delete drops unmerged commits",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git branch -D feature"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.branch_force_delete"
+  }
+}

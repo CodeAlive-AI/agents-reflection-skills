@@ -1,0 +1,16 @@
+{
+  "name": "git_filter_repo_analyze",
+  "description": "git filter-repo --analyze is read-only — generates report, no rewrite",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git filter-repo --analyze"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

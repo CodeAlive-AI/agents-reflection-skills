@@ -1,0 +1,16 @@
+{
+  "name": "git_stash_pop",
+  "description": "git stash pop is intentional restore — safe",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git stash pop"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

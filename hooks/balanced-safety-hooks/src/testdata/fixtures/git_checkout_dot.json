@@ -1,16 +1,16 @@
 {
-  "name": "git_push_dash_f",
-  "description": "git push -f",
+  "name": "git_checkout_dot",
+  "description": "git checkout . wipes the working tree",
   "input": {
     "tool_name": "Bash",
     "tool_input": {
-      "command": "git push origin main -f"
+      "command": "git checkout ."
     },
     "cwd": "/Users/test/myproject"
   },
   "expect": {
     "decision": "ask",
     "rule": "git",
-    "reason_code": "git.force_push"
+    "reason_code": "git.checkout_pathspec"
   }
 }

@@ -93,7 +93,8 @@ bash-guard descends into all of those, classifies every span (`Executed` / `Data
 | **rm via wrappers** | `sudo rm`, `env FOO=bar rm`, `xargs rm`, `find -delete`, `find -exec rm`, `bash -c "rm ..."`, `eval "rm ..."`, `ssh host "rm ..."`, `chroot newroot rm`, `timeout 5 rm`, `nohup rm`, `time rm`, … |
 | **rm via pipe-to-shell** | `echo "rm -rf /" \| bash`, `cat script.sh \| sh`, etc. |
 | **supabase** | `supabase db push`, `db reset --linked`, `migration repair`, `--db-url <prod>`; ORM migration verbs (`alembic upgrade`, `manage.py migrate`, `prisma migrate deploy`, `drizzle-kit push`, `knex migrate`, `sequelize db:migrate`, `flyway migrate`, `liquibase update`, `rails db:migrate`, `rake db:migrate`, `typeorm migration:run`, `goose up`) |
-| **infra** | `kubectl delete/apply/patch`, destructive `gcloud compute/storage/...`, `helm install/upgrade/uninstall`, `docker rm/system prune`, destructive Mongo (`drop`, `deleteMany`, `mongorestore`, `mongodump`), `terraform/tofu apply/destroy`, `gsutil rm`, `git push -f / --force` |
+| **infra** | `kubectl delete/apply/patch`, destructive `gcloud compute/storage/...`, `helm install/upgrade/uninstall`, `docker rm/system prune`, destructive Mongo (`drop`, `deleteMany`, `mongorestore`, `mongodump`), `terraform/tofu apply/destroy`, `gsutil rm` |
+| **git** | `push -f / --force / --force-with-lease / +refspec`, `push --delete / -d / :branch`, `reset --hard`, `clean -f[d\|x]`, `checkout . / -- <pathspec>`, `restore .` (without `--source`/`--staged`), `branch -D / --delete --force`, `stash drop / clear`, `filter-branch`, `filter-repo` (carve-out: `--analyze`), `bfg` |
 | **hyperscaler clouds** | `aws <svc> delete-* / terminate-* / destroy-* / purge-* / remove-* / deregister-* / revoke-*`, `aws s3 rm`, `az ... delete / purge`, `oci ... delete / terminate`, `ibmcloud ... delete / *-rm / *-delete` |
 | **paas** | `railway`, `fly` / `flyctl`, `heroku`, `vercel`, `doctl`, `netlify`, `linode-cli` with destructive verbs (`delete`, `destroy`, `remove`, `rm`, `down`, `reset`) and Heroku/Netlify-style colon-suffix forms (`apps:destroy`, `pg:reset`, `sites:delete`, `addons:destroy`, `domains:remove`, `env:unset`) |
 | **DB clients** | `psql` / `mysql` / `mariadb` with inline SQL containing `DROP DATABASE/TABLE/SCHEMA/...`, `TRUNCATE`, `DELETE FROM`, `ALTER ... DROP`; `redis-cli FLUSHALL / FLUSHDB / SHUTDOWN / MIGRATE` |
@@ -157,13 +158,14 @@ When you see asks on legitimate work, add the project root to `~/.claude/hooks/b
 | `src/safe_paths.go` | realpath + lstat-based path classification with POSIX rm trailing-slash semantics, catastrophic-prefix matrix, $HOME carve-outs. |
 | `src/rule_rm.go` | `rm`, `unlink`, `rmdir`, `shred`. |
 | `src/rule_supabase.go` | Supabase CLI + ORM migrations. |
-| `src/rule_infra.go` | kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil, git push -f; aws/az/oci/ibmcloud destructive verbs; curl against OpenSearch/Elasticsearch + cloud control-plane APIs + GraphQL mutations. |
+| `src/rule_infra.go` | kubectl, gcloud, helm, docker, mongo*, terraform/tofu, gsutil; aws/az/oci/ibmcloud destructive verbs; curl against OpenSearch/Elasticsearch + cloud control-plane APIs + GraphQL mutations. |
+| `src/rule_git.go` | Git operations that lose work or rewrite history: `push -f`, `push --delete`, `reset --hard`, `clean -f`, `checkout` / `restore` pathspec, `branch -D`, `stash drop/clear`, `filter-branch`, `filter-repo`, `bfg`. |
 | `src/rule_paas.go` | PaaS CLIs: railway, fly/flyctl, heroku, vercel, doctl, netlify, linode-cli. |
 | `src/rule_db.go` | DB clients: psql, mysql, mariadb, redis-cli — destructive SQL + redis verbs. |
 | `src/decision.go` | `Level` enum (Allow / Ask only — no Deny), aggregation: ask wins. |
 | `src/audit.go` | JSONL log at `~/.claude/logs/bash-guard.jsonl` with size-based rotation, 0o600 perms. |
 | `src/config.go` | TOML loader, trusted-projects allowlist. |
-| `testdata/fixtures/*.json` | Golden-table fixtures: `(decision, rule, reason_code)` tuples. ~120 cases. |
+| `testdata/fixtures/*.json` | Golden-table fixtures: `(decision, rule, reason_code)` tuples. ~155 cases. |
 | `DESIGN.md` | Full architecture, consilium review, asymmetric fail-open rationale, open questions. |
 
 For non-trivial changes, read `DESIGN.md` first. For day-to-day maintenance, [`src/CLAUDE.md`](src/CLAUDE.md) has the edit/rebuild loop, fixture protocol, and "what NOT to do" list.

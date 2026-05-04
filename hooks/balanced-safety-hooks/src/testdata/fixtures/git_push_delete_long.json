@@ -1,0 +1,16 @@
+{
+  "name": "git_push_delete_long",
+  "description": "git push origin --delete <branch> — removes remote ref",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git push origin --delete feature"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.push_delete"
+  }
+}

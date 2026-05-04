@@ -1,0 +1,16 @@
+{
+  "name": "git_checkout_new_branch",
+  "description": "git checkout -b feature — creates and switches branch, safe",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git checkout -b feature"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

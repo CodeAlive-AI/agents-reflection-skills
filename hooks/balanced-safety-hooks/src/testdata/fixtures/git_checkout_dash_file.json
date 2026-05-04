@@ -1,0 +1,16 @@
+{
+  "name": "git_checkout_dash_file",
+  "description": "git checkout -- file.txt — pathspec form discards local edits",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git checkout -- src/main.go"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.checkout_pathspec"
+  }
+}

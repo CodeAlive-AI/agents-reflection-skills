@@ -1,0 +1,16 @@
+{
+  "name": "git_branch_long_delete_force",
+  "description": "git branch --delete --force — long-form equivalent of -D",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git branch --delete --force feature"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "git",
+    "reason_code": "git.branch_force_delete"
+  }
+}
