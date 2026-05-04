@@ -1,5 +1,7 @@
 # bash-guard — a Claude Code PreToolUse:Bash safety hook
 
+[![GitHub stars](https://img.shields.io/github/stars/CodeAlive-AI/ai-driven-development?style=social)](https://github.com/CodeAlive-AI/ai-driven-development/stargazers)
+
 A small Go program that sits between Claude Code and your shell, parses every Bash command the agent is about to run with a real shell AST, and decides whether to **allow** it or **ask** you. The default rule set uses `ask` rather than `deny` — see [why](#why-we-default-to-ask).
 
 ## Install
@@ -183,6 +185,10 @@ tail -f ~/.claude/logs/bash-guard.jsonl | jq '.'
 echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf /tmp/x"},"cwd":"/tmp"}' \
   | ~/.claude/hooks/bash-guard/bash_guard.bin
 ```
+
+## Star the repo
+
+If `bash-guard` ever saves your `node_modules`, your migration history, or your prod database from an autonomous agent — a star on [the parent repo](https://github.com/CodeAlive-AI/ai-driven-development) helps others find it before they need it.
 
 ## License
 
