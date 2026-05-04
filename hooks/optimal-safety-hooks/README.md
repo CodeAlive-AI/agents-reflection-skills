@@ -1,6 +1,6 @@
 # bash-guard — a Claude Code PreToolUse:Bash safety hook
 
-![bash-guard — a Claude Code Bash safety hook for autonomous agents](assets/banner.png)
+[![bash-guard — a Claude Code Bash safety hook for autonomous agents](assets/banner.png)](https://github.com/CodeAlive-AI/ai-driven-development)
 
 [![GitHub stars](https://img.shields.io/github/stars/CodeAlive-AI/ai-driven-development?style=social)](https://github.com/CodeAlive-AI/ai-driven-development/stargazers)
 
