@@ -1,5 +1,7 @@
 # bash-guard — a Claude Code PreToolUse:Bash safety hook
 
+![bash-guard — a Claude Code Bash safety hook for autonomous agents](assets/banner.png)
+
 [![GitHub stars](https://img.shields.io/github/stars/CodeAlive-AI/ai-driven-development?style=social)](https://github.com/CodeAlive-AI/ai-driven-development/stargazers)
 
 A small Go program that sits between Claude Code and your shell, parses every Bash command the agent is about to run with a real shell AST, and decides whether to **allow** it or **ask** you. The default rule set uses `ask` rather than `deny` — see [why](#why-we-default-to-ask).
