@@ -1,0 +1,312 @@
+## C.2.3 - Unified Formality Characteristic F
+
+> **Type:** Definitional (D)
+> **Status:** Stable
+> **Normativity:** Normative unless marked informative
+
+**Plain-name.** Formality characteristic.
+
+**One-line summary.** `C.2.3` defines **Formality (F)** as one ordinal `U.Characteristic` with polarity `up`, anchored by the default ladder `F0...F9`, and owned as the `F` coordinate of the typed `F-G-R` assurance tuple.
+
+### C.2.3:1 - Problem frame
+
+Transdisciplinary work needs one shared way to speak about rigor of expression. A research hypothesis in constrained natural language, a software interface specification with explicit invariants, a controller model checked against hybrid obligations, and a proof-bearing formal development are not comparable by domain lore alone. They are comparable by **how strictly the content is expressed**.
+
+Historically, that distinction drifts. Teams mix editorial maturity, organizational status, notation choice, proof strength, and scope narrowness into one vague story about something being *more formal*. `C.2.3` removes that drift by giving FPF one explicit owner for the rigor-of-expression axis.
+
+### C.2.3:2 - Problem
+
+Without one unified `F` characteristic:
+
+1. **Rigor is narrated inconsistently.**
+   Different contexts invent local mode/tier language with no shared comparability.
+2. **Status and rigor collapse.**
+   Something accepted, published, or approved is mistaken for something precisely expressed.
+3. **Expression changes are hidden.**
+   A move from sketch to predicates or from executable model to proof is not recorded as a distinct content change.
+4. **Composition becomes unsound.**
+   A composite artifact is treated as highly formal because one segment is highly formal, even when essential support still depends on less formal parts.
+5. **Other axes are misused as surrogates.**
+   Authors quietly use scope, evidence, or language-state facets as if they were part of one master formality ladder.
+
+### C.2.3:3 - Forces
+
+| Force | Tension |
+|---|---|
+| **Readability vs precision** | Natural language is fast and legible; formal systems are unambiguous and checkable. F needs a gradient, not a cliff. |
+| **Local freedom vs shared comparability** | Contexts need local exemplars and thresholds, but cross-context reasoning requires one stable axis. |
+| **Exploration vs assurance** | Early work must be allowed at low F, while high-assurance work needs explicit higher anchors. |
+| **Notation diversity vs semantic stability** | Different symbol systems may express the same rigor level; notation choice alone must not redefine F. |
+| **Thin characteristic vs rich practice** | The core characteristic should stay simple, while still supporting concrete guidance, examples, and review discipline. |
+
+### C.2.3:4 - Solution - `U.Formality` as one ordinal characteristic
+
+`C.2.3` defines `U.Formality` as the single owner of rigor-of-expression in FPF.
+
+#### C.2.3:4.1 - Identity and typing
+
+- **Name:** `U.Formality` (abbreviated `F` in the assurance tuple)
+- **Type:** `U.Characteristic`
+- **Scale kind:** ordinal
+- **Polarity:** `up`
+- **Carrier:** any `U.Episteme`
+- **Default value family:** `F0...F9`
+
+`F` states **how strictly the content is expressed**. It does not state whether the content is true, well evidenced, widely applicable, or organizationally accepted.
+
+#### C.2.3:4.2 - Role in the typed `F-G-R` tuple
+
+`F` is the formality coordinate in the assurance tuple. Its interaction rules are strict:
+
+- `F` is **not** `G`; scope remains owned by `U.ClaimScope` and other USM structures.
+- `F` is **not** `R`; evidence, warrant strength, and decay remain assurance concerns.
+- `CL` and bridge losses affect **`R`**, not `F`.
+- Changes in notation or carrier surface do not change `F` if the formal content is preserved.
+
+#### C.2.3:4.3 - Extensibility and local anchors
+
+FPF provides the default anchor ladder `F0...F9`. A context may define sub-anchors or intermediate anchors such as `F4[OCL]` or `F6.5`, but only if:
+
+- global order is preserved,
+- the local anchor is explicitly docked to a parent anchor,
+- the context does not invent a rival ladder or proxy scale.
+
+#### C.2.3:4.4 - Usage obligations
+
+- Every normative episteme shall declare one `F` value.
+- Thresholds that depend on rigor should be written explicitly as `F >= Fk` conditions.
+- Any raise or lowering of `F` is a content change, not a status-only change.
+- `F` remains declaration and reasoning infrastructure; it is not itself a governance process.
+
+### C.2.3:5 - Archetypal Grounding
+
+**Tell.** `F` does not ask whether a claim is correct. It asks how strictly the claim is expressed.
+
+**Show (System).** A system requirement written as controlled natural language with unambiguous acceptance conditions may be `F3`; the same requirement rewritten as explicit typed invariants may become `F4`; a machine-checked proof of a critical invariant may raise the relevant claim core to `F7` or above.
+
+**Show (Episteme).** A research conjecture can begin at `F1-F3`, then gain explicit predicates at `F4`, executable semantics at `F5`, and proof-bearing core content at `F7-F8`, while remaining recognizably the same evolving claim family.
+
+### C.2.3:6 - Bias-Annotation
+
+The pattern biases FPF toward one explicit rigor axis and against stories that mix formality with status, publication quality, scope width, or evidence strength. That bias is intentional. The price of explicit declaration is smaller than the cost of comparing rigor through folklore.
+
+### C.2.3:7 - Conformance Checklist
+
+- `CC-F-1` Every normative `U.Episteme` **SHALL** declare exactly one `U.Formality` value, either a default anchor or a local sub-anchor explicitly docked to one.
+- `CC-F-2` `F` **SHALL** be treated as an ordinal characteristic; arithmetic over `F` values is invalid.
+- `CC-F-3` Higher `F` **SHALL** mean greater or equal strictness of expression, not greater truth, trust, or scope.
+- `CC-F-4` Contexts **MUST NOT** publish alternative "formality modes" or "tiers" as surrogates for `F`.
+- `CC-F-5` Local sub-anchors **SHALL** preserve the global ordering and the parent anchor meaning.
+- `CC-F-6` The episteme-level `F` of a composite artifact **SHALL** be bounded by the least-formal essential support on the relevant support path.
+- `CC-F-7` Implementations **MUST NOT** average `F` values numerically.
+- `CC-F-8` Changes in `G`, `R`, or `CL` **SHALL NOT** change `F` unless the expression form itself changes.
+- `CC-F-9` Cross-context transport **SHALL** preserve the attributed `F`; if the receiving context rewrites the claim materially, it becomes a new episteme with its own `F`.
+- `CC-F-10` Translation loss, bridge weakness, and plane crossings **SHALL** route through `R` rather than being hidden as `F` changes.
+- `CC-F-11` Assigned `F` values **SHALL** be justifiable by observable content such as explicit predicates, executable semantics, or machine-checked proofs.
+- `CC-F-12` Declaring a tool or notation **SHALL NOT** by itself justify a higher `F` unless the content satisfies the target anchor semantics.
+- `CC-F-13` Status labels such as `Draft`, `Approved`, or `Published` **MUST NOT** substitute for `F`.
+- `CC-F-14` A context that uses `F` in gates or policies **SHALL** write those thresholds explicitly.
+- `CC-F-15` Language-state facets such as articulation or closure **MUST NOT** be hidden as pseudo-levels of `F`.
+
+### C.2.3:8 - Common Anti-Patterns and How to Avoid Them
+
+| Anti-pattern | What it looks like | How FPF prevents it |
+|---|---|---|
+| **Status leakage** | An artifact is called highly formal because it is approved or published. | `CC-F-13` keeps status and formality separate. |
+| **Tool-worship** | A notation, prover, or execution harness is named, so the artifact is rated high-F without checking the content. | `CC-F-11` and `CC-F-12` require observable semantic grounds. |
+| **Appendix inflation** | A small high-formality appendix is used to advertise the whole artifact as high-F. | `CC-F-6` keeps the whole artifact capped by the least-formal essential support. |
+| **Proxy ladder** | A local context invents "bronze / silver / gold" or "ready / mature / final" and uses it instead of `F`. | `CC-F-4` rejects rival ladders. |
+| **Axis capture** | Articulation, closure, scope, or evidence is spoken of as if it were part of `F`. | `CC-F-8`, `CC-F-10`, and `CC-F-15` keep the axes orthogonal. |
+
+### C.2.3:9 - Consequences
+
+| Benefit | Trade-off / Mitigation |
+|---|---|
+| **Shared rigor language.** Cross-domain artifacts can be compared by one stable expression axis. | Authors must learn the anchor ladder and declare `F` explicitly. |
+| **Safer composition.** Composite artifacts stop inheriting a misleadingly high rigor label from one polished segment. | Reviewers must identify essential support rather than read only visible polish. |
+| **Cleaner governance.** Thresholds can be written as explicit `F` conditions instead of vague maturity labels. | Contexts must translate old local language into the canonical axis. |
+| **Better interaction with other axes.** `F`, `G`, `R`, and language-state facets remain distinct. | Authors lose the convenience of one master-ladder story; that loss is deliberate. |
+
+### C.2.3:10 - Rationale
+
+FPF needs a rigor axis that is portable across mathematics, software, systems, policy, and research. The smallest stable answer is one ordinal characteristic with clear anchors and explicit composition rules. Anything more fragmented breaks comparability; anything more compressed hides the substantive differences between sketch, predicate, executable model, and machine-checked proof.
+
+### C.2.3:11 - SoTA-Echoing
+
+Post-2015 practice across formal methods, software architecture, safety engineering, verification, computational science, and typed proof environments converges on one broad lesson: rigor is not binary. It rises through explicit structuring, predicate expression, executable semantics, and machine-checked obligations. `C.2.3` adopts that gradient while keeping the characteristic notation-agnostic and transdisciplinary.
+
+### C.2.3:12 - Relations
+
+- **Owns:** the `F` coordinate of the typed `F-G-R` assurance tuple.
+- **Builds on:** characteristic machinery from `A.18` / `A.19` and episteme ownership from Part C.
+- **Coordinates with:** `C.2.2`, `B.3`, `F.9`, `C.2.LS`, `A.16`, `C.2.4`, `C.2.5`, `C.2.6`, and `C.2.7`.
+- **Constrains:** any pattern, gate, or editorial rule that speaks about rigor of expression.
+
+### C.2.3:13 - Canonical Anchors `F0...F9`
+
+> **Reading rule.** Anchors are ordinal. They say what is minimally true of the expression form, not what is true of the world.
+
+#### C.2.3:13.1 - `F0` - Unstructured prose
+
+Free natural language with unstable vocabulary, implicit assumptions, and no stable internal structure.
+
+#### C.2.3:13.2 - `F1` - Scoped notes
+
+Still informal, but with stable topic focus and more consistent terminology. Scope is named even though criteria are not yet operationalized.
+
+#### C.2.3:13.3 - `F2` - Structured outline
+
+A recognizable template or full section shape exists. The artifact is coherent end-to-end, but acceptance criteria are still largely placeholders or informal.
+
+#### C.2.3:13.4 - `F3` - Controlled narrative
+
+Claims are expressed in constrained prose with stable interpretation. Acceptance or refusal conditions are visible in language, even if not yet fully predicate-like.
+
+#### C.2.3:13.5 - `F4` - First-order constraints
+
+Critical claims can be rendered as explicit predicates or invariants over typed entities. Consistency and conflict are at least checkable in principle.
+
+#### C.2.3:13.6 - `F5` - Executable math / algorithmics
+
+The artifact has declared executable semantics. Running the model, algorithm, or simulation is part of its meaning.
+
+#### C.2.3:13.7 - `F6` - Hybrid formalism
+
+Several formal layers are coordinated explicitly, typically discrete plus continuous or several tightly coupled formal subsystems, with declared obligations between them.
+
+#### C.2.3:13.8 - `F7` - Higher-order verified
+
+Core claims are encoded in a proof-capable higher-order setting and machine-checked against that logic kernel.
+
+#### C.2.3:13.9 - `F8` - Dependent / constructive proofs
+
+Programs-as-proofs or dependent-type artifacts carry the relevant property in their types or proof terms.
+
+#### C.2.3:13.10 - `F9` - Univalent / higher foundations
+
+Higher-equality foundations are load-bearing. The artifact relies on a frontier-grade setting where equivalence is handled as structure-level identity.
+
+#### C.2.3:13.11 - Cross-anchor cautions
+
+- Execution is not proof.
+- Surface structure is not yet semantics.
+- Publishing or approval is not an anchor.
+- A local sub-anchor does not erase its parent anchor's meaning.
+
+### C.2.3:14 - Assigning `F` in Practice
+
+#### C.2.3:14.1 - First-pass questions
+
+1. **Can a competent reader misread the claim materially?**
+   If yes, the artifact is likely at `F0-F2`; if not, it may be `F3` or above.
+2. **Are the critical claims visible as explicit predicates or invariants?**
+   If yes, the artifact is at least `F4`.
+3. **Does the artifact have declared executable semantics?**
+   If yes, it is likely in the `F5-F6` region.
+4. **Would a logic kernel or type checker reject an incorrect change to a core claim?**
+   If yes, the artifact is likely `F7-F8`, or `F9` if higher-equality machinery is essential.
+
+#### C.2.3:14.2 - Quick rubric
+
+- No full structure -> `F0-F1`
+- Full structure but mostly placeholder criteria -> `F2`
+- Controlled prose with one stable reading -> `F3`
+- Explicit predicates / invariants -> `F4`
+- Declared executable semantics -> `F5`
+- Hybrid / layered formal obligations -> `F6`
+- Machine-checked proof core -> `F7`
+- Dependent proof-carrying core -> `F8`
+- Higher-equality foundations are essential -> `F9`
+
+#### C.2.3:14.3 - Typical delta-`F` moves
+
+- `F2 -> F3`: replace loose prose with controlled phrasing and explicit acceptance statements.
+- `F3 -> F4`: recast acceptance into typed predicates or invariants.
+- `F4 -> F5`: give the artifact declared executable semantics.
+- `F5 -> F6`: make multi-layer obligations explicit.
+- `F6 -> F7/F8`: move critical claims into machine-checked proof or dependent-type form.
+
+### C.2.3:15 - Composition and Interaction
+
+#### C.2.3:15.1 - Weakest-essential-support rule
+
+For a composite episteme, the effective `F` is bounded by the least-formal essential support on the relevant support path. A highly formal annex does not lift an informal essential claim core.
+
+#### C.2.3:15.2 - Relation to `G`
+
+`F` concerns expression form; `G` concerns applicability or claim scope. Tightening scope may accompany a raise in `F`, but it is a separate change and must remain visible as such.
+
+#### C.2.3:15.3 - Relation to `R`
+
+Higher `F` often makes evidence easier to formulate, test, or prove, but it does not create warrant strength by itself. Empirical freshness, corroboration, and bridge penalties remain `R` concerns.
+
+#### C.2.3:15.4 - Relation to `CL` and Bridges
+
+A bridge may expose loss or mismatch across contexts. Those losses affect `R`; they do not silently lower or raise the attributed `F`. If the receiving context must materially rewrite the claim, it should publish a new episteme with its own `F`.
+
+### C.2.3:16 - Worked Examples
+
+#### C.2.3:16.1 - Research hypothesis
+
+A short note proposing a new scaling law with one stable reading and explicit acceptance conditions in prose is typically `F3`. Rewriting the acceptance conditions as typed predicates would move it toward `F4`.
+
+#### C.2.3:16.2 - Interface specification
+
+An interface specification with explicit preconditions, postconditions, and invariants is typically `F4`. Adding declared executable semantics in a faithful reference model may move it toward `F5`.
+
+#### C.2.3:16.3 - Safety controller
+
+A controller coupled to a plant model with explicit hybrid obligations is typically `F6`. If key invariants are then machine-checked in a higher-order proof environment, those claims move toward `F7`.
+
+#### C.2.3:16.4 - Decision policy
+
+A decision policy with controlled prose may remain `F3`. If thresholds and conditions are published as typed predicates, it becomes `F4`.
+
+#### C.2.3:16.5 - Proof-bearing algorithm
+
+A dependent-typed algorithm whose central property is carried by the type itself is typically `F8`.
+
+#### C.2.3:16.6 - Executable ML recipe
+
+A fully explicit training-and-evaluation recipe with declared execution semantics is typically `F5`. It does not become `F7` merely because the surrounding execution machinery is sophisticated.
+
+### C.2.3:17 - Authoring and Review Guidance
+
+#### C.2.3:17.1 - For authors
+
+Declare `F` honestly and early. A low `F` declaration is not a defect; it is often the correct statement about an early artifact. Raise `F` by changing the expression form itself, not by applying prestige language or by pointing to surrounding machinery.
+
+#### C.2.3:17.2 - For reviewers
+
+Review the actual claim core. Ask whether the target anchor semantics are visibly satisfied, whether essential support has weaker segments, and whether status or other axes have leaked into the `F` declaration.
+
+#### C.2.3:17.3 - For integrators and assurance leads
+
+Use `F` explicitly in gates and composition analysis, but do not let it absorb work that belongs to `G`, `R`, `CL`, or `C.2.LS`. Large `F` gaps across collaborating artifacts are signals for explicit formalization work, not excuses for wishful leveling.
+
+### C.2.3:18 - Glossary and Notation
+
+- **`U.Formality` / `F`.** The rigor-of-expression characteristic owned by this pattern.
+- **Anchor.** A named ordinal milestone on the `F` ladder.
+- **Sub-anchor.** A context-local refinement docked to one parent anchor.
+- **Delta-`F`.** A content change that alters expression rigor.
+- **Essential support.** The support without which the central claim does not stand.
+- **Example notation.** `F = F4`, `F = F7[HOL]`, `requires F >= F6`.
+
+### C.2.3:19 - Change Log and Patch Notes
+
+#### C.2.3:19.1 - Supersession of legacy ladder language
+
+This pattern supersedes legacy wording that speaks about alternate formality modes, tiers, or editorial ladders. Forward-looking use should speak in `F` directly.
+
+#### C.2.3:19.2 - Migration guidance
+
+When refreshing legacy material, assign an initial `F` from observable content, rewrite local maturity labels into explicit `F` declarations, and keep provenance notes only as historical annotations rather than live rigor surrogates.
+
+#### C.2.3:19.3 - Boundary to language-state axes
+
+For the language-space extension, `F` does **not** own `U.ArticulationExplicitness`, `U.LanguageStateClosureDegree`, `U.LanguageStateAnchoringMode`, or `U.LanguageStateRepresentationFactorBundle`. Contexts **MUST NOT** hide thresholds for those facets as pseudo-levels or submodes of `F`; those facets remain explicitly owned by `C.2.LS` and its subordinate owners.
+
+### C.2.3:End
+
+

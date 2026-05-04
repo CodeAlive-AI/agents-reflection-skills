@@ -1,0 +1,16 @@
+{
+  "name": "terraform_destroy",
+  "description": "terraform destroy",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "terraform destroy"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.terraform_mutation"
+  }
+}

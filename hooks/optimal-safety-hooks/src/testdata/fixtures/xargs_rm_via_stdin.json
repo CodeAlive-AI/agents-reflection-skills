@@ -1,0 +1,16 @@
+{
+  "name": "xargs_rm_via_stdin",
+  "description": "xargs rm -rf with stdin args",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "cat list | xargs rm -rf"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.stdin_args"
+  }
+}

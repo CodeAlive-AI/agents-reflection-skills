@@ -1,0 +1,16 @@
+{
+  "name": "helm_uninstall",
+  "description": "helm uninstall",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "helm uninstall my-release"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.helm_mutation"
+  }
+}

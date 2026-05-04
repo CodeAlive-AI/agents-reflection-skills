@@ -1,0 +1,16 @@
+{
+  "name": "paas_doctl_droplet_delete",
+  "description": "doctl compute droplet delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "doctl compute droplet delete 12345 --force"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.doctl_destructive"
+  }
+}

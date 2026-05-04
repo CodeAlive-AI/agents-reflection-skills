@@ -1,0 +1,79 @@
+## E.5.2 - Notational Independence
+
+### E.5.2:1 - Problem frame
+FPF concepts must travel across academic disciplines, modelling tools,
+and future notations we cannot yet foresee. If a normative pattern binds
+its *meaning* to one diagram style, file syntax, or markup dialect, the
+concept ages as soon as the notation does.
+
+### E.5.2:2 - Problem
+*Semantic lock‑in*: when a definition relies on a particular glyph set or
+diagram grammar, alternative communities either translate it—risking
+drift—or ignore FPF altogether.
+
+### E.5.2:3 - Forces
+
+| Force | Tension |
+|-------|---------|
+| **Expressiveness** | Diagrams and formal grammars aid precision ↔ they should never become the definition itself. |
+| **Longevity** | A 20‑year horizon ↔ notation life‑cycles of 3‑5 years. |
+| **Cross‑discipline adoption** | Mathematicians prefer algebraic syntax; engineers prefer schematics. |
+
+### E.5.2:4 - Solution — Notational Independence Guard‑Rail *(conceptual; semantics over syntax; not a notation mandate)*
+
+1. **Semantics primacy**  
+   Normative content **SHALL** define concepts in linguistic form first
+   (plain English + mathematics if needed). Visual or syntax examples
+   are secondary illustrations.
+
+2. **Equivalence clause**  
+   When an official alternate notation exists, the pattern must state:
+   *“Representation A and Representation B are semantically equivalent
+   under mapping M.”*
+
+3. **Reference indirection**  
+   If the Core cites a diagram, it does so by *conceptual role*
+   (“reference boundary schematic”) rather than by file or syntax name.
+
+4. **Conceptual prefix neutrality**  
+   FPF **conceptual prefixes** (e.g., `U.`, `Γ_`, `ut:`, `tv:`, `ev:`, `mero:`) are  **cognitive namespaces**, not syntax tokens. Core patterns **MUST NOT**  tie their meaning to any concrete serialisation or URI scheme for these prefixes; any expansions are **illustrative only** and live in Tooling or Pedagogy.
+
+5. **Cards and other "forms"**
+Cards, tables and other "forms" exist in FPF core only as conceptual model, not as data model, thus no need to data-related notation or notation for lint. Comformance checklist and quards is also conceptual, argumentation like "this will ease machine check" is forbidden, no machine checking is intended in core; machine checks and linters live only in Tooling.
+
+### E.5.2:5 - Archetypal Grounding (System / Episteme)
+
+| Scenario | `U.System` example | `U.Episteme` example |
+|----------|-------------------|----------------------|
+| Definition | Boundary of a pump is expressed in prose plus set notation; a diagram is illustrative. | F‑G‑R assurance components defined textually; a triple‑store serialisation is illustrative. |
+| Alternate rendering | Same pump semantics rendered in a lattice diagram or a tabular sheet remain valid. | R‑scores plotted in a heatmap or listed in CSV remain equivalent. |
+
+### E.5.2:6 - Conformance Checklist
+
+| ID | Requirement |
+|----|-------------|
+| **CC‑NI.1** | A Core pattern **MUST NOT** embed semantics that hinge on one specific notation. |
+| **CC‑NI.2** | Illustrative renderings **SHALL** be marked “informative”. |
+| **CC‑NI.3** | When multiple official renderings exist, the pattern **MUST** declare the semantic mapping between them. |
+| **CC‑NI.4** | If a **conceptual prefix** appears in Core, its expansion (if shown) **SHALL** be marked *informative* and **MUST NOT** be required to interpret the semantics. |
+
+### E.5.2:7 - Consequences
+
+| Benefits | Trade‑offs / Mitigations |
+|----------|-------------------------|
+| Ensures FPF survives notation turnover. | Authors invest time describing mappings; mitigated by reusable mapping templates. |
+| Lowers entry barrier for domains using different diagram traditions. | Excessive illustrations can bloat pages; guidance in Pedagogical Companion limits scope. |
+
+### E.5.2:8 - Rationale
+Language and diagrams are tools, not truths. By elevating semantics over
+syntax, FPF maintains **P‑1 Cognitive Elegance** and **P‑2 Didactic
+Primacy** while safeguarding **P‑5 FPF Layering**: tooling layers can
+add new renderers without Core edits.
+
+### E.5.2:9 - Relations
+* **Parent umbrella:** `pat:constitution/guard‑rails` (E.5)  
+* **Constrains:** every normative Core pattern and official alternate rendering  
+* **Instantiates pillars:** P‑1, P‑2, P‑5
+
+### E.5.2:End
+

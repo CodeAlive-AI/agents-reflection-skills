@@ -1,0 +1,16 @@
+{
+  "name": "supabase_migration_repair",
+  "description": "supabase migration repair 20240101",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "supabase migration repair 20240101"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.migration_repair"
+  }
+}

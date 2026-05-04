@@ -1,0 +1,16 @@
+{
+  "name": "bash_dash_c_rm_rf_etc",
+  "description": "bash -c with inner rm -rf /etc",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "bash -c \"rm -rf /etc/nginx\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

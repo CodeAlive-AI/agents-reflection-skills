@@ -1,0 +1,192 @@
+## E.10.D1 - Lexical Discipline for “Context” (D.CTX)
+
+> **One‑sentence summary.** Make the word **Context** unambiguous: in FPF it **only** denotes the formal primitive **`U.BoundedContext`**; remove the term **anchor**; reserve **Problem Frame** for situational narrative; treat **Domain** as an **informative family label**, not a type.
+
+**Status.** Discipline definitional pattern.
+**Depends on.** C‑6 *Strict Distinction*; C‑7 *Temporal Duality*; G‑1 *Minimal Generality*; G‑2 *Contextual Specification*.
+**Coordinates with.** E.10.U1 *Domain‑Family Landscape Survey*; E.10.U2 *Term Harvesting & Normalisation*; E.10.U7 *Concept‑Set Table*; E.10.U9 *Alignment/Bridge*; `RoleAssigning` patterns (e.g., E.10.U4).
+**Aliases (informative).** Context Discipline; No‑Anchor Rule.
+
+
+### E.10.D1:1 - Intent & Applicability
+
+**Intent.** Eliminate ambiguity around “context” by (a) fixing **one** formal meaning—`U.BoundedContext`; (b) removing “anchor” from the vocabulary; (c) reserving **Problem Frame** for prose about situations; and (d) clarifying **Domain** as an **informative family** (workflow, provenance, services, …) that groups several `U.BoundedContext`s.
+
+**Applicability.** Mandatory across **all FPF patterns** (Role Assignment & Enactment, Sys-CAL, KD-CAL, Kind-CAL, planned LCA-CAL). Apply at the start of any unification effort and whenever documentation introduces or refactors “context”, “domain”, “anchor”.
+
+**Non‑goals.** No governance, workflow, or tool mandates; no storage formats; no team roles.
+
+
+### E.10.D1:2 - Problem Frame
+
+1. **Polysemy.** “Context” is used for formal scopes, narrative situations, and even runtime modes.
+2. **Extra token (“anchor”).** “Anchor” pretends to be “where meaning is attached”, duplicating context semantics.
+3. **Domain overreach.** “Domain context” conflates **families** (disciplinary areas) with **formal contexts**.
+4. **Plane mixing.** Runtime/design stances and deontic/behavioural notions are smuggled into “context”.
+
+
+### E.10.D1:3 - Forces
+
+| Force                     | Tension to resolve                                                 |
+| ------------------------- | ------------------------------------------------------------------ |
+| Universality vs locality  | One calculus vs many local context of meaning (C‑6 vs C‑1).          |
+| Brevity vs precision      | Short labels vs unambiguous reference.                             |
+| Stability vs evolution    | Fixed terms vs edition turnover and language variants (C‑7).       |
+| Parsimony vs expressivity | Few primitives vs enough hooks for Role Assignment & Enactment, Concept Sets, and Bridges. |
+
+
+### E.10.D1:4 - Solution — **Name one thing “Context” can mean**
+
+**D‑CTX‑1 (Canonical meaning).** In all FPF materials, **Context** denotes the formal primitive **`U.BoundedContext`** only. The short form **Context** is permitted in the *Tech* register strictly as an alias of `U.BoundedContext`.
+
+**D‑CTX‑2 (Remove “anchor”).** The term **anchor** is **prohibited**. When you need “the place where a meaning lives”, use:
+
+* **`SenseCell := (U.BoundedContext, Local‑Sense)`** — the *cell of meaning* inside a specific Context; or
+* a **`ConceptSet.Row`** + column reference (see E.10.U7).
+
+**D‑CTX‑3 (Domain is informative).** **Domain** (workflow, provenance, services, access, sensing, …) is **not** a U.Type. It is an **informative family label** grouping several `U.BoundedContext`s. There is no “domain context”.
+
+**D‑CTX‑4 (Narrative is Problem Frame).** Use **Problem Frame** (or **Frame**) for situational narrative in patterns. Do **not** use “context” for narrative sections.
+
+**D‑CTX‑5 (Time is a tag, not a context).** `design` / `run` are **TimeScope tags** (C‑7) on artefacts or sources; they do **not** create separate contexts.
+
+**D‑CTX‑6 (No context inheritance).** `U.BoundedContext`s have **no is‑a** or containment relations. Any cross‑context relationship appears **only** via E.10.U9 *Alignment/Bridge* with explicit loss policies.
+
+**D‑CTX‑7 (Language/edition discipline).** Different languages or editions may be **distinct `U.BoundedContext`s** when meaning or usage can diverge. Where an official source binds multilingual labels to the **same** semantics, record them as **labels** of the **same** Context.
+
+**D‑CTX‑8 (Reference forms).** Use **one of the following** when pointing to meaning:
+
+* **`ContextId:LocalLabel`** (e.g., `BPMN_2_0:process`), or
+* **`SenseCell(ContextId, Local‑SenseId)`**, or
+* **ConceptSet(RowId).Column(ContextId)** (E.10.U7).
+
+
+### E.10.D1:5 - Structure — Minimal reference shapes (informative)
+
+> Shapes shown **do not** prescribe formats; they are naming conventions.
+
+* **Context Id.** Stable short handle (e.g., `BPMN_2_0`, `PROV_O_2013`, `ITIL4_2020`, `NIST_RBAC_2004`, `SOSA_SSN_2017`).
+* **SenseCell.** `(ContextId, Local‑Sense)` where `Local‑Sense` is the Context‑local preferred label (from E.10.U2).
+* **ConceptSet Row.** A table row keyed by a row id; columns are `SenseCell`s per Context (E.10.U7).
+
+
+### E.10.D1:6 - Core Invariants (normative)
+
+1. **LCTX‑INV‑1 (Uni‑meaning).** The word **Context** in formal text equals **`U.BoundedContext`**.
+2. **LCTX‑INV‑2 (No anchor).** The token **anchor** does **not** appear in normative prose; use **SenseCell** or **ConceptSet reference**.
+3. **LCTX‑INV‑3 (No domain contexts).** “Domain context” is invalid; use **Domain family** + list of `U.BoundedContext`s.
+4. **LCTX‑INV‑4 (Frames, not contexts).** Pattern headers use **Problem Frame** for narrative.
+5. **LCTX‑INV‑5 (No hierarchy).** Contexts are flat; relationships are declared **only** via E.10.U9 Bridges.
+6. **LCTX‑INV‑6 (Plane hygiene).** Contexts describe **context of meaning** for sources; they are not roles, statuses, executions, or types (C‑6).
+7. **LCTX‑INV‑7 (Time tags).** DesignRunTag is a **tag** on artefacts/sources; it does not multiply contexts.
+8. **LCTX‑INV‑8 (Language/edition).** Multilingual or multi‑edition handling follows D‑CTX‑7.
+
+
+### E.10.D1:7 - Conformance Checklist (normative)
+
+* **CC‑LCTX‑1.** Grep‑style check: every “Context” in formal sections expands to **`U.BoundedContext`**.
+* **CC‑LCTX‑2.** The token **anchor** is absent from normative text; where needed, occurrences are replaced by **SenseCell** or **ConceptSet reference**.
+* **CC‑LCTX‑3.** Pattern headers use **Problem Frame**; none use “Context” for narrative.
+* **CC‑LCTX‑4.** References to meaning are in one of the **reference forms** (Sec. 5).
+* **CC‑LCTX‑5.** No file defines “domain context”; Domain appears only as an **informative family**.
+* **CC‑LCTX‑6.** No is‑a edges between contexts; any cross‑context relation is located in **E.10.U9**.
+* **CC‑LCTX‑7.** Language/edition handling matches **D‑CTX‑7** (separate Contexts when semantics can diverge).
+
+
+### E.10.D1:8 - Anti‑patterns & Remedies
+
+| Anti‑pattern                  | Symptom                                                           | Why harmful                          | Remedy (normative)                                                           |
+| ----------------------------- | ----------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------- |
+| **A1 Context-as-situation**   | “Context” used for narrative sections                             | Ambiguity                            | Use **Problem Frame**; reserve Context for `U.BoundedContext` (D‑CTX‑4).     |
+| **A2 Anchor-speak**           | “role anchor”, “ontology anchor”                                   | Redundant token; hides locality      | Replace with **SenseCell** or **ConceptSet(Row).Column** (D-CTX-2, D-CTX-8). |
+| **A3 Domain context**         | “Workflow domain context”, etc.                                   | Family ≠ formal context              | Use **Domain family** + explicit list of Context ids (D‑CTX‑3).              |
+| **A4 Context hierarchy**      | Context A “is‑a” Context B                                        | Leaks meanings; blocks loss policies | Remove hierarchy; use **E.10.U9 Bridge** with loss policy (D‑CTX‑6).         |
+| **A5 Time‑as‑context**        | “Runtime context” vs “Design context”                             | Multiplies Contexts incorrectly         | Use **TimeScope tags** (C‑7); keep one Context (D‑CTX‑5).                    |
+| **A6 Cross‑lingual blending** | Mixing language labels as one context despite divergent semantics | Hidden drift                         | Split Contexts per **D‑CTX‑7** or document shared semantics if truly bound.  |
+
+
+### E.10.D1:9 - Worked Examples
+
+#### E.10.D1:9.1 Enactment — process vs activity (two context of meaning).
+
+* Use `BPMN_2_0:process` and `PROV_O_2013:activity` as **SenseCell**s.
+* In a Concept‑Set row, code the provisional relation `⋈` (overlap), not an equality.
+* Role Descriptions later reference **the specific SenseCell**, not “an anchor”.
+
+#### E.10.D1:9.2 Roles — behavioural mask vs access status.
+
+* `BPMN_2_0:participant` vs `NIST_RBAC_2004:role`.
+* Mark `⟂` (incompatible) in the Concept‑Set row to prevent conflation.
+* Any cross‑use requires E.10.U9 with explicit loss policy.
+
+#### E.10.D1:9.3 Services & evidence.
+
+* `ITIL4_2020:service` / `ITIL4_2020:service‑level‑objective` with KD‑CAL cells `SOSA_SSN_2017:observation`.
+* References in acceptance patterns point to **SenseCell**s; provenance stays within the PROV Context.
+
+
+### E.10.D1:10 - Reasoning Primitives (conceptual judgements; notation‑agnostic)
+
+> Pure **thinking moves**; no APIs, no storage, no governance.
+
+* **(J1) Context expansion.** `⊢ Context ≡ U.BoundedContext`
+  *Reading:* wherever “Context” appears in formal prose, it denotes `U.BoundedContext`.
+
+* **(J2) Anchor ban.** `uses("anchor") ⊢ violation(D‑CTX‑2)`
+  *Reading:* usage of “anchor” flags a discipline violation.
+
+* **(J3) Sense reference.** `ref(ContextId, LocalLabel) ⊢ SenseCell(ContextId, Local‑Sense)`
+  *Reading:* a well‑formed reference identifies a SenseCell.
+
+* **(J4) Narrative frame.** `header("Context") ⊢ replaceWith("Problem Frame")`
+  *Reading:* headings “Context” in patterns must become “Problem Frame”.
+
+* **(J5) Domain family.** `label ∈ {workflow,…} ⊢ DomainFamily(label)`
+  *Reading:* Domain labels are families, not contexts.
+
+* **(J6) Time tag.** `stance ∈ {design, run} ⊢ TimeScopeTag(stance)`
+  *Reading:* time is a tag, not a new context.
+
+
+### E.10.D1:11 - Relations (with other patterns)
+
+**Builds on:** C‑6, C‑7, G‑1, G‑2.
+**Constrains:**
+
+* **E.10.U1** — lists only `U.BoundedContext`s; no “domain contexts”; context records never encode pattern semantics.
+* **E.10.U2** — Seeds and Occurrences are **always** Context‑anchored; references use forms from Sec. 5.
+* **E.10.U7** — Columns are **SenseCell**s; row notes never call them “anchors”.
+* **E.10.U9** — All cross‑context relations live here; no implicit equivalences elsewhere.
+* **`RoleAssigning` patterns (E.10.U4, …)** — Context points to **SenseCell** or **Concept‑Set columns**, never to “anchors”.
+
+
+### E.10.D1:12 - Migration Notes (conceptual playbook)
+
+1. **Rename headings.** Replace any “Context” section title with **Problem Frame**.
+2. **Delete “anchor”.** Replace with **SenseCell** or **Concept‑Set** references.
+3. **Split domain vs context.** Where “domain context” appears, rewrite as **Domain family** + explicit list of `U.BoundedContext`s.
+4. **Audit references.** Ensure every semantic reference is `ContextId:LocalLabel` or `SenseCell(ContextId, …)` or Concept‑Set column.
+5. **Flatten contexts.** Remove any inheritance among contexts; move relations to **E.10.U9**.
+6. **Tag time.** Replace “design/runtime context” with **TimeScope tags**.
+7. **Language/edition pass.** Split or merge Contexts per **D‑CTX‑7**; document rationale.
+
+
+### E.10.D1:13 - Acceptance Tests (SCR/RSCR stubs)
+
+**SCR — Static discipline checks**
+
+* **SCR‑DCTX‑S01.** No occurrence of the token **anchor** in normative sections.
+* **SCR‑DCTX‑S02.** All formal uses of “Context” resolve to **`U.BoundedContext`**.
+* **SCR‑DCTX‑S03.** Pattern headers contain **Problem Frame** instead of “Context”.
+* **SCR‑DCTX‑S04.** All semantic references use the forms in Sec. 5.
+* **SCR‑DCTX‑S05.** No “domain context” strings; Domain appears only as family metadata.
+* **SCR‑DCTX‑S06.** No is‑a or containment relations between contexts outside **E.10.U9**.
+
+**RSCR — Regression discipline checks**
+
+* **RSCR‑DCTX‑E01.** Adding a new family or edition does not introduce “domain context” or context hierarchies.
+* **RSCR‑DCTX‑E02.** Refactors of E.10.U1/U.2/U.7/U.9 do not re‑introduce “anchor”.
+* **RSCR‑DCTX‑E03.** Multilingual updates follow D‑CTX‑7 (split/merge rationale recorded informatively).
+
+### E.10.D1:End
+  

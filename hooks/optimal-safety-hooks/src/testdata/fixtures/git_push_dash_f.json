@@ -1,0 +1,16 @@
+{
+  "name": "git_push_dash_f",
+  "description": "git push -f",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git push origin main -f"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.git_force_push"
+  }
+}

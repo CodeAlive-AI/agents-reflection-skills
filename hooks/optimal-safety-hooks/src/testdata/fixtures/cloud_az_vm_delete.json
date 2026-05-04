@@ -1,0 +1,16 @@
+{
+  "name": "cloud_az_vm_delete",
+  "description": "az vm delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "az vm delete -g prod -n web01 --yes"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.azure_destructive"
+  }
+}

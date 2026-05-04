@@ -1,0 +1,16 @@
+{
+  "name": "mongo_drop",
+  "description": "mongosh ... db.coll.drop()",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "mongosh --eval 'db.users.drop()'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.mongo_destructive"
+  }
+}

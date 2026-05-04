@@ -1,0 +1,16 @@
+{
+  "name": "paas_railway_status_allow",
+  "description": "railway status — read-only",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "railway status"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

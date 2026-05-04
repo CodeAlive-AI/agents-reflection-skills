@@ -1,0 +1,16 @@
+{
+  "name": "sudo_rm_rf_var_log",
+  "description": "sudo rm -rf /var/log unwrap",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "sudo rm -rf /var/log/old.log"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_undef_var",
+  "description": "rm -rf $UNDEFINED/foo",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf \"$UNDEFINED/important\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.unresolvable"
+  }
+}

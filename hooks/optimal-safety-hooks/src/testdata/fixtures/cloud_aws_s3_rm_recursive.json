@@ -1,0 +1,16 @@
+{
+  "name": "cloud_aws_s3_rm_recursive",
+  "description": "aws s3 rm --recursive on prod bucket",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "aws s3 rm s3://prod-backups --recursive"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.aws_s3_rm"
+  }
+}

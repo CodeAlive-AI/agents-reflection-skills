@@ -1,0 +1,16 @@
+{
+  "name": "alembic_upgrade",
+  "description": "alembic upgrade head",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "alembic upgrade head"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.alembic_migration"
+  }
+}

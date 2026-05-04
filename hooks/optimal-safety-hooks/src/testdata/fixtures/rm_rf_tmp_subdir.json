@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_tmp_subdir",
+  "description": "FP-2: rm -rf in /tmp subdir from project cwd",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "cd /tmp && rm -rf ci-results && mkdir ci-results"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

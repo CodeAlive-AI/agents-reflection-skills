@@ -1,0 +1,16 @@
+{
+  "name": "goose_up",
+  "description": "goose up",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "goose up"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.goose_migration"
+  }
+}

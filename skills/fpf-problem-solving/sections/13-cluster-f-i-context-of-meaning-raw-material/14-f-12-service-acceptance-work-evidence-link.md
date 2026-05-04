@@ -1,0 +1,337 @@
+## F.12 — Service Acceptance–Work Evidence Link
+
+**“Judge promises on what happened, not on what was planned.”**
+**Status.** Architectural pattern.
+**Builds on:** F.1 **context of meaning (U.BoundedContext)**; F.2 **Term Harvesting**; F.3 **Intra‑Context Sense Clustering**; F.5 **Naming Discipline**; F.7/F.9 **Bridges & CL**; F.10 **Status Families & Windows**; F.11 **Method Quartet Harmonisation**; A.2.3 **U.PromiseContent**.
+**Coordinates with.** KD‑CAL (Observation/Characteristic/Scale); Sys‑CAL (Work/Actuation contexts).
+**Non‑goals.** No team workflows, no tooling, no editorial procedures. This pattern specifies **how to think** about acceptance, not how to store or operate systems.
+
+
+### F.12:1 - Intent & applicability
+
+**Intent.** Provide a **conceptual binding** that turns a *service promise* (SLO/SLA clause) into a **clear, local, time‑bounded judgement** about **actual Work**, using **Observations** as evidence and **explicit Bridges** where Cross‑context notions must meet. The result is a **Status** (Satisfied/Violated/Inconclusive) that attaches to the **clause‑about‑that‑Work‑in‑that‑Window**.
+
+**Applicability.** Any situation where a **service promise clause** (promise content) is published (availability, latency, safety margin, response time, quality gate, compliance duty) and its fulfilment must be decided from what occurred. Works across digital services, industrial control, laboratory processes, clinical pathways, logistics, etc.
+
+
+### F.12:2 - Problem frame
+
+1. **Plan ≠ proof.** Diagrams and playbooks are treated as if they demonstrated fulfilment.
+2. **Signal ≠ outcome.** Control signals (Actuation) are mistaken for the consumer‑perceived outcome (the outcome promised by the clause).
+3. **Global meanings.** *Availability*, *incident*, *latency* are used as if universal, ignoring context‑local senses.
+4. **Unstated translation.** Metrics from one canon are mapped to clauses from another without declaring losses.
+5. **Timeless verdicts.** Judgements are asserted with no explicit Window (day, month, batch).
+
+
+### F.12:3 - Forces
+
+| Force                                | Tension to resolve                                                                                        |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| **Promise vs. occurrence**           | A service **promise clause** (`U.PromiseContent`) is an external promise, yet acceptance must reference **Work** (run‑time). |
+| **Locality vs. integration**         | Meanings are **context‑local**; still we must compare across **service situations**, plants, and monitors.                 |
+| **Parsimony vs. realism**            | We want a small binding scheme, yet domains differ (percentiles, downtime minutes, control margins).      |
+| **Evidence vs. privacy/feasibility** | Observations prove outcomes; sometimes only proxies exist.                                                |
+
+
+### F.12:4 - Core idea (didactic)
+
+**Bind promises to runs with measurements in time.**
+Acceptance is a **quadruple of anchors** (all context‑local):
+
+1. **ClauseCell** — a deontic/Standardual **SenseCell** stating the promise (*availability ≥ 99.9%*, *MTTR ≤ 60 min*, *temperature within band*).
+2. **WorkCell** — a **SenseCell** for the **Work** that enacted **service delivery work** in the relevant situation.
+3. **MeasureCell** — a **SenseCell** for the **Observation/Characteristic** used as evidence (KD‑CAL).
+4. **Window** — the explicit period in which the judgement is made (F.10).
+
+A **Predicate** compares the **Measure** against the **Clause** within the **Window**.
+The **Status** (Satisfied/Violated/Inconclusive) attaches to **ClauseCell\@Window about WorkCell**, never to a plan.
+
+
+### F.12:5 - Minimal vocabulary (this pattern only)
+
+* **ClauseCell.** A context‑local deontic/Standardual concept (*SLO*, *obligation*, *target*), typically from *services/deontics* Contexts (e.g., **ITIL 4**, **ODRL**).
+* **WorkCell.** A context‑local run‑time occurrence (PROV **Activity**, IEC **Task Execution**, etc.).
+* **MeasureCell.** A context‑local observation concept (KD‑CAL **Observation** over a **Characteristic** with a **Scale/Unit**).
+* **Window.** A time envelope (calendar month, batch, incident interval, shift) per F.10.
+* **Predicate.** A clause‑shape: threshold, percentile, count‑within‑limit, band‑conformance, etc.
+* **Bridge.** An explicit Cross‑context relation with **kind/CL/Loss** (F.7/F.9).
+
+> **Context discipline.** Terms like *availability*, *activity*, *task*, *observation* are always read as **context‑local**. Cross‑use requires a **Bridge**.
+
+
+### F.12:6 - The binding, as five mental rules (notation‑free)
+
+**R1 — Locus rule.**
+An acceptance verdict **attaches to the Clause**, scoped by a **Window**, **about a specific Work**:
+`status(ClauseCell, WorkCell, Window) ∈ {Satisfied, Violated, Inconclusive}`.
+*Reading:* We do not place “Satisfied” on the plan or on the whole service concept.
+
+**R2 — Evidence rule.**
+Only **Observations** (MeasureCell) that **refer to the outcome of the same Work** and **lie within the Window** may support the verdict.
+*Reading:* Control commands and approvals are not evidence of outcome.
+
+**R3 — Predicate rule.**
+Every ClauseCell is read with a **Predicate** schema that defines how Measures decide:
+
+* **Threshold:** `value ≥/≤ target`.
+* **Percentile:** `Pₚ(value) ≤ target`.
+* **Ratio/Share:** `good_time / total_time ≥ target`.
+* **Count‑within‑limit:** `count(events of type E) ≤ target`.
+* **Band:** `min(value) ≥ L ∧ max(value) ≤ U`.
+
+**R4 — Bridge rule.**
+If Clause, Work, and Measure live in **different Contexts**, apply declared **Bridges** with **kind**, **CL**, and **Loss** notes.
+*Reading:* Without a Bridge, do not presume transferability of meanings.
+
+**R5 — Window rule.**
+Every verdict is **time‑bounded**. Changing the Window can change the result; **no retroactivity** from new clauses or specs (cf. F.10).
+
+
+### F.12:7 - Clause templates (conceptual schemata)
+
+> These are **shapes of meaning**, not data fields.
+
+1. **Availability (share‑of‑time)**
+
+* **ClauseCell:** *service availability ≥ 99.9% monthly* (services Context).
+* **MeasureCell:** *uptime indicator* over **Work** (KD‑CAL).
+* **Predicate:** `good_time/total_time ≥ 0.999`.
+* **Window:** calendar month.
+* **Bridge:** from monitor semantics → consumer‑perceived availability (**kind:** proxy; **CL:** 2; **Loss:** blind to partial degradations).
+
+2. **Latency (percentile)**
+
+* **ClauseCell:** *p95 latency ≤ 120 ms during incidents* (services Context).
+* **MeasureCell:** *response time observation* for the same **Work episode** (KD‑CAL).
+* **Predicate:** `P95(latency) ≤ 120ms`.
+* **Window:** incident interval.
+* **Bridge:** from request‑level telemetry → service‑level promise (**kind:** aggregation; **CL:** 2; **Loss:** sampling bias).
+
+3. **Safety margin (band)**
+
+* **ClauseCell:** *temperature ∈ \[L,U] during batch* (deontics/quality Context).
+* **MeasureCell:** *process temperature observation* (KD‑CAL).
+* **Predicate:** `min ≥ L ∧ max ≤ U`.
+* **Window:** batch run interval (Work).
+* **Bridge:** not needed if Measure and Clause are in the same Context; otherwise declare.
+
+4. **MTTR (count‑within‑limit + duration)**
+
+* **ClauseCell:** *MTTR ≤ 60 min per incident*.
+* **MeasureCell:** *timestamps of Work phases* (start fix → restore).
+* **Predicate:** `restore_time − start_fix ≤ 60 min`.
+* **Window:** each incident’s **Work** interval.
+* **Bridge:** BPMN design steps → PROV Work **Interpretation** (CL=2; **Loss:** gateways ≠ real branching).
+
+
+### F.12:8 - Invariants (normative)
+
+1. **Design/run split.** Clauses live on the **design stance**; judgements live on the **run stance** about **Work** (F.11).
+2. **Context locality.** All terms are **context‑local**; Cross‑context meaning flows **only** across declared **Bridges**.
+3. **Observation‑only evidence.** Verdicts require **Observations** that **about‑refer** to Work outcomes; **Actuation** and **Approvals** are not sufficient.
+4. **Window explicitness.** Every verdict carries a **Window**; no timeless acceptance.
+5. **Predicate declared.** The Clause’s **Predicate** is explicit; no hidden aggregation or default percentile.
+6. **Non‑retroactivity.** Updating clauses or specs does not alter past verdicts; re‑evaluation must be explicit.
+7. **One‑Work focus.** A verdict references a **specific Work** (or a defined population of Works) matched to the Clause’s scope.
+8. **Loss honesty.** Each Bridge states **kind/CL/Loss**; stronger claims require stronger Bridges or same‑Context alignment.
+9. **No detached pass.** When the ClauseCell is a `U.PromiseContent` (service promise clause), `Satisfied` about a Work is admissible only if that Work also **delivers** the promised outcome spec for the clause (A.2.3:8.1 `fulfilsPromiseContent`). This keeps acceptance on the **same delivery evidence base** (Work facts + Δ anchors + Observations) and prevents “pass verdict separate from delivery”.
+
+
+### F.12:9 - Micro‑examples (didactic, multi‑domain)
+
+#### F.12:9.1 - SaaS uptime (services + sensing)
+
+* **Contexts:** *ITIL 4* (Clause), *PROV‑O* (Work), *SOSA/SSN* (Measure).
+* **ClauseCell:** *availability ≥ 99.9% monthly*.
+* **WorkCell:** *service delivery work* Activities during June.
+* **MeasureCell:** *uptime observation* from synthetic probes.
+* **Predicate:** share‑of‑time ≥ 0.999.
+* **Bridge:** probe result → user availability (**kind:** proxy; **CL:** 2; **Loss:** regional gaps).
+* **Verdict:** *Satisfied (June)* if the ratio holds; **attaches to Clause\@June about those Works**.
+
+#### F.12:9.2 - Furnace band (industrial control)
+
+* **Contexts:** *quality/deontics canon* (Clause), *IEC 61131‑3/PROV* (Work), *KD‑CAL* (Measure).
+* **ClauseCell:** *product temperature within \[720,740] °C during soak*.
+* **WorkCell:** *soak phase* Work interval.
+* **MeasureCell:** thermocouple Observations (KD‑CAL).
+* **Predicate:** band conformance.
+* **Bridge:** IEC task interval → PROV Activity (**Interpretation**, CL=2).
+* **Verdict:** *Violated* if any measured value exits the band.
+
+#### F.12:9.3 - Incident MTTR (services + enactment)
+
+* **Contexts:** *ITIL 4* (Clause), *PROV‑O* (Work).
+* **ClauseCell:** *MTTR ≤ 60 min per incident*.
+* **WorkCell:** each incident’s handling Activity.
+* **MeasureCell:** timestamps (Observed facts) of start‑fix and restore events.
+* **Predicate:** duration ≤ 60 min.
+* **Bridge:** BPMN steps → PROV Activity (**Interpretation**, CL=2).
+* **Verdict:** *Satisfied* if the measured interval meets the target.
+
+### F.12:10 - Anti‑patterns & remedies
+
+| #       | Anti‑pattern                    | Symptom in practice                                                                          | Why it breaks thinking                          | Remedy (conceptual move)                                                                                                                                 |
+| ------- | ------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A1**  | **Plan‑as‑proof**               | A BPMN or runbook is cited as if it proved the SLO was met.                                  | Design artefacts are **not** occurrences.       | Apply **R1 locus** + **R2 evidence**: attach the verdict to **ClauseCell\@Window about WorkCell** and require **Observations** of outcomes.              |
+| **A2**  | **Signal‑as‑outcome**           | Control **Actuation** (setpoint writes, approvals) treated as evidence of delivered service. | Commands are intentions, not results.           | Accept only **MeasureCell** that **about‑refer** to the **same Work**; if a control signal is used as proxy, declare a **Bridge(kind=proxy, CL, Loss)**. |
+| **A3**  | **Windowless verdict**          | “We met the SLA” with no stated period or scope.                                             | Unfalsifiable; mixes populations.               | Enforce **R5 Window**: every verdict names a **Window** (month, batch, incident interval).                                                               |
+| **A4**  | **Global words**                | *Availability*, *latency* used without a Context.                                               | Collides senses across disciplines.             | Speak with **Context prefixes** (F.1). Cross‑context reuse demands a **Bridge** (F.9).                                                                         |
+| **A5**  | **Percentile mirage**           | p95 computed on a pooled year while the clause is monthly.                                   | Predicate and Window misaligned.                | **R3 Predicate** + **R5 Window**: compute the statistic **per Clause’s Window**.                                                                         |
+| **A6**  | **Proxy blindness**             | Synthetic probes stand in for user experience with no limitations stated.                    | Proxies miss geography, jitter, or pathologies. | Declare **Bridge(kind=proxy, CL, Loss)**. If proxy coverage is too weak, the verdict is **Inconclusive**.                                                |
+| **A7**  | **Scope drift (Work mismatch)** | Measured another product’s or region’s traffic but judged the whole service.                 | Evidence is about the wrong **Work**.           | Tie **MeasureCell** to the **same WorkCell** (or a stated population‑of‑Works) as the Clause scopes.                                                     |
+| **A8**  | **Retroactive renorm**          | A new clause or recalibrated monitor silently rewrites past verdicts.                        | Violates temporal honesty.                      | Enforce **Non‑retroactivity** (Inv‑6): past verdicts stand; new rules apply forward.                                                                     |
+| **A9**  | **Silent units**                | “Latency ≤ 120” with no unit or scale.                                                       | Ambiguous thresholds.                           | **KD‑CAL discipline**: state **Characteristic, Scale, Unit** on **MeasureCell**.                                                                         |
+| **A10** | **Hidden aggregation**          | “Global availability” but only a subset of regions/slices was covered.                       | Over‑claims evidence.                           | State the **aggregation scope** explicitly or confine the verdict to the observed subset; otherwise **Inconclusive**.                                    |
+| **A11** | **Status on “the service”**     | Tagging an abstract umbrella like *“the service”* as “Satisfied”.                            | Loses the describedEntity of the judgement.           | Attach to **ClauseCell\@Window about WorkCell**; the service concept remains a promise vocabulary (A.2.3).                                               |
+| **A12** | **Bridge‑by‑name**              | Equating *Activity* ≡ *Process* because both say “process”.                                  | Assumes global meaning.                         | Use **F.9 Bridge** with **kind/CL/Loss**; or keep them distinct.                                                                                         |
+### F.12:11 - Extended worked examples
+
+> Each example identifies **Contexts**, the **quadruple** ⟨ClauseCell, WorkCell, MeasureCell, Window⟩, any **Bridge(s)**, and the **Predicate**. The verdict attaches to *ClauseCell\@Window about WorkCell*.
+
+#### F.12:11.1 - CDN latency across regions (services + sensing + types)
+
+* **Contexts.** *ITIL 4* (Clause), *PROV‑O* (Work), *SOSA/SSN* (Measure), *OWL 2* (type labels).
+* **ClauseCell.** *p95 end‑user latency ≤ 200 ms per region per month*.
+* **WorkCell.** *delivery Activities* per region during the month (PROV).
+* **MeasureCell.** *response‑time Observations* tagged by region and path (SOSA/SSN).
+* **Predicate.** For each region in the Window, `P95(latency) ≤ 200 ms`.
+* **Bridges.** *probe→user* (**kind**: proxy; **CL** 2; **Loss**: last‑mile bias).
+* **Verdict.** Region‑wise statuses; a global “all‑regions met” is the **logical AND** of region statuses (declare this aggregation explicitly).
+* **Manager cue.** “Green map ≠ one green verdict”; acceptance is **per Clause per Window per Work population**.
+
+#### F.12:11.2 - Stroke care: door‑to‑needle (method + enactment + status)
+
+* **Contexts.** *clinical guideline canon* (Clause), *PROV‑O* (Work), *SOSA/SSN* (Measure), *F.10* (status windows).
+* **ClauseCell.** *90% of ischemic‑stroke episodes achieve door‑to‑needle ≤ 30 min per quarter*.
+* **WorkCell.** Population of **patient‑episode Activities** started in the quarter.
+* **MeasureCell.** Timestamps **Observation** of *door* and *needle* events (KD‑CAL).
+* **Predicate.** `|{episodes with (needle−door ≤ 30)}| / |{episodes}| ≥ 0.9`.
+* **Bridges.** *EHR event semantics → PROV Activity* (**Interpretation**, **CL** 2; **Loss**: missing triage tags).
+* **Verdict.** If data gaps exceed a declared tolerance, status is **Inconclusive** rather than “Satisfied by assumption”.
+
+#### F.12:11.3 - Cold‑chain warehouse (control + sensing + deontics)
+
+* **Contexts.** *quality/deontics canon* (Clause), *IEC 61131‑3/PROV* (Work), *SOSA/SSN + ISO 80000‑1* (Measure).
+* **ClauseCell.** *temperature ∈ \[2,8] °C for ≥ 99.5% of each day*.
+* **WorkCell.** The warehouse’s **daily storage Activity**.
+* **MeasureCell.** Thermistor **Observations** with calibrated units (KD‑CAL/ISO 80000‑1).
+* **Predicate.** `(good_time / 24h) ≥ 0.995`.
+* **Bridges.** *sensor position → product exposure* (**kind**: proxy; **CL** 2; **Loss**: stratification).
+* **Verdict.** *Violated* if any day fails; annotate **Loss** to communicate assurance limits.
+
+#### F.12:11.4 - SaaS incident MTTR (services + enactment)
+
+* **Contexts.** *ITIL 4* (Clause), *PROV‑O* (Work).
+* **ClauseCell.** *MTTR ≤ 60 min per incident*.
+* **WorkCell.** Each incident’s handling **Activity**.
+* **MeasureCell.** **Observations** of start‑fix and restore timestamps.
+* **Predicate.** `(restore − start_fix) ≤ 60 min`.
+* **Verdict.** Per incident; a quarter’s report is an explicit aggregation of incident‑scoped verdicts.
+
+
+### F.12:12 - Reasoning primitives (judgement schemas, notation‑free)
+
+> These are **mental inferences**; they neither read nor write artefacts. Each reads “if these thoughts hold, you may safely conclude …”.
+
+1. **Clause–Work match**
+   `covers(ClauseCell, WorkCell) ⊢ admissible(ClauseCell, WorkCell)`
+   *Reading:* The Clause speaks **about** the kind of Work under judgement (scope alignment).
+
+2. **Window adequacy**
+   `Window is explicit ∧ Window intersects WorkCell-occurrence ⊢ admissible(Window)`
+   *Reading:* There is a concrete time envelope; the Work actually occurred within it.
+
+3. **Evidence sufficiency**
+   `Observations E about WorkCell within Window ⊢ sufficient(E)`
+   *Reading:* There exists a non‑empty set of outcome **Observations** relevant to the Work and Window.
+
+4. **Evidence insufficiency → Inconclusive**
+   `¬sufficient(E) ⊢ status = Inconclusive(ClauseCell, WorkCell, Window)`
+   *Reading:* Absent admissible evidence, do not guess; mark **Inconclusive**.
+
+5. **Predicate evaluation**
+   `sufficient(E) ∧ eval(Predicate, E) = true ⊢ status = Satisfied(ClauseCell, WorkCell, Window)`
+   `sufficient(E) ∧ eval(Predicate, E) = false ⊢ status = Violated(ClauseCell, WorkCell, Window)`
+   *Reading:* The **Predicate** (threshold/percentile/share/band/…) decides directly from E.
+
+6. **Bridge discipline**
+   `usesCrossContexts(ClauseCell, WorkCell, MeasureCell) ∧ Bridges B declared ⊢ admissible(B)`
+   `usesCrossContexts … ∧ ¬admissible(B) ⊢ status = Inconclusive`
+   *Reading:* Cross‑context comparisons require explicit **Bridges**; without them, **Inconclusive**.
+
+7. **CL aggregation (assurance hint)**
+   `Bridges B = {b₁…bₖ} ⊢ effectiveCL = min(CL(bᵢ))`
+   *Reading:* The weakest Bridge governs the assurance level communicated with the verdict (advisory to B.3 calculus).
+
+8. **Population clauses**
+   `Clause quantifies over population W = {w₁…wₙ} ⊢ status = agg({status(Clause, wᵢ, Window)})`
+   *Reading:* For “≥ p%”‑style clauses, compute per‑Work verdicts, then apply the Clause’s quantifier.
+
+9. **Non‑retroactivity**
+   `newClause or newMonitor after Window ⊢ doesNotAlter(status@Window)`
+   *Reading:* Later changes do not rewrite past verdicts.
+
+10. **Conflict exposure**
+    `two admissible Bridge sets ⇒ conflicting statuses ⊢ escalate as Inconclusive, expose Loss notes`
+    *Reading:* If equally defensible translations disagree, the honest outcome is **Inconclusive** plus an explanation.
+
+
+### F.12:13 - Relations (with other patterns)
+
+* **Builds on:**
+  **F.1** (Contexts): keeps all meanings **local**.
+  **F.2–F.3**: provide the **SenseCells** that become Clause/Work/Measure anchors.
+  **F.5**: ensures labels for Clause/Work/Measure and Windows are didactically clear.
+  **F.7–F.9**: supply **Bridge** kinds / **CL** and loss semantics.
+  **F.10**: defines **Status** families and **Window** constructs.
+  **F.11**: protects **Method / MethodDescription / Work / Actuation** distinctions.
+
+* **Uses (Part C patterns).**
+  **KD‑CAL** (Observation/Characteristic/Scale/Unit).
+  **Sys‑CAL** (Work/Actuation Contexts).
+  **Kind-CAL** (type labels for populations or cohort selection).
+
+* **Constrains:**
+  Later reporting and assurance rules (B.3) must **not** collapse CL/Loss; they report them alongside status.
+
+
+### F.12:14 - Migration notes (conceptual)
+
+1. **Clause revisions.** Introduce a **new ClauseCell**; keep old verdicts intact (Non‑retroactivity).
+2. **Monitor changes.** Update or replace **Bridges** (kind/CL/Loss). Future verdicts use the new Bridge; past ones are annotated, not rewritten.
+3. **Scope corrections.** If evidence was about the wrong **Work**, retire the verdict and restate the quadruple; do **not** patch by redefining the Clause.
+4. **Unit harmonisation.** When scales/units change, apply **KD‑CAL** conversions inside the Measure’s Context; if Cross‑context mapping is needed, declare a **Bridge**.
+5. **Population refinement.** If a Clause’s quantifier is refined (e.g., per‑region → per‑AZ), treat each as a new ClauseCell or a new Window partition; avoid hidden re‑baselining.
+6. **Proxy retirement.** When direct Observations become available, prefer them; keep earlier proxy‑based verdicts with their CL/Loss notes.
+
+
+### F.12:15 - Acceptance tests (SCR/RSCR — concept‑level)
+
+#### F.12:15.1 - Static conformance (SCR)
+
+* **SCR‑F12‑S01 (Quadruple present).** Every acceptance statement names **ClauseCell**, **WorkCell**, **MeasureCell**, and **Window**.
+* **SCR‑F12‑S02 (context‑locality).** Each of the three Cells cites a **Context** (U.BoundedContext).
+* **SCR‑F12‑S03 (Evidence admissibility).** The **Observation(s)** are **about** the **same Work** and lie within the **Window**.
+* **SCR‑F12‑S04 (Predicate explicit).** The **Predicate** shape is stated (threshold/percentile/share/band/…) with any needed aggregation scope.
+* **SCR‑F12‑S05 (Bridge discipline).** Any Cross‑context use declares **Bridge(kind, CL, Loss)**.
+* **SCR‑F12‑S06 (Status trichotomy).** The verdict is exactly one of **{Satisfied, Violated, Inconclusive}** and attaches to **ClauseCell\@Window about WorkCell**.
+* **SCR‑F12‑S07 (Unit honesty).** MeasureCell specifies **Characteristic, Scale, Unit** (KD‑CAL).
+* **SCR‑F12‑S08 (Temporal honesty).** No verdict is asserted without a **Window**; no clause retroactively changes past verdicts.
+
+#### F.12:15.2 - Regression checks (RSCR)
+
+* **RSCR‑F12‑E01 (Bridge update).** When a **Bridge CL** changes, past verdicts stand; future verdicts **reference the new CL**; reports surface the difference.
+* **RSCR‑F12‑E02 (Edition churn).** When a Context’s canon updates, Cells reference the **edition**; old verdicts remain bound to their original editions.
+* **RSCR‑F12‑E03 (Scope drift guard).** If the Work population definition changes, verdicts are not silently re‑interpreted; new verdicts cite the new population.
+* **RSCR‑F12‑E04 (Window partition).** Changing from monthly to weekly windows creates **new** verdicts; monthly summaries are expressed as explicit aggregations of weekly statuses.
+* **RSCR‑F12‑E05 (Proxy retirement).** When direct Observations replace proxies, the status computation is re‑run **forward‑only**; past proxy‑based verdicts retain their CL/Loss annotations.
+
+
+#### F.12:15.3 Didactic distillation (60‑second recap)
+
+> **Bind promises to runs with measurements in time.**
+> Name the **Clause**, the **Work** it talks about, the **Measure** of what actually happened, and the **Window**. Evaluate the Clause’s **Predicate** on Observations **about that Work in that Window**. If any concept crosses Contexts, declare a **Bridge** with **kind/CL/Loss**. The verdict (**Satisfied/Violated/Inconclusive**) attaches to **Clause\@Window about Work**, never to a plan or to the abstract service.
+
+### F.12:End
+

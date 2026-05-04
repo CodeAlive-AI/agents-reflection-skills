@@ -1,0 +1,16 @@
+{
+  "name": "multi_command_chain",
+  "description": "a && b && rm /tmp/x",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo hello && true && rm /tmp/somefile"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

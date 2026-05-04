@@ -1,0 +1,271 @@
+#!/bin/bash
+# mac-health-check — minimal noise-resistant macOS health monitor.
+#
+# Three CRITICAL-only triggers:
+#   1) Disk free below threshold (3 consecutive readings)
+#   2) Memory pressure critical AND swap above threshold (3 consecutive readings)
+#   3) New JetsamEvent with vm-compressor-space-shortage (immediate, via file polling)
+#
+# Compatible with bash 3.2 (Apple-shipped). No `set -u` to avoid 3.2 quirks
+# with `local var` declarations. Process substitution is used and tested.
+#
+# Usage:
+#   mac-health-check                       # uses ~/.config/mac-health/config.sh
+#   MAC_HEALTH_CONFIG=/path/to/cfg.sh ...  # override config (for tests)
+
+set -e
+set -o pipefail
+
+CONFIG="${MAC_HEALTH_CONFIG:-$HOME/.config/mac-health/config.sh}"
+[ -f "$CONFIG" ] && . "$CONFIG"
+
+# ---- Defaults (config.sh can override) ----
+: "${DISK_VOLUME:=/System/Volumes/Data}"
+: "${DISK_CRITICAL_PCT:=10}"
+: "${SWAP_CRITICAL_GB:=8}"
+: "${MEM_FREE_CRITICAL_PCT:=10}"
+: "${COOLDOWN_MINUTES:=30}"
+: "${HYSTERESIS_READINGS:=3}"
+: "${CALIBRATION_DAYS:=7}"
+: "${SUPPRESS_FILE:=$HOME/.config/mac-health/silent}"
+: "${NTFY_URL:=}"
+: "${JETSAM_DIR:=/Library/Logs/DiagnosticReports}"
+: "${NOTIFIER:=auto}"          # auto | alerter | terminal-notifier | osascript | none
+
+LOG_DIR="$HOME/Library/Logs/mac-health"
+STATE_DIR="$HOME/.local/state/mac-health"
+LOG_FILE="$LOG_DIR/health.log"
+INSTALL_DATE_FILE="$STATE_DIR/install_date"
+JETSAM_SEEN="$STATE_DIR/jetsam_seen"
+
+mkdir -p "$LOG_DIR" "$STATE_DIR"
+
+NOW=$(date '+%s')
+
+# ---- helpers ----
+log() {
+  printf '%s %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$LOG_FILE"
+}
+
+# track install date for calibration window
+[ -f "$INSTALL_DATE_FILE" ] || echo "$NOW" > "$INSTALL_DATE_FILE"
+INSTALL_DATE=$(cat "$INSTALL_DATE_FILE")
+DAYS_SINCE_INSTALL=$(( (NOW - INSTALL_DATE) / 86400 ))
+if [ "$DAYS_SINCE_INSTALL" -lt "$CALIBRATION_DAYS" ]; then
+  IN_CALIBRATION=1
+else
+  IN_CALIBRATION=0
+fi
+
+is_suppressed() {
+  if [ -f "$SUPPRESS_FILE" ]; then return 0; fi
+  if [ "$IN_CALIBRATION" = "1" ]; then return 0; fi
+  return 1
+}
+
+in_cooldown() {
+  local key="$1"
+  local file="$STATE_DIR/cooldown.$key"
+  [ -f "$file" ] || return 1
+  local last
+  last=$(cat "$file")
+  local elapsed=$(( (NOW - last) / 60 ))
+  [ "$elapsed" -lt "$COOLDOWN_MINUTES" ]
+}
+
+set_cooldown() {
+  echo "$NOW" > "$STATE_DIR/cooldown.$1"
+}
+
+# Pick the first available notifier; fall back gracefully.
+notifier_send() {
+  local title="$1" message="$2"
+  local choice="$NOTIFIER"
+
+  if [ "$choice" = "auto" ]; then
+    if [ -x /opt/homebrew/bin/alerter ]; then choice="alerter"
+    elif [ -x /opt/homebrew/bin/terminal-notifier ]; then choice="terminal-notifier"
+    else choice="osascript"
+    fi
+  fi
+
+  # All notifier paths are wrapped in ( ... & ) so they never block the script.
+  # alerter in particular blocks on user response unless detached.
+  case "$choice" in
+    alerter)
+      ( /opt/homebrew/bin/alerter --title "$title" --message "$message" \
+          --sound default --timeout 30 </dev/null >/dev/null 2>&1 & )
+      ;;
+    terminal-notifier)
+      ( /opt/homebrew/bin/terminal-notifier -title "$title" -message "$message" \
+          -sound default </dev/null >/dev/null 2>&1 & )
+      ;;
+    osascript)
+      ( /usr/bin/osascript -e "display notification \"$message\" with title \"$title\" sound name \"default\"" \
+          </dev/null >/dev/null 2>&1 & )
+      ;;
+    none) : ;;
+  esac
+}
+
+notify() {
+  local key="$1" title="$2" message="$3" reason="$4"
+  log "ALERT key=$key reason='$reason' title='$title' msg='$message'"
+
+  if is_suppressed; then
+    if [ -f "$SUPPRESS_FILE" ]; then
+      log "  -> suppressed (silent file)"
+    else
+      log "  -> suppressed (calibration day=$DAYS_SINCE_INSTALL/$CALIBRATION_DAYS)"
+    fi
+    return
+  fi
+  if in_cooldown "$key"; then
+    log "  -> cooldown active for '$key', skip"
+    return
+  fi
+  set_cooldown "$key"
+
+  notifier_send "$title" "$message"
+
+  if [ -n "$NTFY_URL" ]; then
+    /usr/bin/curl -s -m 5 -d "$message" -H "Title: $title" \
+      -H "Priority: high" -H "Tags: warning" "$NTFY_URL" >/dev/null 2>&1 || true
+  fi
+
+  log "  -> delivered via $NOTIFIER"
+}
+
+bump_counter() {
+  local file="$STATE_DIR/counter.$1"
+  local v=0
+  [ -f "$file" ] && v=$(cat "$file")
+  v=$(( v + 1 ))
+  echo "$v" > "$file"
+  echo "$v"
+}
+
+reset_counter() {
+  rm -f "$STATE_DIR/counter.$1"
+}
+
+# ---- Sensor 1: Disk free ----
+check_disk() {
+  local free_kb=0 total_kb=1 pct_free=100
+  read -r free_kb total_kb < <(df -P "$DISK_VOLUME" 2>/dev/null | awk 'NR==2{print $4, $2}')
+  if [ -n "$total_kb" ] && [ "$total_kb" -gt 0 ]; then
+    pct_free=$(( free_kb * 100 / total_kb ))
+  fi
+  log "disk volume=$DISK_VOLUME free_pct=$pct_free threshold=$DISK_CRITICAL_PCT"
+
+  if [ "$pct_free" -lt "$DISK_CRITICAL_PCT" ]; then
+    local count
+    count=$(bump_counter disk)
+    log "  disk below threshold (count=$count/$HYSTERESIS_READINGS)"
+    if [ "$count" -ge "$HYSTERESIS_READINGS" ]; then
+      notify "disk_critical" "💾 Disk Critical" \
+        "Free: ${pct_free}% on $DISK_VOLUME. Run 'mo clean' or review Downloads." \
+        "disk_free=${pct_free}%"
+    fi
+  else
+    reset_counter disk
+  fi
+}
+
+# ---- Sensor 2: Memory pressure + swap ----
+check_memory() {
+  local free_pct=100
+  local v=""
+  v=$(memory_pressure 2>&1 | awk '/System-wide memory free percentage/{print $NF; exit}' \
+        | tr -d '%' | tr -d '[:space:]')
+  case "$v" in (''|*[!0-9]*) ;; (*) free_pct="$v" ;; esac
+
+  # vm.swapusage output:
+  #   total = 2048.00M  used = 123.45M  free = 1924.55M  (encrypted)
+  # Field positions (awk):
+  #   $1=total $2== $3=2048.00M $4=used $5== $6=123.45M $7=free $8== $9=1924.55M
+  # Use a label-aware lookup instead of fixed $6 to survive future format changes.
+  local swap_used_mb=0 swap_used_gb=0
+  v=$(sysctl -n vm.swapusage 2>/dev/null \
+        | awk '{for(i=1;i<=NF;i++) if($i=="used"){print $(i+2); exit}}' \
+        | tr -d 'M' | cut -d. -f1)
+  case "$v" in (''|*[!0-9]*) ;; (*) swap_used_mb="$v" ;; esac
+  swap_used_gb=$(( swap_used_mb / 1024 ))
+
+  log "memory free_pct=$free_pct swap_gb=$swap_used_gb critical_free=$MEM_FREE_CRITICAL_PCT critical_swap=$SWAP_CRITICAL_GB"
+
+  if [ "$free_pct" -lt "$MEM_FREE_CRITICAL_PCT" ] && [ "$swap_used_gb" -ge "$SWAP_CRITICAL_GB" ]; then
+    local count
+    count=$(bump_counter memory)
+    log "  memory critical (count=$count/$HYSTERESIS_READINGS)"
+    if [ "$count" -ge "$HYSTERESIS_READINGS" ]; then
+      notify "memory_critical" "🧠 Memory Critical" \
+        "Memory free=${free_pct}%, swap=${swap_used_gb}GB. Close heavy apps." \
+        "free=${free_pct}% swap=${swap_used_gb}GB"
+    fi
+  else
+    reset_counter memory
+  fi
+}
+
+# ---- Sensor 3: JetsamEvent files in DiagnosticReports ----
+# Polls ~/Library/Logs/DiagnosticReports/JetsamEvent-*.ips for new files
+# containing "vm-compressor-space-shortage". `log show` was tried but is too
+# slow even with --start (30+ s) on a busy machine. The .ips file approach
+# does have async write latency but on a 5-min poll cadence that's tolerable —
+# we'll see the file within minutes of the kill, well before any panic.
+check_jetsam() {
+  [ -d "$JETSAM_DIR" ] || { log "jetsam dir absent: $JETSAM_DIR"; return 0; }
+  [ -f "$JETSAM_SEEN" ] || touch "$JETSAM_SEEN"
+
+  local count_total=0 count_new=0 count_alert=0
+  local f base
+  for f in "$JETSAM_DIR"/JetsamEvent-*.ips; do
+    [ -f "$f" ] || continue
+    count_total=$(( count_total + 1 ))
+    base=$(basename "$f")
+
+    if grep -Fxq "$base" "$JETSAM_SEEN" 2>/dev/null; then
+      continue
+    fi
+    count_new=$(( count_new + 1 ))
+
+    # Skip files smaller than 100 bytes — likely zero-byte mid-write entries
+    local fsize
+    fsize=$(stat -f%z "$f" 2>/dev/null || echo 0)
+    if [ "$fsize" -lt 100 ]; then
+      log "jetsam skip mid-write file ($fsize bytes): $base"
+      continue
+    fi
+
+    if grep -q "vm-compressor-space-shortage" "$f" 2>/dev/null; then
+      log "jetsam NEW vm-compressor-space-shortage: $base"
+      notify "jetsam_compressor" "🔥 Kernel Panic Imminent" \
+        "vm-compressor-space-shortage detected ($base). Save work, close apps NOW." \
+        "$base"
+      count_alert=$(( count_alert + 1 ))
+    else
+      log "jetsam new file (other reason): $base"
+    fi
+    echo "$base" >> "$JETSAM_SEEN"
+  done
+
+  log "jetsam scan total=$count_total new=$count_new alerted=$count_alert"
+
+  # Trim seen list if it grows too large
+  local lines
+  lines=$(wc -l < "$JETSAM_SEEN" | tr -d ' ')
+  if [ "$lines" -gt 500 ]; then
+    tail -250 "$JETSAM_SEEN" > "$JETSAM_SEEN.tmp" && mv "$JETSAM_SEEN.tmp" "$JETSAM_SEEN"
+  fi
+}
+
+main() {
+  log "=== run start (calibration=$IN_CALIBRATION, days=$DAYS_SINCE_INSTALL) ==="
+  check_disk || log "ERROR check_disk: $?"
+  check_memory || log "ERROR check_memory: $?"
+  check_jetsam || log "ERROR check_jetsam: $?"
+  log "=== run end ==="
+}
+
+main "$@"

@@ -1,0 +1,16 @@
+{
+  "name": "cloud_aws_ec2_delete_volume",
+  "description": "aws ec2 delete-volume (PocketOS analog)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "aws ec2 delete-volume --volume-id vol-12345"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.aws_destructive"
+  }
+}

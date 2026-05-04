@@ -1,0 +1,16 @@
+{
+  "name": "curl_googleapis_get_allow",
+  "description": "curl GET googleapis",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl https://compute.googleapis.com/compute/v1/projects/p/zones/z/disks"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

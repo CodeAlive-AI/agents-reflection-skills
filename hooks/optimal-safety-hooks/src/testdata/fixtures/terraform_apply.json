@@ -1,0 +1,16 @@
+{
+  "name": "terraform_apply",
+  "description": "terraform apply",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "terraform apply -auto-approve"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.terraform_mutation"
+  }
+}

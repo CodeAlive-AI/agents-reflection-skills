@@ -1,0 +1,16 @@
+{
+  "name": "db_mysql_drop_table",
+  "description": "mysql -e DROP TABLE",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "mysql -h prod -e \"DROP TABLE orders\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "db_client",
+    "reason_code": "db_client.sql_destructive"
+  }
+}

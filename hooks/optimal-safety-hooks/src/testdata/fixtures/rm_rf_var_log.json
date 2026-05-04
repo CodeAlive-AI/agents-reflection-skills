@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_var_log",
+  "description": "rm -rf /var/log",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /var/log/old.log"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

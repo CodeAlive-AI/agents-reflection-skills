@@ -1,0 +1,36 @@
+# Declarative dependency manifest for any Claude Code skill.
+# A general installer reads this and handles clone/pip/mcp/verify steps.
+
+platform: windows           # Required platform (windows|macos|linux|any)
+python: ">=3.10"            # Python version constraint
+
+repos:                      # Git repos to clone
+  - url: https://github.com/microsoft/UFO.git
+    target: ~/UFO           # ~ expands to home dir
+    venv: true              # Create .venv inside the cloned repo
+    requirements: requirements.txt   # pip install -r this file
+    pythonpath: true        # Add repo root to PYTHONPATH for MCP server
+
+pip:                        # Additional pip packages (installed into the repo venv)
+  - fastmcp
+  - pydantic
+
+mcp:                        # MCP server to register in .mcp.json
+  name: ufo-windows-qa
+  script: scripts/ufo_windows_qa_mcp_server.py   # Relative to skill dir
+  env:                      # Environment variables for the MCP server process
+    CONTROL_BACKEND: uia
+    MAXIMIZE_WINDOW: "false"
+    SHOW_VISUAL_OUTLINE_ON_SCREEN: "true"
+    RUN_CONFIGS: "true"
+
+verify:                     # Python code to run (in venv with PYTHONPATH set) to confirm install
+  script: |
+    from ufo.client.mcp.local_servers import load_all_servers
+    load_all_servers()
+    from ufo.client.mcp.mcp_registry import MCPRegistry
+    registered = MCPRegistry.list()
+    assert "UICollector" in str(registered), f"Missing UICollector in {registered}"
+    assert "HostUIExecutor" in str(registered), f"Missing HostUIExecutor in {registered}"
+    assert "AppUIExecutor" in str(registered), f"Missing AppUIExecutor in {registered}"
+    print("OK: all servers registered")

@@ -1,0 +1,15 @@
+{
+  "name": "git_commit_m_rm_message",
+  "description": "rm appears in git commit message",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git commit -m \"Fix rm -rf detection\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

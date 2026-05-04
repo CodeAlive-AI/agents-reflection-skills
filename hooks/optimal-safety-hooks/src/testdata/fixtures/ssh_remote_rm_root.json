@@ -1,0 +1,16 @@
+{
+  "name": "ssh_remote_rm_root",
+  "description": "ssh server 'rm -rf /'",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ssh server 'rm -rf /'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.remote"
+  }
+}

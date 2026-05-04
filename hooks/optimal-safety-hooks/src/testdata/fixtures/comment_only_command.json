@@ -1,0 +1,16 @@
+{
+  "name": "comment_only_command",
+  "description": "command is just a comment",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "# this is a comment"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

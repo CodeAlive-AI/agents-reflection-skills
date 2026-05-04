@@ -1,0 +1,16 @@
+{
+  "name": "curl_post_elasticsearch",
+  "description": "curl -X POST on elasticsearch",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl -X POST https://es.local:9200/_search -d 'q'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.opensearch_mutation"
+  }
+}

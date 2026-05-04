@@ -1,0 +1,16 @@
+{
+  "name": "curl_aws_iam_delete_post",
+  "description": "curl DELETE on amazonaws",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl -X DELETE https://iam.amazonaws.com/?Action=DeleteUser -H \"Authorization: AWS4-HMAC...\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.cloud_api_mutation"
+  }
+}

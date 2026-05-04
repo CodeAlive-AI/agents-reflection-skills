@@ -1,0 +1,16 @@
+{
+  "name": "chroot_rm_etc",
+  "description": "chroot /mnt rm -rf /etc",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "chroot /mnt rm -rf /etc"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.chrooted"
+  }
+}

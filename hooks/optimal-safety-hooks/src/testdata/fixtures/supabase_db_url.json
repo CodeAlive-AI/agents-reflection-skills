@@ -1,0 +1,16 @@
+{
+  "name": "supabase_db_url",
+  "description": "supabase --db-url <postgres>",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "supabase migration list --db-url postgres://x/y"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.db_url"
+  }
+}

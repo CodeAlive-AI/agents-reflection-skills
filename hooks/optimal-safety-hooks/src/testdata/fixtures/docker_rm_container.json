@@ -1,0 +1,16 @@
+{
+  "name": "docker_rm_container",
+  "description": "docker rm <id>",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "docker rm abc123"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.docker_destructive"
+  }
+}

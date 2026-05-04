@@ -1,0 +1,16 @@
+{
+  "name": "eval_rm_string",
+  "description": "eval with rm string",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "eval 'rm -rf /etc/nginx'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

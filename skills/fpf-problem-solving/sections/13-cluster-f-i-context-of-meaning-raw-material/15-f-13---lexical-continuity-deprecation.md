@@ -1,0 +1,313 @@
+## F.13 - Lexical Continuity & Deprecation
+
+**“Change names without changing history.”**
+**Status.** Architectural pattern.
+**Builds on:** F.1 **context of meaning**; F.2 **Term Harvesting**; F.3 **Intra‑Context Clustering (SenseCell)**; F.5 **Naming Discipline**; F.7 **Concept‑Set (row) construction**; F.8 **Mint‑or‑Reuse decision**; F.9 **Bridges**; F.10 **Status windows**.
+**Coordinates with.** Part C CALs when canon editions change (Sys/KD/Type/Method/LCA).
+**Non‑goals.** No registries, workflows, editors, or storage formats. No by‑name Cross‑context equivalence. No silent rewrites of old texts.
+
+
+### F.13:1 - Intent & applicability
+
+**Intent.** Provide a **conceptual discipline** for evolving labels (for **SenseCells**, **Concept‑Set rows**, and **Role Description names**) so that:
+
+* new names **clarify** without erasing what earlier texts meant;
+* aliases remain **local to Contexts**;
+* genuine sense changes cause **explicit splits/merges** (F.7/F.9), not cosmetic renames.
+
+**Applicability.** Whenever you consider **renaming**, **aliasing**, **deprecating**, or **retiring** any label in FPF: a SenseCell label in a Context, a Concept‑Set row label, or a Role Description name.
+
+
+### F.13:2 - Problem frame
+
+Unification efforts rot when names drift faster than senses or, worse, when senses change under a constant name.
+
+* **Silent relabeling.** A new label is introduced as if nothing changed; readers cannot connect past to present.
+* **Alias bloat.** Synonyms accumulate without discipline; reading becomes guesswork.
+* **Cross‑context aliasing.** A single alias is made to stand for different Contexts (“global slang”), defeating locality.
+* **Retroactive edits.** Old texts are silently rewritten to today’s names, corrupting provenance.
+
+
+### F.13:3 - Forces
+
+| Force                          | Tension to resolve                                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------------------- |
+| **Continuity vs truthfulness** | Preserve readers’ continuity yet surface real sense changes (no paint‑over).                 |
+| **Locality vs convenience**    | Keep aliases **inside Contexts** even when a catchy global name tempts reuse.                   |
+| **Simplicity vs coverage**     | Avoid giant synonym lists while still catching the one or two legacy names people will meet. |
+| **Didactics vs formality**     | Make the mapping teachable without inventing new low‑level artefacts or processes.           |
+
+
+### F.13:4 - Core idea (didactic)
+
+**Treat names as lenses, not objects.**
+The **thing that persists** is the *sense* (a **SenseCell** inside a Context, or the *Cross‑context alignment* embodied by a **Concept‑Set row**, or a **Role Description** that points to such sense). Names are **lenses** we look through. When the lens improves, we **record a continuity relation** between lenses; when the underlying sense changes, we **split/merge the thing**, then name accordingly.
+
+> **Contexts keep names local.**
+> A label (including aliases) always belongs to **one context** or to **one Concept‑Set row**. Cross‑context similarity is handled by **Bridges** (F.9), never by shared names.
+
+
+### F.13:5 - Minimal vocabulary (this pattern only)
+
+* **Legacy label** — a previously used label in the same Context (or same Concept‑Set row / Role Description).
+* **Preferred label** — the current **F.5‑conformant** label for that item.
+* **Alias** *(context‑local)* — a **read‑path** from a legacy label to the preferred one **inside the same Context** (or the same row/template). For writing, prefer the current label.
+* **Continuity relation** — a small set of **relations over labels** (below) that capture whether a change is *just wording* or a *real sense change*.
+* **Epoch note** — an **informative** time marker (“used before 2024‑07”) attached to a legacy label to help readers of old texts. (No storage format implied.)
+
+
+### F.13:6 - Solution — Continuity, not “registries”
+
+Rather than maintain a tool or workflow, **think with five continuity relations**. Use the *least strong* relation that tells the truth.
+
+#### F.13:6.1 - Continuity relations (normative meanings)
+
+1. **`renames(label_old → label_new)`** — *wording improved, sense unchanged*.
+   *Use when:* Same **SenseCell** / same **Concept‑Set row** / same **Role Description**; only the surface form changed to satisfy F.5 (morphology, disambiguation, plain/tech harmony).
+   *Effect:* `label_old` becomes a **context‑local alias** of `label_new`; both resolve to the **same thing**. Past texts remain valid.
+
+2. **`aliases(label_legacy ↔ label_pref)`** — *legacy synonym kept for reading*.
+   *Use when:* A common historical synonym exists **in the same Context** for the **same SenseCell**.
+   *Effect:* Two‑way **read‑path** only; **writing uses `label_pref`**. Keep at most **one** legacy alias per register to avoid bloat.
+
+3. **`splits(label_old ⇒ {label_A, label_B})`** — *one label covered multiple senses; now separated*.
+   *Use when:* Your **SenseCell** was really two local senses; F.3 has **split** them; or a **Concept‑Set row** is refactored into two rows.
+   *Effect:* `label_old` is **deprecated** (read‑path allowed to a **disambiguation note**); new writing uses `label_A`/`label_B`. No claim that either *continues* the old label wholesale.
+
+4. **`merges({label_A, label_B} ⇒ label_new)`** — *two labels now recognized as one sense*.
+   *Use when:* F.3 shows **same SenseCell**; or two Concept‑Set rows collapse after F.9 raised CL sufficiently.
+   *Effect:* `label_A` and `label_B` become **aliases** of `label_new`. Keep one **epoch note** on each legacy label.
+
+5. **`retires(label_old)`** — *name withdrawn without successor*.
+   *Use when:* The label proved misleading and **no single successor** exists (e.g., it spanned different Contexts, or it was metaphorical).
+   *Effect:* Only a **read‑warning** remains (“avoid in new writing; see Contexts X/Y”). Readers are pointed to **Bridges** or to multiple rows.
+
+> **Important:** All five relations are **context‑local** (SenseCell level) or **row‑local** (Concept‑Set). **Never** use them to “alias” across Contexts. If a change crosses Contexts, it is not a rename; it requires a **Bridge** (F.9) and often a **split/merge of rows** (F.7).
+
+
+### F.13:7 - Invariants (normative)
+
+1. **Locality of alias.** `aliases(-)` and `renames(-)` operate **within one context** (SenseCell) or **within one Concept‑Set row / Role Description**.
+2. **Truth over comfort.** If the **sense changed**, use `splits`/`merges` (and possibly adjust rows/Bridges), **not** `renames`.
+3. **Non‑retroactivity.** Past texts remain phrased as written; continuity only **adds read‑paths**, never rewrites.
+4. **Alias parsimony.** per Context and per row, keep **≤ 1** legacy alias per register (Tech/Plain); prefer the one readers will most likely encounter.
+5. **Prefer present for writing.** In normative writing, use the **current preferred label** (F.5). Aliases are for **reading comprehension**.
+6. **Bridge discipline.** If a label shift would require crossing Contexts to “explain”, it is **not a rename**; use **F.9 Bridge** and, if needed, refactor the **Concept‑Set row(s)**.
+7. **Epoch honesty.** When declaring continuity, attach a **succinct epoch note** (“pre‑2023 usage”) if it aids readers.
+
+
+### F.13:8 - Self‑checks (mental, not procedural)
+
+* **Same‑sense test.** Can you point to the **same SenseCell** (or same row) before and after? If yes → `renames`/`aliases`. If no → `splits`/`merges`.
+* **Context test.** Does the change stay **inside one context**? If it needs two Contexts to explain, it’s a **Bridge**, not a rename.
+* **Reader test.** What two legacy strings would a newcomer actually meet in old texts? Keep **those two** as aliases; drop the rest.
+* **History test.** Does your “continuity” require editing old claims? If yes, you’re attempting a **retroactive rewrite**—stop.
+* **Didactic test.** Can you explain the continuity relation in **one sentence**? If not, you are hiding a sense change.
+
+
+### F.13:9 - Micro‑examples (illustrative)
+
+#### F.13:9.1 - Pure rename inside a Context (ITIL → clearer plain label)
+
+*Context:* **ITIL 4 (services)**.
+Old: **“SLO” (plain: *service target*)** → New: **“service‑level objective” (plain unchanged)**.
+**Relation:** `renames("SLO" → "service‑level objective")`.
+**Why:** F.5 morphology & expansion; SenseCell unchanged (same clause semantics).
+**Effect:** Old guidance remains readable; new writing spells out the term.
+
+#### F.13:9.2 - Alias for a common legacy synonym (Sys‑CAL)
+
+*Context:* **state‑space control (design)**.
+Preferred: **“actuation”**. Legacy: **“control output”**.
+**Relation:** `aliases("control output" ↔ "actuation")`.
+**Why:** Same SenseCell; legacy term appears in older textbooks.
+**Effect:** Readers resolve to the SenseCell; new texts use “actuation”.
+
+#### F.13:9.3 - Split of a muddled local sense (Enactment)
+
+*Context:* **BPMN 2.0**.
+Legacy label **“process”** was used to mean both **“collaboration”** and **“executable process”** in a team’s prose.
+**Relation:** `splits("process" ⇒ {"collaboration","executable‑process"})`.
+**Effect:** The single Concept‑Set row becomes two; old label is deprecated with a disambiguation note.
+
+#### F.13:9.4 - Merge after clustering raised confidence (Kind-CAL row)
+
+Two Concept‑Set rows **{“DBaaS”, “Database‑Service”}** converge after F.3 within the same context profile and F.9 raised CL.
+**Relation:** `merges({"DBaaS","Database‑Service"} ⇒ "Database‑Service")`.
+**Effect:** “DBaaS” becomes a legacy alias with an epoch note.
+
+#### F.13:9.5 - Not a rename: Cross‑context temptation (forbidden)
+
+*Contexts:* **BPMN (design graph)** vs **PROV‑O (run activity)**.
+Temptation: “Let’s rename *process* to *activity*.”
+**Diagnosis:** Cross‑context; **different SenseCells**.
+**Action:** **No continuity relation.** Keep labels; if needed, declare a **Bridge** (F.9) explaining design→run mapping with CL/Loss.
+
+### F.13:10 - Anti‑patterns & remedies
+
+| #       | Anti‑pattern               | Symptom in texts                                                      | Why it harms thinking                                          | Remedy (conceptual move)                                                                                                         |
+| ------- | -------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **A1**  | **Cross‑context rename**      | “Let’s rename *process (BPMN)* to *activity (PROV)*.”                 | Erases Context boundaries; hides loss; violates locality.         | **Do not rename across Contexts.** Keep both labels; if you must relate them, declare a **Bridge** (F.9) with CL/loss.              |
+| **A2**  | **Retroactive rewrite**    | Old passages silently updated to new names.                           | Breaks provenance; misleads readers about what was meant then. | **Non‑retroactivity.** Past texts stand; add **read‑paths** via `renames/aliases`; attach **epoch notes** when helpful.          |
+| **A3**  | **Alias flood**            | Long lists of synonyms for comfort.                                   | Raises ambiguity; dilutes teaching signals.                    | **Alias parsimony.** Keep ≤ 1 legacy alias per register (Tech/Plain) **inside the same Context or row**.                            |
+| **A4**  | **Paint‑over rename**      | Rename used where sense actually changed.                             | Confuses continuity with revision; hides splits.               | Use **`splits`** (or **`merges`**), not `renames`. If Contexts diverge, adjust **rows** (F.7) and **Bridges** (F.9).                |
+| **A5**  | **Global alias**           | One catchy word reused as alias in several Contexts.                     | Creates a pseudo‑global dictionary; invites category errors.   | **Local aliases only.** If a word appears in many Contexts, treat it as **homonymous**; keep Context‑prefixed speech.                  |
+| **A6**  | **Euphemism treadmill**    | Frequent cosmetic renames (“modernising” labels) with no gain.        | Cognitive noise; readers lose confidence in names.             | Apply the **Same‑sense test**. If gain is marginal, **do nothing**; if clarity improves materially, one **`renames`** is enough. |
+| **A7**  | **Grandfather everything** | Never deprecate confusing legacy labels.                              | Drags ambiguity forward; blocks sharper distinctions.          | When a label truly misleads and has no single successor, **`retires`** with a short **pointer note** to Contexts/rows.              |
+| **A8**  | **Row drift via rename**   | Concept‑Set row is relabeled while its membership silently changes.   | Hides that the set changed; breaks Cross‑context alignment.       | First **split/merge rows** (F.7) as needed; only then `renames` the row **if** its intension stayed.                             |
+| **A9**  | **Bridge‑by‑alias**        | Using an alias to hint two Contexts are “the same.”                      | Smuggles translation without CL/loss.                          | **No Cross‑context aliasing.** If similarity matters, **Bridge** explicitly (F.9) and keep labels separate.                         |
+| **A10** | **Acronym absolutism**     | Treating acronyms as preferred labels everywhere (“SLO” in any Context). | Obscures Context‑specific senses; hurts didactics.                | Prefer **expanded** labels as preferred (F.5); keep acronym as context‑local **alias** only where historically dominant.            |
+| **A11** | **Temporal fudge**         | Rename used to imply design↔run shift (“execution ≈ process”).        | Conflates time stances; erases important dualities.            | Keep **design/run** explicit on labels or glosses; if mapping is needed, do so in **F.9**.                                       |
+| **A12** | **Over‑canonicalisation**  | Forcing a single “perfect” label across all rows/Contexts.               | Centralises language; breaks heterogeneity guard.              | Let each Context/row keep its **own preferred label**; put unification pressure only into **rows** and **Bridges**.                 |
+
+
+### F.13:11 - Extended examples
+
+#### F.13:11.1 - KD‑CAL × Services — *metric target* labels over time
+
+* **Contexts:** *ITIL 4 (services, design)*; *SOSA/SSN (sensing, run)*.
+* **Before:** Role Description used **“SLO”** (plain “target”) and readers often saw **“service target”**.
+* **Move:** `renames("SLO" → "service‑level objective")` (Context: ITIL). Keep `aliases("service target" ↔ "service‑level objective")`.
+* **Why:** Same local sense; clearer morphology for F.5; SOSA/SSN labels untouched.
+* **Pay‑off:** Runtime **Observations** (SOSA) are later compared to **service‑level objective** clauses (ITIL) without Cross‑context aliasing.
+
+#### F.13:11.2 - Sys‑CAL × LCA‑CAL — separating *execution* vs *actuation*
+
+* **Contexts:** *IEC 61131‑3 (run)*; *state‑space control texts (design)*.
+* **Temptation:** Rename **“task execution”** to **“actuation”** “to sound control‑ish”.
+* **Diagnosis:** Different Contexts; different SenseCells (program run vs control output).
+* **Move:** **No rename.** Keep labels; later add **Bridge** “`execution (IEC)` *produces* signals that realise `actuation (control)`” with CL stating partial coverage.
+* **Pay‑off:** Plant narratives stop calling programs “actuators”; runtime vs control semantics stay crisp.
+
+#### F.13:11.3 - Kind-CAL × Method‑CAL — false merge avoided
+
+* **Contexts:** *OWL 2 (types, design)*; *SPEM 2.0 (methods, design)*.
+* **Issue:** A row labeled **“Class”** tried to absorb **“WorkProductKind”** by a `renames`.
+* **Diagnosis:** Not same sense; different calculi (type vs artefact category).
+* **Move:** **Split the row**: `splits("class" ⇒ {"type‑class","work‑product‑category"})`.
+* **Pay‑off:** Downstream Role Descriptions can point to the correct **SenseCell** without redefining ontological commitments.
+
+#### F.13:11.4 - Enactment × KD‑CAL — retiring a misleading metaphor
+
+* **Context:** *BPMN 2.0 (design)*.
+* **Legacy:** Team jargon **“heartbeat”** used for a **timer event**. Newcomers confuse it with **sensor heartbeats** (KD‑CAL).
+* **Move:** `retires("heartbeat")` in BPMN Context with note “use **timer event**; ‘heartbeat’ refers to sensor liveness in KD‑CAL”.
+* **Pay‑off:** Two different ecosystems stop colliding on the same catchy word.
+
+#### F.13:11.5 - Concept‑Set row refactor after rising CL
+
+* **Rows:** `{“DBaaS”, “Database‑Service”}` representing service notions across several Contexts.
+* **F.3 + F.9 outcome:** High CL; evidence of same Cross‑context alignment.
+* **Move:** `merges({"DBaaS","Database‑Service"} ⇒ "Database‑Service")` at **row level**. Both legacy labels become row‑local aliases with epoch notes.
+* **Pay‑off:** One clearer row label; old articles still understandable.
+
+
+### F.13:12 - Reasoning primitives (judgement schemas, notation‑free)
+
+> Each judgement is a **pure thought**: premises ⇒ safe conclusion. No storage, no workflow, no roles.
+
+Let **`ContextOf(ℓ)`** be the Context of label **ℓ** (when ℓ names a SenseCell); **`rowOf(ℓ)`** the Concept‑Set row (when ℓ names a row); **`senseOf(ℓ)`** the SenseCell it denotes (if local); **`pref(thing)`** the current preferred label of a SenseCell / row / Role Description.
+
+#### F.13:12.1 - Same‑sense & same‑place
+
+`ContextOf(ℓ₁)=ContextOf(ℓ₂) ∧ senseOf(ℓ₁)=senseOf(ℓ₂) ⊢ mayRename(ℓ₁→ℓ₂)`
+*Reading:* If two labels denote **the same SenseCell in the same Context**, a rename is legitimate.
+
+#### F.13:12.2 -Local alias
+
+`ContextOf(ℓ₁)=ContextOf(ℓ₂) ∧ senseOf(ℓ₁)=senseOf(ℓ₂) ⊢ aliases(ℓ₁↔ℓ₂)`
+*Reading:* Legacy synonym can be kept **as a read‑path**; writing uses `pref`.
+
+#### F.13:12.3 - Split detection
+
+`coversMultipleLocalSenses(ℓ) ⊢ splits(ℓ ⇒ {ℓA,ℓB,… })`
+*Reading:* If one label straddles several local senses, declare a split and prefer the new precise labels.
+
+#### F.13:12.4 - Merge admission
+
+`ContextOf(ℓA)=ContextOf(ℓB) ∧ senseOf(ℓA)=senseOf(ℓB) ⊢ merges({ℓA,ℓB} ⇒ ℓN)`
+*Reading:* Once F.3 shows identity of sense **within** a Context, merging labels into one preferred label is safe.
+
+#### F.13:12.5 - Retirement
+
+`misleading(ℓ) ∧ ¬∃ℓ' sameSense(ℓ,ℓ') ⊢ retires(ℓ)`
+*Reading:* If a label misleads and has **no single** successor, retire it and point readers to relevant Contexts/rows.
+
+#### F.13:12.6 - Cross‑context guard
+
+`ContextOf(ℓ₁) ≠ ContextOf(ℓ₂) ⊢ ¬mayRename(ℓ₁→ℓ₂)`
+*Reading:* Different Contexts forbid rename/alias; any relation goes to **Bridge** (F.9).
+
+#### F.13:12.7 - Writing discipline
+
+`thing t ⊢ writeWithPreferred(t) = pref(t)`
+*Reading:* Normative prose uses the **current** preferred label; aliases are for reading.
+
+#### F.13:12.8 - Reading resolution
+
+`legacyLabel ℓ ⊢ readResolve(ℓ) = ⟨thing, pref(thing), epoch?⟩`
+*Reading:* A reader can mentally resolve a legacy label to the **thing** and its present name, with epoch hint if needed.
+
+#### F.13:12.9 - Alias budget
+
+`aliasesFor(thing, register=r) = A ⊢ |A| ≤ 1`
+*Reading:* Keep at most one legacy alias per register (Tech/Plain) for any one thing.
+
+#### F.13:12.10 - Row‑level continuity
+
+`rowOf(ℓA)=rowOf(ℓB)=R ∧ intension(R) stable ⊢ mayRenameRow(R,ℓB)`
+*Reading:* A row label can change if the **row’s membership/intension** did not change; otherwise refactor rows first (F.7).
+
+
+### F.13:13 - Relations
+
+**Builds on:**
+F.1 **context of meaning** (keeps locality), F.2 **Harvesting** (provides attested strings), F.3 **Clustering** (establishes SenseCells), F.5 **Naming Discipline** (supplies preferred labels), F.7 **Concept‑Set rows**, F.8 **Mint‑or‑Reuse**, F.9 **Bridges**, F.10 **Status windows**, F.11 **Method harmonisation**, F.12 **Service acceptance**.
+
+**Constrains:**
+
+* **F.5 (Naming):** may select preferred labels **only** after applying these continuity relations.
+* **F.7 (Rows):** row relabels require row **intension** stability; otherwise use **split/merge rows**.
+* **F.9 (Bridges):** Cross‑context changes must **not** be expressed as renames/aliases.
+
+**Used by.**
+All Part C patterns when editions shift; all examples and tutorials when teaching with legacy terminology.
+
+
+### F.13:14 - Migration notes (conceptual playbook)
+
+1. **Ask the same‑sense question first.** If the underlying **SenseCell/row** is unchanged, prefer `renames`; else reach for `splits/merges`.
+2. **Keep it inside the Context.** If your explanation crosses Contexts, stop—this is **Bridge** territory (F.9), not a rename.
+3. **Prefer clarity over fashion.** Rename only when the new label **removes a real ambiguity** (F.5 criteria), not to chase style.
+4. **Limit nostalgia.** Admit **one** legacy alias in each register that readers will most likely meet; leave the rest to footnotes in examples.
+5. **Deprecate with kindness.** When retiring a label, add a one‑line **pointer note** (e.g., “see `timer event` in BPMN; ‘heartbeat’ in KD‑CAL means sensor liveness”).
+6. **Rows before names.** If a rename request coincides with a shift in what the row covers, **refactor rows** (F.7) first, then choose labels.
+7. **Edition bumps.** When a canon updates, check labels used in that Context: if definitions shift, it’s a **split/merge**; if not, you may `renames` for style/uniformity.
+8. **Teach the delta.** In primers, show a **mini table** with legacy → preferred pairs only where readers will encounter both.
+
+
+### F.13:15 - Acceptance tests (SCR/RSCR — concept‑level)
+
+#### F.13:15.1 - Static conformance (SCR)
+
+* **SCR-F13-S01 (context-local continuity).** Every `renames/aliases` relates labels **within the same context** or the **same row/Role Description**; none cross Contexts.
+* **SCR‑F13‑S02 (Truthfulness).** For each `renames`, there exists an unchanged **SenseCell/row**; otherwise the move is rejected.
+* **SCR‑F13‑S03 (Alias budget).** For any one thing and register, the number of legacy aliases is **≤ 1**.
+* **SCR‑F13‑S04 (Non‑retroactivity).** No requirement or suggestion to rewrite past texts is present; continuity is expressed as **read‑paths**.
+* **SCR‑F13‑S05 (Row integrity).** A row rename occurs only when the row’s **intension** is stable; if membership changed, a **row split/merge** is documented (F.7).
+* **SCR‑F13‑S06 (Bridge discipline).** No alias/rename is used to imply Cross‑context sameness; any such relation is deferred to **F.9**.
+
+#### F.13:15.2 - Regression (RSCR)
+
+* **RSCR‑F13‑E01 (Edition drift audit).** When a canon edition changes, all labels from that Context are checked against definitions; moves are `renames` if senses stable, else `splits/merges`.
+* **RSCR‑F13‑E02 (Alias creep check).** Periodically ensure alias budgets remain within **≤ 1 per register**; surplus aliases are pruned.
+* **RSCR‑F13‑E03 (Bridge leak check).** Scan continuity notes for Cross‑context hints; any such case is converted into a **Bridge** or deleted.
+* **RSCR‑F13‑E04 (Didactic continuity).** Sampling of examples shows that readers can **resolve** legacy labels to current ones without confusion (via the continuity notes).
+
+
+### F.13:16 - Didactic distillation (60‑second script)
+
+> **Names are lenses.** The *thing* that persists is the **sense** (a SenseCell in a Context, a Concept‑Set row, a Role Description). When you improve a lens, use **`renames`** or **`aliases`** **inside that same place**. When the *thing* changes, say so with **`splits/merges`**—and adjust rows/Bridges accordingly. **Never rename across Contexts.** Keep at most **one** legacy alias per register. Do **not** rewrite history; give readers **read‑paths** and brief epoch notes. With this discipline, you can clarify language without erasing meaning, and your models keep both **continuity** and **truth**.
+
+### F.13:End
+

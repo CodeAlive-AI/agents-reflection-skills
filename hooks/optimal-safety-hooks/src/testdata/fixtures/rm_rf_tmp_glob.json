@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_tmp_glob",
+  "description": "rm -rf /tmp/*",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /tmp/*"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.shared_root_glob"
+  }
+}

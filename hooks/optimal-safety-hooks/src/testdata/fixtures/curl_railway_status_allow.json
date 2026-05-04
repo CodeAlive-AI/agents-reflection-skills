@@ -1,0 +1,16 @@
+{
+  "name": "curl_railway_status_allow",
+  "description": "curl GET on Railway API",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl https://backboard.railway.com/healthz"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

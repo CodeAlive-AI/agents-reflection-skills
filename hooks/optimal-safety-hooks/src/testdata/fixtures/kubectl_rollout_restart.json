@@ -1,0 +1,16 @@
+{
+  "name": "kubectl_rollout_restart",
+  "description": "kubectl rollout restart deploy/X",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "kubectl rollout restart deploy/api"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.kubectl_destructive"
+  }
+}

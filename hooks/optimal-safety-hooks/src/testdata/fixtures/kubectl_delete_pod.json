@@ -1,0 +1,16 @@
+{
+  "name": "kubectl_delete_pod",
+  "description": "kubectl delete pod",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "kubectl delete pod my-pod"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.kubectl_destructive"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_root",
+  "description": "rm -rf / — still ask, not deny (memory: no deny tier)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

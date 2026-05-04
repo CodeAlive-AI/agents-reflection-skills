@@ -1,25 +1,73 @@
 {
-  "name": "agents-reflection-skills",
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ai-driven-development",
   "owner": {
     "name": "CodeAlive-AI",
     "email": "contact@codealive.ai"
   },
   "metadata": {
-    "description": "Meta-skills for AI coding agent self-configuration and reflection",
-    "version": "2.1.0"
+    "description": "Practices, protocols, and skills for AI-driven software development — for any agent that supports the Agent Skills standard (Claude Code, Codex CLI, OpenCode, Cursor, Gemini CLI, Antigravity, and more).",
+    "version": "3.0.0"
   },
   "plugins": [
     {
-      "name": "agents-reflection-skills",
-      "description": "Meta-skills that let AI coding agents configure themselves. Manage MCP servers across 10+ agents, hooks, settings, subagents, skills, and plugins for Claude Code, Codex CLI, OpenCode, Cursor, and more.",
-      "version": "2.1.0",
+      "name": "ai-driven-development",
+      "description": "An umbrella collection of 18 skills + 1 hook for AI-driven development: agent self-configuration (MCP / hooks / settings / subagents / skills / plugins / Claude Code optimisation), engineering practices (prompt engineering, FPF problem solving, bug-fix protocol), research & docs (Semantic Scholar deep research, URL-to-Markdown, ubiquitous-language thesaurus), multi-agent orchestration (consilium), macOS health & cleanup, and niche utilities (clipboard, repo-explorer, Windows QA). Plus a Claude Code Bash safety hook.",
+      "version": "3.0.0",
       "author": {
-        "name": "CodeAlive-AI"
+        "name": "CodeAlive-AI",
+        "email": "contact@codealive.ai"
       },
-      "source": "./plugins/agents-reflection-skills",
+      "homepage": "https://github.com/CodeAlive-AI/ai-driven-development",
+      "repository": "https://github.com/CodeAlive-AI/ai-driven-development",
+      "license": "MIT",
+      "source": "./",
       "category": "developer-tools",
-      "tags": ["meta-skills", "reflection", "self-configuration", "multi-agent", "skills", "subagents", "plugins", "settings", "mcp", "hooks"],
-      "keywords": ["claude-code", "codex-cli", "cursor", "multi-agent", "meta-skills", "reflection", "self-configuration", "plugins", "settings", "mcp", "hooks", "subagents"]
+      "tags": [
+        "skills",
+        "meta-skills",
+        "ai-driven-development",
+        "agent-reflection",
+        "engineering-practices",
+        "multi-agent",
+        "mcp",
+        "hooks",
+        "subagents",
+        "plugins",
+        "settings",
+        "prompt-engineering",
+        "fpf",
+        "bug-fix-protocol",
+        "research",
+        "ubiquitous-language",
+        "consilium",
+        "claude-code",
+        "codex-cli",
+        "opencode",
+        "cursor"
+      ],
+      "keywords": [
+        "claude-code",
+        "codex-cli",
+        "opencode",
+        "cursor",
+        "gemini-cli",
+        "antigravity",
+        "multi-agent",
+        "skills",
+        "meta-skills",
+        "ai-driven-development",
+        "engineering-protocols",
+        "prompt-engineering",
+        "fpf",
+        "bug-fix",
+        "consilium",
+        "research",
+        "mcp",
+        "hooks",
+        "subagents",
+        "plugins"
+      ]
     }
   ]
 }

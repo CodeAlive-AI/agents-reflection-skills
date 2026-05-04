@@ -1,0 +1,16 @@
+{
+  "name": "mongo_deletemany",
+  "description": "mongo deleteMany",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "mongosh --eval 'db.logs.deleteMany({old:true})'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.mongo_destructive"
+  }
+}

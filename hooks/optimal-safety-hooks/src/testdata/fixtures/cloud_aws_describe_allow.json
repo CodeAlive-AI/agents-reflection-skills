@@ -1,0 +1,16 @@
+{
+  "name": "cloud_aws_describe_allow",
+  "description": "aws ec2 describe-instances — read-only",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "aws ec2 describe-instances --region us-east-1"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

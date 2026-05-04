@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_cwd_subdir",
+  "description": "rm -rf inside cwd subtree",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf node_modules"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

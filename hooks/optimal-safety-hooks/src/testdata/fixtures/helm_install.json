@@ -1,0 +1,16 @@
+{
+  "name": "helm_install",
+  "description": "helm install",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "helm install my-release charts/app"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.helm_mutation"
+  }
+}

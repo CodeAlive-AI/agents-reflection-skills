@@ -1,0 +1,16 @@
+{
+  "name": "gsutil_ls_allow",
+  "description": "gsutil ls (read-only)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gsutil ls gs://bucket"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

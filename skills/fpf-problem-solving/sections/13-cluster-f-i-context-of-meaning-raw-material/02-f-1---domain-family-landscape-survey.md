@@ -1,0 +1,334 @@
+## F.1 - Domain‑Family Landscape Survey
+
+**“Fix the context of meaning before you name anything.”**
+**Status.** Architectural pattern.
+**Depends on.** E.10.D1 **Lexical Discipline for “Context” (D.CTX)**; **F.0.1 Contextual Lexicon Principles**; A.7 **Strict Distinction (Clarity Lattice)**; A.11 **Ontological Parsimony**.
+**Coordinates with.** F.2 **Term Harvesting & Normalisation**; F.3 **Intra‑Context Sense Clustering**; F.4 **Role Description**; F.9 **Alignment & Bridge Across Contexts**; **G.0–G.1** *(Scope/describedEntity handoff)*.  *(Bridges live only in F.9.)*
+
+**Aliases (informative).** *Contexts‑first survey*; *Context cut*.
+
+### F.1:1 - Intent & applicability
+
+**Intent.** Establish a **finite set of U.BoundedContext** (“**context of meaning**”), each tied to an authoritative source or canon within a **domain family**, so that all later moves (term harvesting, clustering, role naming, cross‑context bridges) operate on **local meanings** rather than on drifting, globalised words.
+
+**Applicability.** Use **at the start** of any unification effort for **any FPF pattern** (Enactment (`U.RoleAssignment` + `U.RoleEnactment`), Sys-CAL, KD-CAL, Kind-CAL, LCA-CAL…) and **whenever** a discipline canon materially changes (new edition, re-framing, seminal result).
+
+**Non‑goals.** No tooling, workflow, or editorial roles. No global ontology. No cross‑context equations. This pattern describes **how to think**, not how to store.
+
+### F.1:2 - Problem frame
+
+Without explicit context of meaning:
+
+1. **Word‑drift.** Common words (*process*, *role*, *service*, *model*) silently change sense across disciplines.
+2. **Scope mirages.** One influential standard is mistaken for *the* domain.
+3. **Retro‑lock.** Old editions become the implicit truth simply because they were “there first”.
+4. **Category bleed.** Behavioural roles, epistemic statuses, deontic permissions mix because their contexts were never fixed.
+5. **Name inflation.** New U.Types appear just to “stabilise” unstable words.
+
+
+### F.1:3 - Forces
+
+| Force                        | Tension to resolve                                                                |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| **Universality vs locality** | We want cross‑domain unification, but **meaning is local** to a U.BoundedContext. |
+| **Breadth vs parsimony**     | Wide coverage prevents bias; too many Contexts defeats understanding.                |
+| **Recency vs continuity**    | New editions matter; but working knowledge often trails by years.                 |
+| **Didactics vs fidelity**    | Pedagogically simple summaries must remain faithful to the source.                |
+
+
+### F.1:4 - Core idea (didactic)
+
+**Think in Contexts, not in words.**
+A *Context of meaning* is a **U.BoundedContext** (per D.CTX) that encloses a coherent vocabulary and its rules from a **specific, citable canon** (standard, BoK, seminal paper, textbook tradition). You **name and reason** *inside the Context*. When you must step between Contexts, you will **declare a bridge later** (F.9) with explicit losses or mismatches.
+
+
+### F.1:5 - Minimal vocabulary (this pattern only)
+
+* **U.BoundedContext** (short: **Context** in Tech register). The formal *Context of meaning*.
+* **Context** (Tech register alias for **U.BoundedContext**). Use **Context** for pedagogy, **U.BoundedContext** for formal references.
+* **Domain family.** An **informative** shelf‑label grouping related Contexts (e.g., *workflow & provenance*; *services & deontics*; *sensing & measurement*; *types & taxonomies*; *control & actuation*). **No semantics** attach; Domain ≠ Context.
+* **Context Card.** A **one‑screen** conceptual sketch of a Context (see §7.2).
+* **SenseCell** *(appears downstream)*. A **(Context × Local‑Sense)** address; F.3 will mint these after clustering. Mentioned here only to keep the destination in view.
+
+
+### F.1:6 - Solution — the Contexts‑first survey (conceptual, notation‑free)
+
+**Step 1 — Declare your unification line(s).**
+State which FPF pattern threads are in play (e.g., *Enactment + KD‑CAL sensing + Sys‑CAL execution*). This keeps the cut purposeful.
+
+**Step 2 — Cut the landscape by domain families.**
+For each line, **select at least three distinct domain families** (heterogeneity guard). Examples:
+
+* *Workflow & provenance* (BPMN 2.0; W3C PROV‑O)
+* *Services & deontics* (ITIL 4; ODRL 2.2)
+* *Sensing & measurement* (SOSA/SSN; ISO 80000‑1)
+* *Types & taxonomies* (OWL 2; FCA corpus)
+* *Control & actuation* (state‑space control texts; IEC 61131‑3)
+
+**Step 3 — For each family, sketch 1–3 Context Cards.**
+Prefer canonical, widely cited canons. If a field is fragmented, choose one **exemplar** and one **counter‑voice** to surface heterogeneity.
+
+**Step 4 — Make **locality** explicit.**
+Treat words as **context‑local**. *Process (BPMN)* ≠ *process (thermodynamics)* ≠ *process (PROV)*. Do not reconcile. Do not average. **Just fix the Contexts.**
+
+**Step 5 — Bound the set.**
+Small enough to hold in working memory. As a rule of thumb:
+
+* per unification line: **≥ 3 families**;
+* per family: **1–3 Contexts**.
+  More only if a missing Context hides a known sense‑split you will certainly need.
+
+**Step 6 — Postpone bridges.**
+If two Contexts seem “close”, **resist** collapsing. Note the tension and defer to **F.9 Alignment & Bridge**.
+
+### F.1:7 - What to record (conceptual, not clerical)
+
+**7.1 The two‑minute memory.**
+Everything you need to *think correctly later* fits on an eight‑line card. No registries, no workflows, no storage choices.
+
+**7.2 The Context Card (one‑screen sketch).**
+*(Each bullet is a thought, not a field.)*
+
+* **Name & edition.** *“BPMN 2.0 (2011)”* • *“W3C PROV‑O (2013)”* • *“ITIL 4 (2020)”*.
+* **Domain family.** *workflow* / *provenance* / *services* / *deontics* / *sensing* / *types* / *control* … *(informative only; never used to infer meaning).*
+* **Scope gist** *(didactic; ≠ `USM.ScopeSlice(G)`)*. One line that marks the **inside/outside** (“workflow **graphs & participants**”, “provenance **entities/activities/agents**”).
+* **Time stance** *(if inherent)*. Does the canon speak **design** (specifications, models) or **run** (occurrences, acts)?
+* **Lexical trip‑wires.** Known homonyms or false friends in this Context (*“process ≠ thermodynamic process”*, *“role (RBAC) ≠ behavioural role”*).
+* **Neighbour Contexts** *(informative)*. Close cousins that people often conflate (*BPMN ↔ PROV‑O*, *ITIL ↔ ODRL*).
+* **Recency note.** *Current* / *superseded* / *candidate* (only as a reminder to yourself which text you mean).
+* **Why this Context matters here.** One sentence linking to your unification line (“we will name Executions later; PROV‑O keeps them run‑time”).
+* **Diversity signature (dSig).** A 5‑characteristics discrete signature for `U.BoundedContext`: **[Sector, Function, Archetype, Regime, MetricFamily]**. Authors SHOULD pick from local discipline taxonomies. **Publish a `dSigSource` list (five refs/URIs, one per axis) on every Card**, falling back to free‑text only where no canonical term exists. Two Contexts are flagged as **Near‑Duplicate** when ≥3 characteristics match. Publish `dSig` and `dSigSource` on every Card.
+
+> *If your Card spills beyond a screen, you are collecting facts, not fixing meaning.*
+
+F1‑Card (normative artefact): { taxonomyRef, embeddingRef, DistanceDef, δ_family, confidenceBand, calibrationSet, edition, subFamilyDef? }. subFamilyDef (optional): declares the stable partitioning below a domain‑family (e.g., taxonomic sub‑fields or CVT clusters with parent family anchors).  When HET‑FIRST quotas refer to “sub‑family”, they MUST use this declared subFamilyDef.
+Declare **DomainDistance** policy (cosine or transport) and δ_family threshold; version as part of DescriptorMapRef. Publish `confidenceBand` (e.g., CI90%) for the calibrated `δ_family`; treat numbers in examples as illustrative, not normative.
+
+### F.1:8 - Invariants (normative, lightweight)
+
+1. **Context ≡ U.BoundedContext.** In this pattern, *Context* always means **U.BoundedContext** (per E.10.D1).
+2. **Locality.** Words are **local to their Context**; no global meaning is implied or imported.
+3. **Heterogeneity.** Each unification line considers **≥ 3 distinct Domain families** (labels are informative only).
+4. **Parsimony.** Prefer few, canonical Contexts per family (1–3) that jointly expose the key sense splits.
+5. **No bridging here.** No equivalence or mapping is asserted between Contexts in F.1. (Bridges live in **F.9**.)
+6. **Design/run honesty.** If a canon fixes a DesignRunTag, note it. Do not reinterpret.
+7. **Didactic primacy.** Each Context Card must be readable by a thoughtful engineer in **under two minutes**.
+8. **Domain‑family neutrality.** Domain families **carry no semantics**; they SHALL NOT be used for inheritance, inference, or bridge implication.
+9. **Scope naming separation.** `Scope gist` on Cards is **didactic only**; formal *Scope/describedEntity* (=`USM.ScopeSlice(G)` ⊕ `describedEntity(GroundingHolon, ReferencePlane)`) is declared **in G.0–G.1**, not in F.1.
+10. **Diversity signature present.** Each Context Card PUBLISHES a `dSig` in the 5‑characteristics form.
+11. **Collision rule.** If any pair of Cards has `dSig` matching on ≥3 characteristics, mark **Near‑Duplicate** and either merge  into one slot or replace one by a Context from a different domain‑family. Record action in SCR.
+
+### F.1:9 - Self‑checks (mental, not procedural)
+
+* **The mirror test.** Can you explain *why each Context is inside* your cut **in one breath**? If not, you are surveying for comfort, not for meaning.
+* **The homonym ping.** For each frequent word (*process*, *role*, *service*, *model*, *execution*), can you immediately list **the Contexts where it differs**? If not, add the missing Context.
+* **The bridge itch.** Feel a strong urge to say “these are the same”? Good. **Write the itch down** and refuse to scratch it here. That’s F.9’s job.
+* **The memory rule.** If your entire survey cannot be recalled **without opening a document**, it is too large.
+
+
+### F.1:10 - Micro‑examples (illustrative only)
+
+*One unification line: Enactment (`U.RoleAssignment` + `U.RoleEnactment`) with sensing and execution.*
+
+* **BPMN 2.0 (2011)** — *workflow family*.
+  *Scope gist:* flow nodes, sequence flows, participants (design‑time).
+  *Trip‑wires:* “process” here is a **graph**; not a run.
+* **W3C PROV‑O (2013)** — *provenance family*.
+  *Scope gist:* **Activity** that uses/generates entities (run‑time).
+  *Trip‑wires:* “activity/process” here is a **temporal occurrence**.
+* **ITIL 4 (2020)** — *services family*.
+  *Scope gist:* service as value co‑creation; SLO/SLA (deontic talk nearby).
+  *Trip‑wires:* “incident/problem/practice” don’t equal workflow tasks.
+* **ODRL 2.2** — *deontics family*.
+  *Scope gist:* permissions, prohibitions, duties (design).
+  *Trip‑wires:* “duty/obligation” ≠ service guarantee mechanics.
+* **SOSA/SSN (2017)** — *sensing family*.
+  *Scope gist:* Observation as an act yielding a Result for a property.
+  *Trip‑wires:* “observation” ≠ “state”; it’s an **act** with a **procedure**.
+* **IEC 61131‑3** — *control languages family*.
+  *Scope gist:* tasks that **execute** programs (run‑time).
+  *Trip‑wires:* “task/execution” ≠ “workflow process”.
+
+> With only these Contexts fixed, later steps become almost mechanical: F.2 harvests terms **inside** each Context; F.3 clusters **within** each Context; F.4 names roles/statuses pointing to **SenseCells**; F.9 draws the bridges you refused to draw here.
+
+### F.1:11 - Anti‑patterns & remedies
+
+| #       | Anti‑pattern               | Symptom in practice                                                                  | Why it harms thinking                                          | Remedy (conceptual move)                                                                                                |
+| ------- | -------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **A1**  | **“One‑Book Domain”**      | Everything is justified from a single canon (“X is the domain”).                     | Projectionism; blinds heterogeneity; brittle to new editions.  | Enforce **heterogeneity**: pick **≥ 3 distinct domain families** per unification line (§6 Step 2, §8‑3).                |
+| **A2**  | **Context‑less talking**   | Words like *process*, *role*, *service* used without naming a Context.                  | Global words drift; later steps must guess meaning.            | Always **prefix with the Context** in thought and prose: *process (BPMN)*, *activity (PROV)*, *service (ITIL)* (§4, §7.2). |
+| **A3**  | **Edition blur**           | “BPMN” or “ITIL” cited with no year or profile.                                      | Inadvertent sense shifts; debates about “what the book says.”  | Cards keep **name + edition** on the first line; think with the exact edition (§7.2).                                   |
+| **A4**  | **Phonebook survey**       | Dozens of Contexts; no one can recall the cut.                                          | Violates didactic primacy; people default to global talk.      | **Parsimony rule**: 1–3 Contexts per family, just enough to reveal key sense‑splits (§6 Step 5, §8‑4, §9 “memory rule”).   |
+| **A5**  | **Bridge‑by‑stealth**      | Phrases like “these are basically the same” inside the survey.                       | Hides losses; imports meaning across Contexts without scrutiny.   | **No bridging here**; write the *itch to bridge* down and defer to **F.9** (§6 Step 6, §8‑5).                           |
+| **A6**  | **Role/status conflation** | *Role (RBAC)* treated as behavioural mask; *duty (ODRL)* treated as service runtime. | Category bleed across families.                                | Cards carry **lexical trip‑wires** (“RBAC role ≠ behavioural role”; “duty ≠ runtime guarantee”) (§7.2).                 |
+| **A7**  | **Temporal fudge**         | *Activity* or *execution* discussed without run/design stance.                       | Misplaced assertions; design artefacts treated as occurrences. | Cards note **time stance** when inherent (design vs run) (§7.2, §8‑6).                                                  |
+| **A8**  | **Domain = Context**       | A “domain” label used as if it were a Context (e.g., “control” == one context).         | Shelf label mistaken for a canon; sense becomes fuzzy.         | **Domain family is informative only**; Contexts are **U.BoundedContext** tied to specific canons (§5, §7.2).               |
+| **A9**  | **Context inheritance**    | Arranging Contexts in is‑a hierarchies (“PROV is‑a BPMN”).                              | Suggests meaning flows by inheritance; erases locality.        | **No is‑a among Contexts**; relations between Contexts live in **F.9 bridges** (§8‑5).                                        |
+| **A10** | **Didactic bloat**         | Context Card spills into pages of notes.                                             | Teaching burden overwhelms the core idea.                      | **One‑screen Card**; everything else belongs to later patterns (§7.1–§7.2).                                             |
+| **A11** | **Family‑based inference** | Treating Domain‑family membership as implying similarity/equivalence. | Smuggles semantics via shelf labels; breaks locality. | **Domain family is informative only**; locality and any Cross‑context relation must be explicit (F.9). |
+
+### F.1:12 - Worked examples
+
+> Each example shows **the cut** (the Contexts you keep in view) and the **thinking pay‑off** you get *before* any harvesting, clustering, or bridging.
+
+#### F.1:12.1 Enactment (`U.RoleAssignment` + `U.RoleEnactment`) with sensing & execution (service acceptance)
+
+**Unification line.** Enactment + KD‑CAL (sensing) + Sys‑CAL (execution).
+
+**Contexts (six Cards).**
+
+1. **BPMN 2.0 (2011)** — workflow family; **design**; *graph of flow nodes, participants*.
+2. **PROV‑O (2013)** — provenance family; **run**; *Activity uses/generates Entities; Agents*.
+3. **ITIL 4 (2020)** — services family; **design**; *service, SLO/SLA vocabulary*.
+4. **ODRL 2.2** — deontics family; **design**; *permission / prohibition / duty*.
+5. **SOSA/SSN (2017)** — sensing family; **run**; *Observation as act with Result*.
+6. **IEC 61131‑3** — control languages; **run**; *tasks execute control programs*.
+
+**Thinking pay‑off (examples).**
+
+* You stop saying “*process uptime*” and think **Execution (IEC)** measured by **Observation (SOSA)** compared against **SLO (ITIL)**—three Contexts, three senses.
+* You mark a trip‑wire: **RBAC role** (not in this cut) is *not* a **behavioural role (BPMN participant)**.
+* You resist equating **PROV Activity** with **BPMN workflow**; later **F.9** may relate them with explicit loss.
+
+
+#### F.1:12.2 Method quartet with types & measurement (model state graph)
+
+**Unification line.** Method‑CAL + Kind-CAL + KD‑CAL.
+
+**Contexts (five Cards).**
+
+1. **SPEM 2.0 / ISO 24744** — methods family; **design**; *Method / MethodDescription language*.
+2. **OWL 2 (profiles)** — types family; **design**; *class, subclass, equivalent class*.
+3. **FCA corpus** — types family; **design**; *concept lattices*.
+4. **SOSA/SSN (2017)** — sensing family; **run**; *Observation / Procedure*.
+5. **ISO 80000‑1 (2022)** — metrology family; **design**; *quantity kinds, units*.
+
+**Thinking pay‑off.**
+
+* You keep **Method** (abstract how‑to) separate from **MethodDescription** (epistemic recipe) and **Execution** (run) because the Contexts already split design vs run.
+* You avoid treating **FCA “concept”** as a **U.Type**; later F.9 can bridge OWL classes to FCA concepts with cautions.
+
+
+#### F.1:12.3 Control & actuation with services (operational SLOs in plants)
+
+**Unification line.** Sys‑CAL + LCA‑CAL (planned) + services/deontics.
+
+**Contexts (five Cards).**
+
+1. **State‑space control texts** — control family; **design**; *controller/plant, feedback*.
+2. **IEC 61131‑3** — control languages; **run**; *task, program execution*.
+3. **ISA‑95** — integration family; **design**; *levelled layers, interfaces*.
+4. **ITIL 4 (2020)** — services family; **design**; *SLO/SLA*.
+5. **SOSA/SSN (2017)** — sensing family; **run**; *Observation*.
+
+**Thinking pay‑off.**
+
+* “**Actuation**” is recognised as **control output** (Sys‑CAL), not a *service promise*.
+* “**Incident**” (ITIL) is not a plant *fault* (Sys‑CAL); Contexts deter category errors.
+
+
+### F.1:13 - Reasoning primitives (judgement schemas, notation‑free)
+
+> These are **mental moves**, not queries. They read “given these thoughts, this conclusion is safe to hold (conceptually).”
+
+1. **Context set for a line**
+   `line L declared ⊢ Contexts(L) = {C₁,…,Cₙ}`
+   *Reading:* For a unification line **L**, the Contexts you deliberately keep in view are `{C₁,…,Cₙ}` (from your Cards).
+
+2. **Heterogeneity check**
+   `families(L) = F ⊢ heterogeneous(L) ≡ (|distinct(F)| ≥ 3)`
+   *Reading:* Your cut is heterogeneous if it spans at least three **domain families**.
+
+3. **Parsimony check**
+   `Contexts(L)=R, families(L)=F ⊢ parsimonious(L) ≡ (∀f∈F: 1≤|R∩f|≤3)`
+   *Reading:* Each family contributes a few Contexts, not a phonebook.
+
+4. **Locality assertion**
+   `term w, C∈Contexts(L) ⊢ meaning(w)@C is local`
+   *Reading:* A word’s sense is **context‑local**; no global meaning is implied.
+
+5. **Time‑stance guard**
+   `C has stance s∈{design,run} ⊢ claims@C must respect s`
+   *Reading:* If a Context is design‑time, do not make run‑time claims in it (and vice versa).
+
+6. **Trip‑wire recall**
+   `C lists tripWires T ⊢ for any w∈T, require Context‑prefix when speaking`
+   *Reading:* Words on the trip‑wire list must be spoken with the Context name.
+
+7. **Bridge embargo**
+   `C₁≠C₂ ⊢ no‑equivalence(C₁,C₂) within F.1`
+   *Reading:* F.1 never asserts equivalence across Contexts; postponement is principled, not procrastination.
+
+8. **Context sufficiency probe**
+   `common‑word w used in L ∧ w not covered by any trip‑wire ⊢ consider adding a Context that makes w differ`
+   *Reading:* If a frequent word has no deliberate sense‑split in your cut, you may be missing a Context.
+
+9. **Memory rule**
+   `|Contexts(L)| too large ⊢ reduce until a careful mind can recite them unaided`
+   *Reading:* The survey should live in memory, not in a registry.
+
+### F.1:14 - F1‑Card example (informative)
+```
+F1-Card v2025‑Q3:
+  taxonomyRef: OpenAlex topics/fields (snapshot 2025‑08)
+  embeddingRef: SPECTER2(2023) fine‑tuned@OA‑2025‑08
+  DistanceDef: cosine on centroid embeddings (window 36 mo)
+  δ_family: 0.35 (calibrated on control set; CI90% [0.33,0.37])
+  calibrationSet: 120 labeled pairs (same vs different families)
+  edition: 2025‑Q3
+```
+### F.1:15 - Relations (with other patterns)
+
+**Builds on:**
+E.10.D1 **Lexical Discipline for “Context” (D.CTX)** — ensures *Context* ≡ *U.BoundedContext* and reserves “Problem Frame” for narrative use.
+A.7 **Strict Distinction** — guards object/description/carrier and design/run splits while you cut Contexts.
+A.11 **Ontological Parsimony** — motivates the small cut.
+
+**Constrains:**
+**F.2** (Term Harvesting): harvest **inside** Contexts named here; every occurrence carries a Context name.
+**F.3** (Intra‑Context Sense Clustering): cluster **per Context**; no Cross‑context sense claims.
+**F.4** (Role Descriptions): any role/status template must cite a **SenseCell** that lives in a Context from this cut.
+**F.9** (Alignment & Bridge): only F.9 may relate Contexts; never F.1–F.4.
+
+**Used by.**
+Extention patterns in Part C (Sys‑CAL, KD‑CAL, Kind-CAL, Method‑CAL, LCA‑CAL) as the *lexical starting grid* for their examples and definitions.
+
+
+### F.1:16 - Migration notes (conceptual)
+
+1. **New edition appears.** Keep the old Card; add a new Card with the new edition. If the sense shifts, treat it as a **new Context**; if it is strictly editorial, mark recency but keep one context.
+2. **New family emerges.** If a missing family explains recurrent confusion in your line, admit it with **one exemplar** Context; remove a less informative Context to keep parsimony.
+3. **Language variants.** Treat language editions as **separate Contexts** unless the canon itself declares a single normative bilingual mapping.
+4. **Trip‑wire growth.** When you notice a recurring confusion, add a crisp trip‑wire to the relevant Card (one line; no essays).
+5. **Bridges discovered later.** Do not back‑port bridges into F.1; leave the Cards untouched and record the mapping in **F.9**.
+6. **Dormant Contexts.** If a Context no longer contributes to any active line, move it to a *parking shelf* (informative note on the Card) rather than deleting it.
+
+
+### F.1:17 - Acceptance tests (SCR/RSCR — concept‑level)
+
+#### F.1:17.1 - Static conformance checks (SCR)
+
+* **SCR‑F1‑S01 (Heterogeneity).** For each unification line, the set of Cards spans **≥ 3 distinct domain families**.
+* **SCR‑F1‑S02 (One‑screen Cards).** Each Card fits on one screen: name+edition; family; scope gist; time stance (if inherent); 1–3 trip‑wires; neighbour Contexts (optional); recency note.
+* **SCR‑F1‑S03 (Locality pledge).** Nowhere in F.1 are Cross‑context equivalences or merges asserted.
+* **SCR‑F1‑S04 (Parsimony).** In every family, **1–3** Contexts are kept; if more, a clear sentence justifies each extra Context’s unique sense contribution.
+* **SCR‑F1‑S05 (Context discipline).** “Context” is used only as a synonym of **U.BoundedContext**; “domain” appears only as an informative family label.
+* **SCR‑F1‑S06 (Temporal honesty).** If a canon fixes DesignRunTag, the Card states it.
+* **SCR‑F1‑S07 (Family neutrality).** No claim, classification, or relation in F.1 relies on Domain‑family membership; families appear only as shelf labels on cards.
+* **SCR‑F1‑S08 (dSig present).** Every Context Card has a 5‑characteristics `dSig`.
+* **SCR‑F1‑S09 (Collision policy).** Any pair with `dSig` match on ≥3 characteristics is either merged or replaced; SCR records the action.
+
+#### F.1:17.2 - Regression checks (RSCR)
+
+* **RSCR‑F1‑E01 (Edition churn).** When a new edition is added, prior Cards remain; no silent replacement.
+* **RSCR‑F1‑E02 (Family balance).** Adding/removing Cards does not drop any line below **three families**.
+* **RSCR‑F1‑E03 (Trip‑wire coverage).** After introducing a new Context, the trip‑wire lists of neighbouring Contexts are reconsidered and updated if needed.
+* **RSCR‑F1‑E04 (No creep).** Periodically apply the **memory rule**: if the cut no longer fits in working memory, shrink it.
+
+
+### F.1:18 - Didactic distillation (90‑second teaching script)
+
+> “Before you name anything, **fix the context of meaning**. A *Context* is a **U.BoundedContext** tied to a specific canon—*BPMN 2.0*, *PROV‑O*, *ITIL 4*, *SOSA/SSN*, *IEC 61131‑3*, *OWL 2*. Words are **local to Contexts**: *process (BPMN)* is a workflow graph, *activity (PROV)* is a run‑time occurrence, *service (ITIL)* is a promise vocabulary. Cut the landscape so each unification line sees **at least three domain families**, with **one‑screen Cards** per Context (scope gist, time stance, trip‑wires). **Do not bridge** Contexts here—just write down the itch to bridge and defer it. Keep the cut **small enough to remember**. With Contexts fixed, harvesting (F.2), local clustering (F.3), role/status templates (F.4), and explicit Cross‑context bridges (F.9) become straightforward—and you avoid naming ghosts that come from words floating without walls.”
+
+### F.1:End
+

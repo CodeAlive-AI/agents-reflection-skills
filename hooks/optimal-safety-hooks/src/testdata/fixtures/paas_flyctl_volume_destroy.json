@@ -1,0 +1,16 @@
+{
+  "name": "paas_flyctl_volume_destroy",
+  "description": "flyctl volumes destroy",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "flyctl volumes destroy vol_abc -y"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.flyctl_destructive"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "cloud_oci_compute_terminate",
+  "description": "oci compute instance terminate",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "oci compute instance terminate --instance-id ocid1.x"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.oci_destructive"
+  }
+}

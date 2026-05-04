@@ -1,0 +1,16 @@
+{
+  "name": "docker_system_prune",
+  "description": "docker system prune -a",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "docker system prune -a"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.docker_system_prune"
+  }
+}

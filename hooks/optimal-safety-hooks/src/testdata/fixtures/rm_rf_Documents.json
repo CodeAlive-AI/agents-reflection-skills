@@ -1,0 +1,17 @@
+{
+  "name": "rm_rf_Documents",
+  "description": "rm -rf /Users/test/Documents",
+  "env": { "HOME": "/Users/test" },
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /Users/test/Documents/important"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

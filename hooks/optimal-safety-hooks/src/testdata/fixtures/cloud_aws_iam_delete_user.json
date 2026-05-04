@@ -1,0 +1,16 @@
+{
+  "name": "cloud_aws_iam_delete_user",
+  "description": "aws iam delete-user",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "aws iam delete-user --user-name svc"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.aws_destructive"
+  }
+}

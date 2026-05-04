@@ -1,0 +1,16 @@
+{
+  "name": "sh_dash_c_rm_in_safe_path",
+  "description": "sh -c with inner rm in /tmp (allow)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "sh -c 'rm -rf /tmp/cache'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

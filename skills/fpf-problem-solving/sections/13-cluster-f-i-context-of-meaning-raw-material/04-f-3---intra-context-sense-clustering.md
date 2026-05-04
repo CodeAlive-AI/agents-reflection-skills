@@ -1,0 +1,339 @@
+## F.3 - Intra‑Context Sense Clustering
+
+**“Within one context, decide what ‘the same sense’ really is—before you ever cross Contexts.”**
+**Status.** Architectural pattern.
+**Depends on.** F.1 **Domain‑Family Landscape Survey**; F.2 **Term Harvesting & Normalisation**; E.10.D1 **Lexical Discipline for “Context” (D.CTX)**; A.7 **Strict Distinction**; A.11 **Ontological Parsimony**.
+**Coordinates with.** F.4 **Role Description**; F.7 **Concept‑Set Table**; F.8 **Mint or Reuse Decision**; F.9 **Alignment & Bridge Across Contexts**.
+**Aliases (informative).** *context‑local clustering*; *Sense consolidation*.
+
+
+### F.3:1 - Intent & applicability
+
+**Intent.** Consolidate the **context‑local lexical units** from F.2 into a **small set of Local‑Senses** that actually operate in that **one context (U.BoundedContext)**. Each Local‑Sense receives a crisp, didactic label pair (Tech/Plain) and a short sense statement. The result is an **addressable basis** for later uses (Role Assignment, tables, bridges) that is **still strictly context‑local**.
+
+**Applicability.** Apply **after** F.2 for any Context that will feed naming (F.4/F.5), decision gates (F.8), Cross‑context bridges (F.9), or exemplars in Part C. Use again whenever the canon (edition) **shifts usage** enough to split or merge senses **within the same context**.
+
+**Non‑goals.** No Cross‑context comparison or merging. No behaviour/deontics/type mathematics. No storage schemas or workflows. This is **pure sense‑making** inside one context.
+
+
+### F.3:2 - Problem Frame
+
+context‑local units (LNF + labels + gloss) from F.2 often **over‑ or under‑differentiate** meaning:
+
+1. **Over‑split:** superficial variants (*service‑level‑objective* vs *SLO*) treated as different “things”.
+2. **Under‑split:** one gloss covering **two selectional frames** or incompatible use‑cases.
+3. **Drift within a canon:** multi‑chapter texts use the same head differently unless the reader **consolidates** the intended sense.
+4. **Didactic mismatch:** engineer‑friendly label and plain label drift apart when units remain too granular.
+
+F.3 repairs this **inside the Context** by clustering “same sense” and distinguishing “different sense”, with **parsimony**.
+
+
+### F.3:3 - Forces
+
+| Force                     | Tension to resolve                                                                                               |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Parsimony vs fidelity** | Few Local‑Senses ease teaching; too few dilute real distinctions the canon relies on.                            |
+| **Usage vs definition**   | Glosses should reflect **how the canon uses the word**, not an imported dictionary definition.                   |
+| **Labels vs idiom**       | Tech label must stay in the canon’s idiom; Plain label must help newcomers—without inventing a new sense.        |
+| **Stability vs openness** | Consolidated senses must be stable enough for Role Descriptions and tables, yet revisable when the canon’s use clearly splits. |
+
+### F.3:4 - Core idea (didactic)
+
+**Cluster by usage, not by string.**
+Inside one context:
+
+* **Same sense** → **Local‑Sense**: a small, coherent usage‑region the canon treats as one idea (even if it has aliases or minor surface variation).
+* **Different sense** → **two Local‑Senses**: incompatible selectional frames, entailments, or role in the canon’s own statements.
+
+Each Local‑Sense becomes **addressable** when paired with its Context: **SenseCell = (Context × Local‑Sense)**. SenseCells are **context‑local coordinates**; they do not pre‑judge any Cross‑context mapping.
+
+
+### F.3:5 - Minimal vocabulary (this pattern only)
+
+* **Context** — short for `U.BoundedContext` (per D.CTX).
+* **Unit** — a context‑local lexical unit from F.2 (LNF + Tech/Plain + gloss).
+* **Local‑Sense** — the **conceptual cluster** of Units deemed “same sense” **within that Context**.
+* **SenseCell** — the **address** for a Local‑Sense: *(Context, Local‑Sense)*. This is what later patterns will **cite**.
+* **Counter‑example** — a short, canonical sentence or use that **must not** be covered by the Local‑Sense; it sharpens the boundary.
+* **Usage cue** *(informative)* — a clue from usage (collocational patterns, paraphrases, entailments in the canon) that **suggests** merge or split. Cues **do not decide**; the canon’s intent does.
+
+
+### F.3:6 - Solution — how to think the clustering (notation‑free)
+
+> What follows are **mental moves**, not steps for a team. Use them as probes until the Context’s usage partitions itself naturally.
+
+**6.1 Consolidate aliases into one Local‑Sense.**
+If Units differ only by **orthography, abbreviation, or canon‑blessed synonymy** and are **used interchangeably** in the Context’s own sentences, treat them as **one Local‑Sense**.
+*Example (ITIL):* *service‑level‑objective* and *SLO* → one Local‑Sense.
+
+**6.2 Split on incompatible selectional frames.**
+If the same head pairs with **different kinds of arguments** or plays **different roles** in the canon’s statements (and those roles cannot both be true at once), split.
+*Example (BPMN):* *event* as **node type** vs as **occurrence narrative** in a tutorial → two Local‑Senses; adopt the **node type** sense if that is the normative layer.
+
+**6.3 Split on entailments that pull apart.**
+If paraphrases lead to **different entailments** (e.g., one implies temporality, another structural position), you have two senses.
+*Example (PROV):* *activity* implies **time‑bounded use/generate**; it cannot be the same sense as a **static capability**.
+
+**6.4 Prefer sense minimality.**
+If two candidate Local‑Senses never lead to **different conclusions** in the Context’s own use, merge them. If they sometimes do, split them—and record a **counter‑example** to keep the boundary crisp.
+
+**6.5 Keep Tech label idiomatic; Plain label helpful.**
+Tech label stays as the canon speaks; Plain label conveys the **function** of the sense to a careful newcomer. Neither label may **broaden** the sense beyond usage.
+
+**6.6 Name only as much as you will use.**
+If a fine-grained split has **no downstream consequence** (Role Descriptions, tables, bridges), prefer the coarser Local-Sense.
+
+
+### F.3:7 - Outputs (conceptual, not clerical)
+
+F.3 yields, **per Context**:
+
+1. A **small set of Local‑Senses**, each with:
+
+   * **Label pair**: *Tech* (idiomatic) - *Plain* (didactic).
+   * **Sense line**: one‑sentence usage statement, in the Context’s voice.
+   * **Inside list** (informative): which Units from F.2 it consolidates.
+   * **Counter‑example** (optional but powerful): a short use that must **not** be included.
+1. A **SenseCell address** for each Local‑Sense: *(Context, Local‑Sense)*.
+
+These are **thinking reference points** (cognitive only), not records or files. Later patterns **cite SenseCells by name**; nothing about storage is implied.
+
+
+### F.3:8 - Invariants (normative, lightweight)
+
+1. **context‑locality.** Every Local‑Sense belongs to **exactly one context**. No Cross‑context clustering.
+2. **Parsimony.** Local‑Senses are **few**; prefer the coarsest partition that preserves the canon’s distinctions.
+3. **Idiomatic Tech.** The Tech label **must** stay in the Context’s idiom; no house‑style overrides.
+4. **Didactic Plain.** The Plain label **must** aid comprehension **without adding scope**.
+5. **Usage‑first.** Sense lines reflect the **canon’s usage**, not imported taxonomies or external theories.
+6. **Counter‑examples rule.** If a counter‑example exists that the sense would wrongly include, **split**.
+7. **No behaviour math.** Sense lines contain **no** behavioural, deontic, metrological, or type calculus; those live in Part C.
+8. **Temporal honesty.** If the Context fixes **DesignRunTag**, the sense line respects it (e.g., PROV *activity* is **run‑time**).
+
+
+### F.3:9 - Self‑checks (mental probes)
+
+* **Same‑conclusion test.** Do two candidate senses ever lead to **different conclusions** in the canon? If not, merge.
+* **Argument‑slot probe.** Replace arguments in canonical sentences; do both candidates still read true? If one fails, split.
+* **Label inversion.** Read the Plain label alone: does it tempt you to over‑generalise? If yes, tighten it.
+* **Counter‑example ping.** Can you state a **ten‑word** use that the sense must exclude? If you can, write it; if you cannot, your sense may be too broad.
+* **Memory rule.** Can you recall the Context’s Local‑Senses **without notes**? If not, you split too finely.
+
+### F.3:10 - Anti‑patterns & remedies
+
+| #       | Anti‑pattern               | Symptom in thought                                                            | Why it harms                                            | Remedy (conceptual move)                                                                                          |
+| ------- | -------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **A1**  | **String = Sense**         | Treating surface identity (*service*, *SLO*) as sameness of meaning.          | Collapses distinct uses; hides selectional differences. | Compare **selectional frames** and entailments inside the Context; merge only if conclusions never diverge.          |
+| **A2**  | **Cross‑context creep**       | Folding BPMN *process* with PROV *activity* while clustering **inside** BPMN. | Imports foreign usage; violates locality.               | Constrain attention to **one context**; postpone Cross‑context talk to F.9.                                             |
+| **A3**  | **Over‑granulation**       | Splitting minor orthographic variants (*service‑level‑objective* vs *SLO*).   | Adds friction; no conceptual gain.                      | Consolidate **canon‑blessed aliases** into one Local‑Sense.                                                       |
+| **A4**  | **Under‑granulation**      | One sense for incompatible roles (*event* as node‑type vs occurrence).        | Causes contradictory inferences later.                  | Split on **role/entailment** conflict; add a **counter‑example** to sharpen the cut.                              |
+| **A5**  | **Imported definitions**   | Borrowing dictionary glosses not used in the canon.                           | Drifts from the Context’s idiom; confuses labels.          | Ground every sense line in **statements the canon actually makes**.                                               |
+| **A6**  | **Label drift**            | Tech label in canon idiom; Plain label broadens scope.                        | Teaches the wrong thing; leaks meaning.                 | Keep **Tech** idiomatic; make **Plain** helpful yet strictly **within** the same usage.                           |
+| **A7**  | **Behaviour/math leakage** | Sense lines include runtime metrics, deontic rules, type axioms.              | Mixes I/D/S layers; duplicates Part C work.                   | Sense lines are **usage‑only**; no equations, no policies.                                                        |
+| **A8**  | **Edition blend**          | Mixing 2011 and 2020 usage under one Local‑Sense.                             | Hidden shifts; brittle bridges later.                   | If usage changed with edition, treat as **different Contexts** (F.1) or distinct Local‑Senses with **edition note**. |
+| **A9**  | **Collocate worship**      | Declaring sameness solely from similar nearby words.                          | Correlates ≠ causes; misses entailments.                | Use collocates as **cues**, then decide by **entailment/role** checks.                                            |
+| **A10** | **Temporal fudge**         | Treating a design‑time sense as if it were run‑time (or vice versa).          | Category errors at enactment.                           | Respect the Context’s **time stance**; keep senses aligned to *design* or *run* as declared in F.1.                  |
+
+
+### F.3:11 - Local‑Sense Cards (one‑glance form)
+
+> A **Local‑Sense Card** is a **one‑glance** sketch per sense in a Context. It teaches faster than prose lists and keeps senses crisp.
+
+**Fields (thought‑items, not fields to fill):**
+
+* **Context** (U.BoundedContext, edition)
+* **Label pair** — **Tech** (idiomatic) - **Plain** (didactic)
+* **Sense line** — one sentence in the Context’s voice
+* **Inside** — which F.2 Units it consolidates (names only)
+* **Counter‑example** — a short use that must **not** be included
+
+
+### F.3:12 - Worked examples (all **intra‑Context**)
+
+#### F.3:12.1 - BPMN 2.0 (workflow Context)
+
+**Card A — “process (graph)”**
+
+* **Label**: Tech **process** - Plain **workflow graph**
+* **Sense line**: A BPMN **graph of flow nodes and sequence flows** **specifying orchestration among participants** *(design‑time)*.
+* **Inside**: *process*, *process model*, *business process* (when used as diagram).
+* **Counter‑example**: *“This process took 5 minutes”* ← **runtime** occurrence, **not** this sense.
+
+**Card B — “event (node‑type)”**
+
+* **Label**: Tech **event (node)** - Plain **event symbol**
+* **Sense line**: A **node‑type** that marks starts, ends, and intermediates; typed by trigger/result.
+* **Inside**: *start event*, *message event*, *end event*.
+* **Counter‑example**: *“The outage event happened at 13:05”* ← narrative occurrence, **not** the node‑type.
+
+> **Outcome:** “Process uptime” is rejected as a BPMN sense; Execution belongs to another Context.
+
+
+#### F.3:12.2 - PROV‑O (provenance Context)
+
+**Card C — “activity (run)”**
+
+* **Label**: Tech **activity** - Plain **time‑bounded execution**
+* **Sense line**: An **occurrence** that **uses** and **generates** entities; linked to agents; has start/end.
+* **Inside**: *activity*, *execution* (when PROV authors use it).
+* **Counter‑example**: *“Sorting algorithm”* ← capability/method, **not** an occurrence.
+
+**Card D — “agent (provenance)”**
+
+* **Label**: Tech **agent** - Plain **provenance actor**
+* **Sense line**: Thing that bears **responsibility** for an activity’s effects (person, org, software).
+* **Inside**: *agent*.
+* **Counter‑example**: *“RBAC role”* ← access status, **not** a PROV agent.
+
+
+#### F.3:12.3 - ITIL 4 (services Context)
+
+**Card E — “service‑level objective”**
+
+* **Label**: Tech **SLO** - Plain **service target**
+* **Sense line**: A **target value/range** for a **service characteristic** used to define acceptable service.
+* **Inside**: *service‑level objective*, *SLO*.
+* **Counter‑example**: *“Actual availability 99.5%”* ← observation, **not** the target.
+
+**Card F — “incident”**
+
+* **Label**: Tech **incident** - Plain **service disruption**
+* **Sense line**: An **unplanned interruption** or reduction in quality of a service.
+* **Inside**: *incident*.
+* **Counter‑example**: *“Fault in plant sensor”* ← Sys‑CAL fault; different Context.
+
+
+#### F.3:12.4 - SOSA/SSN (sensing Context)
+
+**Card G — “observation (act)”**
+
+* **Label**: Tech **observation** - Plain **measurement act**
+* **Sense line**: An **act** applying a **Procedure** to a **FeatureOfInterest** to yield a **Result** for a property.
+* **Inside**: *observation*.
+* **Counter‑example**: *“Temperature is 20 °C”* ← **result value**, not the act.
+
+
+#### F.3:12.5 - OWL 2 (types Context)
+
+**Card H — “subclass‑of”**
+
+* **Label**: Tech **subclass‑of** (⊑) - Plain **is‑a (class)**
+* **Sense line**: A **class inclusion**: every instance of **C** is an instance of **D**.
+* **Inside**: *SubClassOf*, *is‑a* (when authors use it for classes).
+* **Counter‑example**: *rdf\:type* (instance‑of) — not class inclusion.
+
+**Card I — “equivalent‑class”**
+
+* **Label**: Tech **equivalent‑class** - Plain **same class extension**
+* **Sense line**: Mutual class identity by extension; two labels for **the same** set of instances.
+* **Inside**: *EquivalentClasses*.
+* **Counter‑example**: *owl\:sameAs* (individual identity), different predicate.
+
+
+#### F.3:12.6 - IEC 61131‑3 (control‑runtime Context)
+
+**Card J — “task (runtime)”**
+
+* **Label**: Tech **task** - Plain **program runner**
+* **Sense line**: A **cyclic or event‑driven** execution unit that **invokes programs** on schedule or trigger.
+* **Inside**: *task*.
+* **Counter‑example**: *“Control algorithm”* ← design/method, not the runtime task.
+
+
+### F.3:13 - Reasoning primitives (judgement schemas, notation‑free)
+
+> Each schema captures a **safe mental move**. It implies no storage, API, or workflow.
+
+1. **Alias‑to‑sense consolidation**
+   `Context C ⊢ interchangeable(U₁,…,Uₖ) ⇒ Local‑Sense σ`
+   *Reading:* If Units are used interchangeably **by the canon** in **C**, consolidate them into one Local‑Sense **σ**.
+
+2. **Selectional‑frame split**
+   `C ⊢ frames(U) = F, frames(V) = G, F ∩ G = ∅ ⇒ split(U,V)`
+   *Reading:* In **C**, if the argument/role patterns do not overlap, treat as **different senses**.
+
+3. **Entailment divergence**
+   `C ⊢ entail(U) ≠ entail(V) on canonical paraphrases ⇒ split(U,V)`
+   *Reading:* If paraphrases lead to **different conclusions** in the canon, split.
+
+4. **Parsimony merge**
+   `C ⊢ no‑test distinguishes {U₁,…,Uₖ} ⇒ merge(U₁,…,Uₖ)`
+   *Reading:* If no canonical test yields a difference, merge into one sense.
+
+5. **Counter‑example trigger**
+   `C ⊢ ∃e: e should not be covered by σ ⇒ refine(σ)`
+   *Reading:* A crisp counter‑example forces a narrower sense (split or relabel).
+
+6. **Idiomatic Tech, faithful Plain**
+   `C ⊢ labelTech(σ) in idiom(C) ∧ labelPlain(σ) ⊆ usage(σ)`
+   *Reading:* Tech label speaks the canon; Plain label does not widen the sense.
+
+7. **SenseCell address**
+   `C ⊢ σ ⇒ SenseCell ⟨C,σ⟩`
+   *Reading:* Pair each Local‑Sense with its Context to form an address used downstream.
+
+8. **Temporal guard**
+   `stance(C)=design ⇒ forbid(run‑claims in σ)` (and symmetrically)
+   *Reading:* Sense lines must not cross the Context’s DesignRunTag.
+
+9. **Edition guard**
+   `C≠C′ (different editions with usage shift) ⇒ no‑merge(σ@C, τ@C′)`
+   *Reading:* Do not merge senses across Contexts when editions shift usage.
+
+10. **Completeness ping (optional)**
+    `frequent head w in C ∧ no Local‑Sense on w ⇒ consider(sense for w)`
+    *Reading:* If a common head lacks a sense, you may be missing a useful consolidation (within C).
+
+
+### F.3:14 - Relations
+
+**Builds on:**
+F.1 **Domain‑Family Landscape Survey** (Contexts fixed); F.2 **Term Harvesting** (Units ready); E.10.D1 **D.CTX** (Context discipline); A.7 **Strict Distinction**.
+
+**Constrains:**
+
+* **F.4 Role Description.** Role Descriptions **cite SenseCells**; they do **not** invent senses.
+* **F.7 Concept‑Set Table.** Rows are built from **SenseCells** (later Cross‑context assembly); intra‑Context clarity here prevents row bloat.
+* **F.8 Mint or Reuse Decision.** Decisions compare proposed names to **existing SenseCells** to avoid type inflation.
+* **F.9 Alignment & Bridge.** Bridges connect **SenseCell ↔ SenseCell** across Contexts; F.3 provides the stable endpoints.
+
+**Is used by.**
+Part C Extention Patterns to ground examples and invariants in **Context‑true** language.
+
+
+### F.3:15 - Migration notes (conceptual)
+
+1. **Usage clarifies → merge.** If two Local‑Senses never lead to different conclusions in the Context’s canon, **merge** and keep the narrower sense line.
+2. **Usage diverges → split.** If new reading reveals incompatible roles/entailments, **split** and attach a counter‑example to each side.
+3. **Edition change → new Context.** When a new edition **reframes** usage, treat it as a **separate Context** (F.1) and re‑cluster there.
+4. **Label upkeep.** If the Plain label tempts broadening, tighten it; if the Tech label drifts from idiom, restore the canon term.
+5. **Dormant sense.** If a Local‑Sense ceases to matter for any active line, leave it listed but mark it **low‑use** in your own notes; do not fold it into another unless rule 1 holds.
+6. **Bridge temptation.** Record tensions to bridge **elsewhere**; F.3 never resolves Cross‑context relations.
+
+
+### F.3:16 - Acceptance tests (SCR/RSCR — concept‑level)
+
+#### F.3:16.1 - Static conformance (SCR)
+
+* **SCR‑F3‑S01 (context‑locality).** Every Local‑Sense is paired with **exactly one context**; no Cross‑context clustering appears.
+* **SCR‑F3‑S02 (Label pair).** Each Local‑Sense has **Tech** (idiomatic) and **Plain** (didactic) labels; neither widens usage beyond the sense line.
+* **SCR‑F3‑S03 (Sense line fidelity).** Each sense line is **grounded in canonical statements** of the Context; no behaviour/deontic/math content.
+* **SCR‑F3‑S04 (Parsimony).** The set of Local‑Senses per Context is small enough to **recall unaided** by a careful mind.
+* **SCR‑F3‑S05 (Counter‑example presence).** For any ambiguous head, at least one **counter‑example** is recorded to guard the boundary.
+* **SCR‑F3‑S06 (Temporal honesty).** Where the Context has a declared stance, sense lines **respect design/run**.
+
+#### F.3:16.2 - Regression (RSCR)
+
+* **RSCR‑F3‑E01 (Merge soundness).** Every merge is justified by a **failed distinction test** (no selectional or entailment difference).
+* **RSCR‑F3‑E02 (Split necessity).** Every split cites a **role/entailment conflict** or a concrete **counter‑example**.
+* **RSCR‑F3‑E03 (Edition guard).** No Local‑Sense spans Contexts that differ by edition **with usage shift**.
+* **RSCR‑F3‑E04 (Label stability).** Changes to labels do **not** change sense; if they do, the change is treated as a split/merge per E01/E02.
+* **RSCR‑F3‑E05 (Downstream continuity).** After splits/merges, **SenseCell** references in F.4/F.7/F.9 remain **referentially clear** (new addresses are explicit; no silent aliasing).
+
+
+### F.3:17 - Didactic close (60‑second recap)
+
+> **Within one context,** collect how the canon actually **uses** a head, not how we wish it did. **Merge** aliases that never lead to different conclusions; **split** uses that do. Give each consolidated use a crisp **Tech** label in the Context’s idiom and a faithful **Plain** label. The pair *(Context, Local-Sense)* is your **SenseCell**—the address later cited by Role Descriptions, tables, and bridges. No Cross‑context mergers here; that job belongs to F.9. Keep senses few, boundaries sharp, and labels honest.
+
+### F.3:End
+

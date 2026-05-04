@@ -1,0 +1,16 @@
+{
+  "name": "tofu_apply",
+  "description": "tofu apply",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "tofu apply -auto-approve"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.terraform_mutation"
+  }
+}

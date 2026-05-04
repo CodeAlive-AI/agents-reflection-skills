@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_no_preserve_root",
+  "description": "rm -rf --no-preserve-root /etc",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf --no-preserve-root /etc"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "paas_railway_volume_delete",
+  "description": "railway volume delete (PocketOS-class)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "railway volume delete vol-123"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.railway_destructive"
+  }
+}

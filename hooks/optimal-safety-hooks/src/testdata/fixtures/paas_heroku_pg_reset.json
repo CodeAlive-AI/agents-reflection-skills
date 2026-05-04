@@ -1,0 +1,16 @@
+{
+  "name": "paas_heroku_pg_reset",
+  "description": "heroku pg:reset DATABASE_URL",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "heroku pg:reset DATABASE_URL --app myapp"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.heroku_destructive"
+  }
+}

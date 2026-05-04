@@ -1,0 +1,16 @@
+{
+  "name": "curl_delete_opensearch",
+  "description": "curl -X DELETE on opensearch",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl -X DELETE https://os.local:9200/my-index"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.opensearch_mutation"
+  }
+}

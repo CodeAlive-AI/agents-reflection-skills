@@ -1,0 +1,84 @@
+## E.7 - Archetypal Grounding Principle
+
+### E.7:1 - Problem frame
+Universal rules are powerful only when readers can grasp them. In FPF the
+Conceptual Core speaks in substrate‑agnostic language: `U.Holon`,
+Γ‑aggregation, MHT emergence. Practitioners need to “see” those rules in
+familiar matter—physical hardware or bodies of knowledge—before they can
+reuse them.
+
+### E.7:2 - Problem
+A purely abstract statement risks two failures:
+
+1. **Didactic failure** – readers dismiss the pattern as “too meta,”
+   violating Pillar **P‑2 Didactic Primacy**.  
+2. **Unproven universality** – without cross‑domain instantiation the rule
+   remains an untested claim.
+
+### E.7:3 - Forces
+
+| Force | Tension |
+|-------|---------|
+| **Universality vs Concreteness** | Abstract law ↔ concrete example. |
+| **Brevity vs Clarity** | Spec should stay concise ↔ dual examples add length. |
+| **Rigour vs Accessibility** | Formal semantics ↔ intuitive narrative. |
+
+### E.7:4 - Solution — mandatory *Archetypal Grounding* subsection
+
+Every architectural pattern **SHALL** include a dedicated
+section, titled exactly **“Archetypal Grounding,”** that *shows* how the
+abstract law SCRs in FPF’s two canonical holon flavours:
+
+1. **`U.System`** – the archetype of a **physical, operational holon**.  
+2. **`U.Episteme`** – the archetype of an **abstract, epistemic holon**.
+
+This enforces a repeatable **Tell‑Show‑Show** rhythm:
+
+| Stage | Content |
+|-------|---------|
+| **Tell** | `Solution` section states the universal rule. |
+| **Show #1** | `Archetypal Grounding` – concrete `U.System` example. |
+| **Show #2** | Same section – parallel `U.Episteme` example. |
+
+### E.7:5 - Archetypal Grounding (of this pattern itself)
+
+| Universal rule | `U.System` instantiation | `U.Episteme` instantiation |
+|----------------|--------------------------|----------------------------|
+| “Every architectural pattern requires grounding.” | Pattern *D.1 Algebra of Aggregation* illustrates Γ\_sys on assembling a water pump. | The same pattern illustrates Γ_epist on merging a meta‑analysis. |
+
+### E.7:6 - Conformance Checklist
+
+| ID | Requirement | Purpose |
+|----|-------------|---------|
+| **CC‑AG.1** | Every architectural pattern in Parts A, B, C, D, E **SHALL** contain a subsection headed exactly *“Archetypal Grounding”*. | Guarantees consistent Tell‑Show‑Show rhythm. |
+| **CC‑AG.2** | The Archetypal Grounding subsection **MUST** illustrate the rule with both `U.System` *and* `U.Episteme`. | Demonstrates trans‑disciplinary reach. |
+| **CC‑AG.3** | If a rule intentionally applies to only one substrate, the subsection **SHALL** state the scope limitation and justify it against the five Principle‑Taxonomy lenses (`Gov`, `Arch`, `Onto/Epist`, `Prag`, `Did`). | Prevents silent bias; links to Bias‑Audit guard‑rail. |
+| **CC‑AG.4** | Patterns lacking a compliant Archetypal Grounding subsection **MAY NOT** progress to “Accepted” status. | Enforces discipline without referring to workflow mechanics. |
+
+### E.7:7 - Consequences
+
+| Benefits | Trade‑offs / Mitigations |
+|----------|-------------------------|
+| **Immediate clarity** – readers see abstract laws in action. | Patterns grow by one short table; mitigated by consistent template snippet. |
+| **Proof of universality** – every rule is self‑documenting across substrates. | Authors must think cross‑domain; fosters richer patterns. |
+| **Narrative cohesion** – recurring System/Episteme protagonists create a memorable storyline. | — |
+|Built-in Proof of Universality: The specification consistently demonstrates its trans-disciplinary claims, building trust and credibility. | — |
+
+### E.7:8 - Rationale
+Tell‑Show‑Show is a proven pedagogical sequence. By making it normative,
+FPF hard‑codes **P‑2 Didactic Primacy** into the fabric of every architectural
+pattern while still honouring **P‑1 Cognitive Elegance**—the grounding
+section replaces brittle ad‑hoc anecdotes with a disciplined dual
+example. Linking scope‑justification to the five Principle lenses ties the
+pattern to the **Taxonomy‑Guided Bias Audit** and keeps governance
+language out of the Core.
+
+### E.7:9 - Relations
+
+* **Implements macro flow:** `pat:authoring/didactic‑architecture` (E.6)  
+* **References base types:** `pat:kernel/holon` (A.1) (`U.System`, `U.Episteme`)  
+* **Interacts with bias guard‑rail:** `pat:guard/bias‑audit` (E.5.4) via CC‑AG.3  
+* **Constrains:** Authoring template in `pat:authoring/pattern‑template` (E.8)
+
+### E.7:End
+

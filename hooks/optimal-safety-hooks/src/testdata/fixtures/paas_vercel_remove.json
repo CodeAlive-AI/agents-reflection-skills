@@ -1,0 +1,16 @@
+{
+  "name": "paas_vercel_remove",
+  "description": "vercel remove",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "vercel remove myproject --yes"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.vercel_destructive"
+  }
+}

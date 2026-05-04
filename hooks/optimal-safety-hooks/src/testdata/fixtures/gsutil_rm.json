@@ -1,0 +1,16 @@
+{
+  "name": "gsutil_rm",
+  "description": "gsutil rm gs://x/y",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gsutil rm gs://my-bucket/file.txt"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.gsutil_mutation"
+  }
+}

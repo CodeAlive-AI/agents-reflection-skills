@@ -1,0 +1,15 @@
+{
+  "name": "rm_dash_dash_target",
+  "description": "rm -- -rf treats -rf as filename in cwd",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -- -rf"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

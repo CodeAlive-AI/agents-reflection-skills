@@ -1,0 +1,16 @@
+{
+  "name": "mongo_find_allow",
+  "description": "mongosh ... db.coll.find()",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "mongosh --eval 'db.users.find()'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

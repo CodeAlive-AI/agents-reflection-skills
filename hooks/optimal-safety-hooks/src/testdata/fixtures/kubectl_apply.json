@@ -1,0 +1,16 @@
+{
+  "name": "kubectl_apply",
+  "description": "kubectl apply -f",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "kubectl apply -f manifest.yaml"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.kubectl_destructive"
+  }
+}

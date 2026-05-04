@@ -1,0 +1,85 @@
+## E.5.4 - Cross‑Disciplinary Bias Audit
+
+### E.5.4:1 - Problem frame
+FPF calls itself trans‑disciplinary, but every author carries implicit
+metaphors from a home domain. If those metaphors leak into “universal”
+patterns, practitioners from other fields disengage or mis‑interpret the
+rules.
+
+### E.5.4:2 - Problem
+Unrecognised bias hides in wording, examples, unit choices or principle
+weighting. Once embedded in normative language, such bias is hard to
+remove and contradicts Pillars **P‑2 Didactic Primacy** and **P‑8
+Cross‑Scale Consistency**.
+
+### E.5.4:3 - Forces
+
+| Force | Tension |
+|-------|---------|
+| **Neutrality** | One voice for all disciplines ↔ need for relatable examples. |
+| **Conciseness** | Audit guidance must be brief ↔ must cover multiple bias types. |
+| **Longevity** | Guidance must survive emergence of new domains. |
+
+### E.5.4:4 - Solution — Principle‑Taxonomy‑Guided Bias Audit
+
+1. **Bias‑Lens set**  
+   Every normative pattern is assessed through **five lenses** that match the
+   Principle classes from **E.3**:  
+   `Gov`, `Arch`, `Onto/Epist`, `Prag`, `Did`.
+
+2. **Equilibrium question**  
+   For each lens ask:  
+   *“Does the pattern over‑privilege this class or silence it?”*  
+   *Examples:*  
+   *   Over‑reliance on `Onto/Epist` precision may ignore `Prag` cost.  
+   *   Dominant `Arch` metaphors may alienate `Did` audiences.
+
+3. **Scope‑or‑Balance rule**  
+   * If imbalance is found and universality is intended, re‑phrase to
+     restore balance.  
+   * If imbalance is intentional (domain‑specific pattern), mark the
+     scope explicitly: *“Applies primarily to thermodynamic systems.”*
+
+4. **Audit trace**  
+   The pattern carries a short **Bias‑Annotation** paragraph recording
+   which lenses were tested and any scoping statement. No workflow checklists or
+   reviewer metadata or other data and data format and data governance tips is stored in the Core.
+
+### E.5.4:5 - Archetypal Grounding (System / Episteme)
+
+| Bias lens | Example imbalance | Conceptual correction |
+|-----------|------------------|-----------------------|
+| `Arch` vs `Did` | Pump pattern uses abstract category theory terms. | Add plain‑language boundary narrative or move abstraction to appendix. |
+| `Onto/Epist` vs `Prag` | Episteme trust score defined with complex logic but no guidance on empirical cost. | Add pragmatic note on evidence collection burden or scope the pattern. |
+
+### E.5.4:6 - Conformance Checklist
+
+| ID | Requirement | Purpose |
+|----|-------------|---------|
+| **CC‑BA.1** | Each Core pattern **SHALL** include a *Bias‑Annotation* listing the five lenses and any declared scope limitation. | Ensures explicit reflection on bias. |
+| **CC‑BA.2** | A pattern labelled “universal” **MUST NOT** privilege a single lens without justification or scoping note. | Preserves trans‑disciplinary integrity. |
+| **CC‑BA.3** | If scope is declared, the pattern **SHALL** reference the mapping or rationale that enables cross‑domain translation. | Keeps pathways open for other calculi. |
+| **CC‑BA.4 (QD‑triad evidence for “universal”).** | Any pattern that labels itself **“universal”** SHALL cite **A.8 CC‑UC 1 + CC‑UC 2** and attach the **QD evidence** (Diversity_P + IlluminationSummary, with edition and binning) or else **scope** the claim to its home Context. | preserves domain quality diversity |
+
+### E.5.4:7 - Consequences
+
+| Benefits | Trade‑offs / Mitigations |
+|----------|-------------------------|
+| Neutral, inclusive language attracts wider adoption. | Authors spend a few extra lines on Bias‑Annotation; mitigated by template snippet. |
+| Bias is surfaced at writing time, not after publication. | — |
+
+### E.5.4:8 - Rationale
+Coupling the audit directly to the Principle Taxonomy keeps the guard‑rail
+**concept‑driven**, not workflow‑driven. No mention of review boards,
+CI‑jobs, or checklists appears in the Core; such mechanics belong in the
+Tooling Guide. This guard‑rail therefore satisfies **GR‑1** (Firewall)
+while securing Pillars **P‑2, P‑7 Pragmatic Utility, P‑8**.
+
+### E.5.4:9 - Relations
+* **Parent umbrella:** `pat:constitution/guard‑rails` (E.5)  
+* **Depends on:** `pat:constitution/principle‑taxonomy` (E.3)  
+* **Constrains:** All normative patterns claiming universality
+
+### E.5.4:End
+
+

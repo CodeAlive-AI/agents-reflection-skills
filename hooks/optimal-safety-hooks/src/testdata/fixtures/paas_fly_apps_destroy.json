@@ -1,0 +1,16 @@
+{
+  "name": "paas_fly_apps_destroy",
+  "description": "fly apps destroy — wipes the app",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "fly apps destroy myapp --yes"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.fly_destructive"
+  }
+}

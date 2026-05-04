@@ -1,0 +1,118 @@
+## B.3.4 - Evidence Decay & Epistemic Debt
+
+### B.3.4:1 - **Problem Frame**
+
+The FPF assurance model (Pattern B.3.3) provides a robust framework for building trust in holons by anchoring claims to a rich body of evidence. However, it implicitly treats this evidence as timeless. A proof verified today is assumed to hold forever; a validation test run last year is given the same weight as one run yesterday. This assumption is dangerously flawed in any dynamic environment.
+
+Consider a bridge certified in 1980. The assurance case, resting on evidence about steel fatigue from that era, would be considered highly reliable *at that time*. Today, after decades of environmental change, new material science insights, and an entirely different traffic load, would we still trust that original certification without re-evaluation? The context has drifted, and the original evidence has lost its relevance. FPF requires a formal mechanism to account for this natural decay of trust.
+
+### B.3.4:2 - **Problem**
+
+Without a calculus for evidence aging, FPF models are vulnerable to three critical failure modes:
+
+1.  **Silent Risk Accumulation:** Trust silently decays. A component's high `AssuranceLevel` can become an illusion, resting on foundational evidence that is no longer valid in the current operational context. When aggregated, this stale trust propagates upwards, creating a seemingly robust system-of-systems that is, in fact, incredibly brittle.
+2.  **Audit Illusion:** An artifact can pass an audit with flying colors, showing a complete set of anchors to high-quality evidence, yet be fundamentally untrustworthy because that evidence is obsolete. This leads to a false sense of security and undermines the very purpose of the assurance case.
+3.  **Maintenance Paralysis:** Without a systematic way to flag stale evidence, re-validation efforts are often misdirected. Teams either engage in costly, unfocused re-testing of everything, or, more commonly, do nothing, allowing epistemic debt to accumulate until a failure forces a crisis.
+
+### B.3.4:3 - **Forces**
+
+| Force | Tension |
+| :--- | :--- |
+| **Timeless Truth vs. Contextual Reality** | Formal proofs and logical derivations feel permanent and universal, yet the assumptions they make about the world are context-dependent and perishable. |
+| **Rigor vs. Agility** | Continuously re-validating every piece of evidence is prohibitively expensive and would paralyze any agile workflow. |
+| **Transparency vs. Cognitive Load** | We need to make the "staleness" of evidence visible, but we must do so without overwhelming teams with a constant barrage of decay alerts. |
+| **Governance vs. Flexibility** | There must be a formal method for managing aging evidence, yet teams need the autonomy to make risk-informed decisions about when to accept, refresh, or deprecate it. |
+
+### B.3.4:4 - **Solution**
+
+FPF introduces a formal freshness model and a governance loop that make evidence aging a first-class, manageable property of the assurance calculus.
+
+#### B.3.4:4.1 - The Principle of Perishable Evidence
+
+The core of the solution is a new normative principle: **Evidence is perishable**. The relevance of any piece of evidence is a function of time and context. An `AssuranceLevel` is therefore not a permanent achievement but a state that must be actively maintained.
+
+#### B.3.4:4.2 - Mechanism 1: The Freshness Standard (`valid_until`)**
+
+Every evidence artifact anchored in the Assurance Layer **MUST** carry a `valid_until` attribute.
+
+*   **`valid_until: ISO-8601-date | null`**
+*   This attribute acts as a "best before" date, explicitly stating the time horizon over which its creators consider it to be fully relevant without review.
+*   A value of `null` signifies that the evidence is considered **perpetual**. This is reserved for artifacts like mathematical axioms or fundamental physical laws whose validity is not expected to decay on engineering timescales.
+
+#### B.3.4:4.3 - Mechanism 2: The Epistemic Debt Metric (ED)
+
+When the current time `t` surpasses an evidence artifact's `valid_until` date, that artifact begins to accrue **Epistemic Debt (ED)**.
+
+*   **Definition:** Epistemic Debt is a quantitative measure of an artifact's "staleness." It is a function of its age past its expiry date.
+*   **Purpose:** ED is not a penalty but a **signal**. It makes the invisible risk of relying on old evidence visible and measurable.
+
+#### B.3.4:4.4 - Mechanism 3: The Governance Loop (`Refresh / Deprecate / Waive`)
+
+Epistemic Debt is managed through a project-level **epistemic_debt_budget**. When the total accrued debt exceeds this budget, an alert is triggered, and the team **MUST** take one of three actions:
+
+| Action | What It Means | Manager's View: The Practical Consequence |
+| :--- | :--- | :--- |
+| **Refresh** | Produce new, up-to-date evidence and set a new `valid_until` date. | **"We invest the resources to re-validate."** This is the engineering fix: run the tests again, update the model, re-certify the component. |
+| **Deprecate**| Acknowledge that the evidence is no longer valid and formally downgrade the `AssuranceLevel` of the dependent artifact (typically to `L0` or `L1`). | **"We accept the risk by lowering the component's official status."** The component is no longer considered fully assured and may be flagged for restricted use until it is refreshed. |
+| **Waive** | A designated authority (e.g., a senior systems engineer or a safety officer) formally accepts the risk of using the stale evidence for a limited time. | **"I am signing off on this risk, for now."** This is a temporary, auditable override. It keeps the project moving but makes the risk acceptance explicit and assigns responsibility. |
+
+> **Didactic Note for Managers: Managing Your "Trust Budget"**
+>
+> Think of Epistemic Debt exactly like financial or technical debt. It’s not inherently evil, but it must be managed. The FPF dashboard now includes a "Trust Health" meter.
+>
+> *   **Green:** Your evidence is fresh. Your assurance case is solid.
+> *   **Amber:** Epistemic Debt is accumulating. It's time to plan for re-validation work in the next sprint.
+> *   **Red:** Your debt has exceeded its budget. Your CI/CD pipeline might be issuing warnings, and you are now carrying un-budgeted risk. You must immediately decide: **Pay it down (Refresh), write it off (Deprecate), or take out a short-term, high-visibility loan (Waive).**
+>
+> This loop transforms the vague problem of "keeping things up to date" into a concrete, resource-managed, and auditable engineering process.
+
+#### B.3.4:4.5 - Mechanism 4: The Epistemic Debt (ED) Calculation & Aggregation**
+
+To make ED a useful leading indicator, it must be computed and aggregated consistently.
+
+*   **Calculation:** For a single evidence artifact `i`, its debt at time `t` is a function of its age past expiry:
+    `ED_t(i) = k * max(0, t - valid_until_i)`
+    *   The coefficient `k` is a configurable linear decay factor (default: `1.0 per day`), allowing projects to tune the "interest rate" on their debt.
+
+*   **Aggregation:** The total ED for an artifact `A` is the sum of the debt from all its direct and transitive Evidence Graph Ref:
+    `ED_t(A) = Σ_i ED_t(evidence_i)`
+    *   This rule ensures that debt propagates up the holarchy. If a foundational component's validation expires, the entire system that depends on it inherits that debt.
+
+*   **Impact on Assurance Level:** When an artifact's total `ED_t(A)` exceeds a defined threshold (typically `> 0` unless waived), its computed `AssuranceLevel` is **provisionally downgraded by one level**. For example, an `L2` artifact with expired evidence is treated as `L1` for governance and risk purposes until the debt is resolved. This makes the consequence of inaction immediate and visible on project dashboards.
+
+### B.3.4:5 - **Conformance Checklist**
+
+*   **CC-ED.1 (Freshness Mandate):** Every evidence artifact anchored via `verifiedBy` or `validatedBy` **MUST** include a `valid_until` attribute. A value of `null` (perpetual) **MUST** be justified in the artifact's rationale.
+*   **CC-ED.2 (Debt Budget Mandate):** Every project or `U.System` at `AssuranceLevel:L1` or higher **MUST** declare an `epistemic_debt_budget` in its manifest.
+*   **CC-ED.3 (Aggregation Mandate):** The total Epistemic Debt of a composite holon **MUST** be the sum of the debt of its constituent parts, consistent with the aggregation rule `ED_t(S) = Σ_j ED_t(child_j)`.
+*   **CC-ED.4 (Downgrade Mandate):** An artifact with `ED_t > epistemic_debt_budget` **SHALL** have its effective `AssuranceLevel` provisionally downgraded until the debt is resolved via `Refresh`, `Deprecate`, or `Waive`.
+*   **CC-ED.5 (Waiver Auditability):** Any `Waive` action **MUST** be recorded as a formal, auditable event, citing the responsible authority, the rationale, and a new, short-term expiry date for the waiver itself.
+
+### B.3.4:6 - **Common Anti-Patterns and How to Avoid Them**
+
+| Anti-Pattern | Manager's View: What It Looks Like | How FPF Prevents It |
+| :--- | :--- | :--- |
+| **The "Perpetual Evidence" Fallacy** | "We verified this component five years ago, so it's still L2. It's just a simple library, nothing has changed." | **CC-ED.1** forces a `valid_until` date. The context (compiler versions, new vulnerabilities, OS updates) has certainly changed. Setting `valid_until: null` requires explicit justification that the artifact is truly timeless, like a mathematical theorem. |
+| **The "Invisible Debt" Trap** | A critical, low-level component's test suite has been failing silently for months, but the high-level system dashboard is still green. | **CC-ED.3** ensures that the debt from the failing component's expired evidence propagates up to the system level, turning the dashboard amber or red and forcing attention. |
+| **The "Risk Acceptance by Silence"** | "We know those tests are stale, but we're too busy to fix them. Let's just ignore the warnings for now." | **CC-ED.5** makes risk acceptance an explicit, auditable action. A manager must formally `Waive` the debt, putting their name on the decision. This transforms passive neglect into active, accountable risk management. |
+
+### B.3.4:7 - **Consequences**
+
+| Benefits | Trade-offs / Mitigations |
+| :--- | :--- |
+| **Lifecycle Honesty:** The framework provides a transparent, quantitative way to track the erosion of trust over time, preventing "assurance rot." | **Process Overhead:** Teams must now manage `valid_until` dates and respond to debt alerts. *Mitigation:* Tooling can automate much of this, suggesting default expiry dates based on artifact type and providing one-click actions for the governance loop. |
+| **Risk-Informed Maintenance:** Epistemic Debt becomes a leading indicator for maintenance and re-validation planning, allowing teams to allocate resources proactively, not reactively. | **Risk of False Positives:** Overly aggressive decay coefficients (`k`) could create excessive noise. *Mitigation:* The `k` value is configurable, and the `Waive` mechanism provides a safety valve for situations where a formal refresh is not yet warranted. |
+| **Enhanced Auditability:** The entire state progression of evidence—from creation to expiry and resolution—is now a traceable, auditable part of the FPF model. | - |
+
+### B.3.4:8 - **Rationale**
+
+Knowledge frameworks that ignore time degrade silently. By embedding entropy accounting (epistemic debt) directly into the assurance calculus, FPF gains a self-regulating "immune system." This pattern operationalizes the common-sense insight that evidence is perishable, transforming maintenance from an ad-hoc, often-neglected chore into a budgeted, auditable, and risk-informed engineering activity. It complements the human-centric loop of ADR-014 and the pragmatic utility guardrail of ADR-015 by ensuring that what we trust today remains trustworthy tomorrow.
+
+### B.3.4:9 - **Relations**
+
+*   **Builds on:** `B.3.3 Assurance Subtypes & Levels`, `A.10 Evidence Graph Referring`.
+*   **Constrains:** The temporal validity of `AssuranceLevel` for all holons.
+*   **Enables:** Proactive maintenance planning within the Canonical Evolution Loop (B.4) and provides a dynamic risk input for ethical and strategic decision-making (Part D).
+
+### B.3.4:End
+

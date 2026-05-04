@@ -1,0 +1,16 @@
+{
+  "name": "db_psql_delete_from",
+  "description": "psql DELETE FROM",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "psql \"$DB\" -c \"DELETE FROM users WHERE id=1\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "db_client",
+    "reason_code": "db_client.sql_destructive"
+  }
+}

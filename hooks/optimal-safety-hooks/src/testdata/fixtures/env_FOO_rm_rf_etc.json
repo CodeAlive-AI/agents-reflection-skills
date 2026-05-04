@@ -1,0 +1,16 @@
+{
+  "name": "env_FOO_rm_rf_etc",
+  "description": "env FOO=bar rm -rf /etc/nginx",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "env FOO=bar rm -rf /etc/nginx"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

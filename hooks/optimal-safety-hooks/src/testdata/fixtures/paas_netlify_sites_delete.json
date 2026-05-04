@@ -1,0 +1,16 @@
+{
+  "name": "paas_netlify_sites_delete",
+  "description": "netlify sites:delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "netlify sites:delete site-abc --force"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.netlify_destructive"
+  }
+}

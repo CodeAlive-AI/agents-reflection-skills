@@ -1,0 +1,15 @@
+{
+  "name": "gcloud_compute_ssh_destructive",
+  "description": "gcloud compute ssh --command='sudo systemctl restart X'",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gcloud compute ssh vm-1 --command='sudo systemctl restart nginx'"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra"
+  }
+}

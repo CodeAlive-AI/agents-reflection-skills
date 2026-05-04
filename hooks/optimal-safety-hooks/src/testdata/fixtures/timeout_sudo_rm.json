@@ -1,0 +1,16 @@
+{
+  "name": "timeout_sudo_rm",
+  "description": "timeout 5 sudo rm -rf /etc",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "timeout 5 sudo rm -rf /etc/old"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

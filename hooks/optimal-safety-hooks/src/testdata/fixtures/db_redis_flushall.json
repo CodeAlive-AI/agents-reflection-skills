@@ -1,0 +1,16 @@
+{
+  "name": "db_redis_flushall",
+  "description": "redis-cli FLUSHALL",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "redis-cli -h prod-redis FLUSHALL"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "db_client",
+    "reason_code": "db_client.redis_destructive"
+  }
+}

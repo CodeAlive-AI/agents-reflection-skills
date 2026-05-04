@@ -1,0 +1,16 @@
+{
+  "name": "drizzle_push",
+  "description": "drizzle-kit push",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "drizzle-kit push"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.drizzle_migration"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_System",
+  "description": "rm -rf /System",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /System/Library/Frameworks/X"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

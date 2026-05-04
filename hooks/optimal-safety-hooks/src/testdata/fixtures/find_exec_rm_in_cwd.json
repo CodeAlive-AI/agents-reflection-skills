@@ -1,0 +1,15 @@
+{
+  "name": "find_exec_rm_in_cwd",
+  "description": "find ./build -exec rm {} \\; (allow — inside cwd)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "find ./build -name '*.tmp' -exec rm {} \\;"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

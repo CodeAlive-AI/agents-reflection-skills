@@ -1,0 +1,14 @@
+{
+  "name": "pipe_into_bash",
+  "description": "echo \"rm -rf /\" | bash",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo \"rm -rf /\" | bash"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask"
+  }
+}

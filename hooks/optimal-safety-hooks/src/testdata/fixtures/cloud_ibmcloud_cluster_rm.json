@@ -1,0 +1,16 @@
+{
+  "name": "cloud_ibmcloud_cluster_rm",
+  "description": "ibmcloud ks cluster-rm",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ibmcloud ks cluster-rm --cluster prod"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.ibmcloud_destructive"
+  }
+}

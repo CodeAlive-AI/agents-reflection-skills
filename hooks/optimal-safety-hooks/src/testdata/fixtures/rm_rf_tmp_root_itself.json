@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_tmp_root_itself",
+  "description": "rm -rf /tmp itself (the root, not a subdir)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /tmp"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.delete_safe_root"
+  }
+}

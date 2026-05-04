@@ -1,0 +1,16 @@
+{
+  "name": "supabase_db_reset_linked",
+  "description": "supabase db reset --linked",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "supabase db reset --linked"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.db_reset_linked"
+  }
+}

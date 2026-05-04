@@ -1,0 +1,15 @@
+{
+  "name": "find_word_in_heredoc_body",
+  "description": "find as English word inside heredoc body",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "cat <<EOF\nplease find the bug\nEOF"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "subshell_rm_etc_via_cd",
+  "description": "subshell: cd /etc; rm nginx — should ask",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "(cd /etc && rm -rf nginx)"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

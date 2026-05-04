@@ -1,0 +1,75 @@
+## E.5.1 - DevOps Lexical Firewall
+
+### E.5.1:1 - Problem frame
+The FPF Core is meant to remain valid across decades and technology
+generations.  Implementation details—file formats, build pipelines,
+runtime flags—evolve rapidly and differ between domains.  When such
+terms invade normative prose, the Core ages as quickly as the tools it
+mentions.
+
+### E.5.1:2 - Problem
+*Conceptual erosion*: a rule that cites a transient technology becomes
+obsolete when that technology fades, forcing unnecessary Core revisions
+and fragmenting historical audits.
+
+### E.5.1:3 - Forces
+
+| Force | Tension |
+|-------|---------|
+| **Timelessness** | Concepts must survive tool turnover. |
+| **Pedagogic clarity** | Examples need concreteness ↔ too much concreteness hard‑codes technology. |
+| **Cross‑domain reach** | Physical‑system engineers and knowledge‑theorists use different stacks. |
+
+### E.5.1:4 - Solution
+Establish a **Lexical Firewall** around the **Conceptual Core** *(conceptual constraint; not a build‑time linter)*:
+
+1. **Forbidden lexicon**  
+   Normative patterns **SHALL NOT** contain tool‑or file‑specific words
+   (e.g. protocol keywords, file extensions, IDE commands).  
+   Permissible wording: “a reference parser”, “a serialisation schema”.
+
+2. **Indirection rule**  
+   When a Core concept needs an executable illustration, the pattern
+   cites the **Tooling Reference family** artefact by *conceptual name*,
+   never by concrete path or syntax.
+
+3. **Glossary pointer**  
+   If an unavoidable technical term appears, it is defined in a *Tooling Glossary* outside the Core and referenced by conceptual alias—not embedded.
+*Non‑normative automation.* Machine checks **MAY** exist in Tooling; they are advisory and **MUST NOT** be imported into the Core.
+
+### E.5.1:5 - Archetypal Grounding (System / Episteme)
+
+| Scenario | `U.System` example | `U.Episteme` example |
+|----------|-------------------|----------------------|
+| **Normative text** | “A system boundary must expose at least one conserved‑quantity flow.” (No mention of modelling language.) | “An episteme records its F–G–R assurance tuple.” (No mention of proof syntax.) |
+| **Illustrative link** | A modelling profile resides in the Tooling family; Core cites it as “the reference system‑profile”. | A linting routine lives in Tooling; Core cites it as “the reference episteme‑checker”. |
+
+### E.5.1:6 - Conformance Checklist
+
+| ID | Requirement |
+|----|-------------|
+| **CC‑LFW.1** | A Core pattern **SHALL** fail review if it contains implementation‑specific tokens. |
+| **CC‑LFW.2** | References to executable artefacts **MUST** use conceptual names, not file paths or command strings. |
+| **CC‑LFW.3** | Pedagogical examples inside Core **MAY** describe behaviour, but **MUST NOT** embed code snippets. |
+
+### E.5.1:7 - Consequences
+
+| Benefits | Trade‑offs / Mitigations |
+|----------|-------------------------|
+| Core stays evergreen and cross‑domain. | Authors must relocate concrete examples to Tooling or Pedagogy. |
+| Reviewers can machine‑scan for banned tokens. | Requires a small vocabulary allow‑list; maintained in Tooling Guide. |
+
+### E.5.1:8 - Rationale
+Language shapes thought.  By firewalling transient jargon, we uphold
+**P‑1 Cognitive Elegance** (clarity), **P‑2 Didactic Primacy** (domain‑neutral
+exposition) and **P‑5 FPF Layering** (clean separation between Core
+and Tooling).  The rule is content‑agnostic and thus itself immune to the
+very decay it prevents.
+
+### E.5.1:9 - Relations
+* **Parent umbrella:** `pat:constitution/guard‑rails` (E.5)  
+* **Constrains:** every pattern in Conceptual Core  
+* **Instantiates pillars:** P‑1, P‑2, P‑5
+
+### E.5.1:End
+

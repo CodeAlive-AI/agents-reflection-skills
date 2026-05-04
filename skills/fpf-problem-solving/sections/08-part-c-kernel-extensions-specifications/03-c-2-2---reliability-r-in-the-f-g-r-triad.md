@@ -1,0 +1,375 @@
+## C.2.2 - Reliability R in the F–G–R triad
+
+> Reliability (R) is a conservative, evidence-bound warrant signal for a typed claim under an explicit claim scope (G). Cross-context reuse is **Bridge-only**: scope may be re-expressed via `translate(Bridge,·)` (often narrowing), while congruence penalties route to **R only**.
+
+> **Type:** Architectural (A)
+> **Status:** Stable
+
+### C.2.2:1 - Problem frame
+
+KD‑CAL asks a simple operational question: *“Where can I safely use this claim?”*
+FPF answers with a minimal “epistemic location” built from three coordinates and one bridge qualifier:
+
+* **F** (Formality) describes *how the claim is expressed* and how strongly it supports verification workflows (C.2.3).
+* **G** (Claim scope) describes *where the claim is asserted to apply* as a set-like object (A.2.6).
+* **R** (Reliability) describes *how strongly the claim is warranted* by linked evidence under that scope.
+* **CL / CL^k / CL^plane** (Congruence Levels) describe *lossy transport* when claims are reused across contexts, kinds, or planes (B.3, C.3).
+  CL values live on **edges/bridges** (not on the claim as a “4th coordinate”).
+
+In practice, the triad is frequently used before it is made explicit:
+
+* Authors implicitly “average” disparate evidence and report a single confidence.
+* Teams treat higher formality (F) as if it automatically implies higher warrant (R).
+* Scope growth is smuggled in through phrasing instead of explicit scope operators (A.2.6).
+* Cross-context reuse occurs without explicit bridges and without routing congruence loss into R.
+
+This pattern makes **R** explicit in KD‑CAL and fixes the **triad discipline** required by Kind‑CAL (C.3) and the Trust & Assurance calculus (B.3).
+
+### C.2.2:2 - Problem
+
+FPF needs a reliability coordinate that is:
+
+1. **Auditable.** A reader can trace R to concrete evidence and see how reuse penalties were applied.
+2. **Composable.** R can be propagated through claim graphs conservatively, without illegal scale arithmetic.
+3. **Orthogonal.** R is not conflated with F (expression) or G (scope).
+4. **Bridge-safe.** Any loss from transport across contexts/kinds/planes is explicit and affects **R only**. 
+5. **Minimal.** The solution does not introduce new core types or new face-kinds.
+
+### C.2.2:3 - Forces
+
+| Force                                         | Tension                                                                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Single number vs multi-tradition evidence** | People want one scalar ↔ evidence comes from heterogeneous practices (proofs, tests, telemetry, expert review).    |
+| **Rigor vs humility**                         | Claims need to be usable in decisions ↔ overconfident scores are dangerous and hard to unwind.                     |
+| **Formal vs empirical warrant**               | Proof can be decisive in a formal theory ↔ real-world deployment requires empirical adequacy and drift management. |
+| **Scope realism vs marketing scope**          | Narrow scopes raise R ↔ incentives push for broad statements with hidden preconditions.                            |
+| **Reuse vs semantic loss**                    | Reuse is valuable ↔ reuse across contexts/kinds/planes is inherently lossy.                                        |
+| **Toolability vs expressive freedom**         | A validator needs crisp rules ↔ authors want flexible narratives and domain nuance.                                |
+
+### C.2.2:4 - Solution
+
+#### C.2.2:4.1 - Canonical triad contract
+
+**Definition DEF‑C2.2‑1 (Epistemic location).**
+An epistemic location for a claim `c` is the tuple:
+
+`Loc(c | K, S) = ⟨F(c), G(c), R_eff(c)⟩`
+
+where:
+
+* `F(c)` is Formality (C.2.3), treated as an **ordinal**.
+* `G(c)` is Claim scope (A.2.6), treated as a **set-like scope object**.
+* `R_eff(c)` is Effective reliability for `c`, treated as a **ratio-scale** scalar in `[0,1]` (or an **ordinal proxy** at **[M‑0/M‑1]**; see §4.5.A).
+  `R_eff` is computed **pathwise** (DEF‑C2.2‑3): when more than one admissible justification path exists, publish multiple path records (PathId rows) and cite which PathId(s) a guard/decision consumed (see §4.8.A / G.6). Any collapse to a single scalar is an explicitly declared Γ‑policy (no implicit averaging).
+
+A location is always understood *relative to* a bounded context and the assurance carriers used elsewhere in FPF:
+* `K` is the declared `U.BoundedContext`.
+* `S ∈ {design, run}` is the claim’s stance carrier (no design/run chimeras).
+* `ReferencePlane` is declared where applicable; plane crossings apply `CL^plane` and penalize **R only**.
+* When the claim is published on the Working‑Model surface, the author also declares `validationMode ∈ {postulate, inferential, axiomatic}` (E.14 / B.3).
+
+**Mode-to-lane hint (informative).** `validationMode` sets the *default expectation* for which assurance lane carries the initial burden (B.3.3 / B.3.5).
+It does **not** add a new axis and does **not** change the meaning of `R`:
+* `axiomatic` → VA-dominant (constructive grounding / proof artifacts); if `ReferencePlane=world`, LA may still be required.
+* `inferential` → VA+TA-dominant (reasoned chain + typing/alignment assurance); LA is optional and scope-bound.
+* `postulate` → LA-dominant (empirical validation with freshness/decay); VA is optional.
+In all modes, **R remains warrant**, not ontological truth; “proof ⇒ R=1 in the world” is a category error.
+
+**Profile note (informative; fold compatibility).** Some profiles treat empirical `R` as N/A for strictly **axiomatic** lines and use a tagged proxy `R_proxy := F` (`line=formal`) for folding, as an explicit proxy rather than an implicit “F⇒R” rule (B.1.3).
+
+`⟨F,G,R⟩` is an **assurance tuple**, not a `U.CharacteristicSpace`; do not draw “trajectories” in `⟨F,G,R⟩`.
+
+#### C.2.2:4.2 - What Reliability R means in KD‑CAL
+
+**Definition DEF‑C2.2‑2 (Reliability as warrant).**
+`R` is a conservative, evidence-bound indicator of how strongly the claim “holds as stated” under its declared scope and context. It is interpreted as a *warrant strength*, not as truth.
+
+**Prophylactic clarification.**
+
+* A higher `R` means “the evidence and its relevance supports relying on this claim under this scope.”
+* A higher `F` means “the claim’s form is amenable to stronger checking and reuse,” but does not itself imply the claim is warranted.
+* A larger `G` means “the claim applies to more cases,” but does not itself imply the claim is warranted in those cases.
+
+#### C.2.2:4.3 - Pathwise weakest-link propagation (series vs parallel)
+
+KD‑CAL’s default Γ‑fold is **weakest‑link** on the *entailment spine* (the premises/lemmas actually needed), computed per justification path. It is conservative, monotone, and auditable.
+
+**Definition DEF‑C2.2‑3 (Pathwise weakest-link fold).**
+Let `P` be a justification path for claim `c`. Let `SpineClaims(P)` be the required supports on the entailment spine, and let `SpineBridges(P)` be the bridges actually traversed on that spine (scope bridges, kind bridges, plane/notation transports where applicable).
+
+Define the raw warrant of the path as:
+
+`R_raw(P) = min_{i ∈ SpineClaims(P)} R_eff(i)`
+
+and compute the effective warrant of the path by applying congruence penalties (see §4.5 for policy shape):
+
+`R_eff(P) = Π(R_raw(P); Φ(CL_min(P)), Ψ(CL^k_min(P)), Φ_plane(CL^plane_min(P)))`
+
+**Spine discipline.** The `min` is taken over the *entailment spine* only (no satellites, no “nice-to-have” citations).
+
+This matches the KD‑CAL propagation rule (C.2:4.3) and the Trust & Assurance skeleton (B.3): weakest-link on the spine, penalize only by the worst (lowest) congruence encountered on the path (no averaging).
+
+**Parallel support (optional, declared).**
+If the same claim `c` has multiple **independent** justification paths `{P_j}` (OR‑style support), the default is:
+
+`R_eff(c) = max_j R_eff(P_j)`
+
+Independence is recorded as an explicit note (e.g., separate rigs/datasets/proof lines), per CC‑C.2.2‑10 and the KD‑CAL composition rule (C.2:4.3).
+If the “multiple paths” actually cover **different** scope slices, do not use `max` to hide weaker slices; instead publish distinct `G_path` (SpanUnion‑style coverage) and keep per‑path `R_eff` traceable (A.2.6 / C.2:4.3).
+
+**Conflict detection (no averaging).**
+If the evidence graph supports both `p` and `¬p` with overlapping scope, do **not** average. Separate by context/scope, or mark the claim **provisional** with explicit conflict edges until resolved.
+
+#### C.2.2:4.4 - Congruence penalties route to R only (no silent widening)
+
+Cross-context reuse and cross-kind reuse are treated as **transport with loss**, and loss is expressed as a penalty that reduces `R`.
+
+**Invariant INV‑C2.2‑1 (R-only penalty routing).**
+For any transport step that uses a bridge with a declared congruence level, the transported claim preserves its **F** value, re-expresses its scope via an explicit **scope translation** (`translate`) when needed, and only its **R** value is decreased by congruence penalties:
+
+`F_out = F_in`
+`G_out = translate(Bridge, G_in)`  *(identity only for within-context identity use; cross-context use is undefined without a Bridge)*
+`R_out ≤ R_in`
+
+Claim scope may be *re-expressed* by an explicit translation, but must not be silently widened:
+
+`G_out = translate(Bridge, G_in)`  (may narrow / drop unmappable slices; never widen without an explicit ΔG)
+
+**No implicit translation.** Translation between contexts never occurs implicitly: if the target context differs, an explicit Bridge (with declared CL and loss note) is mandatory; otherwise the reuse is non-conformant.
+**No implicit translation.** Cross‑Context reuse is conformant only via an explicit Bridge (declared CL + loss note) and an explicit `translate(Bridge,·)`; see **CC‑C.2.2‑4**.
+
+This invariant is why KD‑CAL guard macros and crossing surfaces can be simple: transport never silently *widens* a claim; it either (i) translates/narrows scope explicitly, and/or (ii) reduces warrant.
+
+`translate` is the USM operator (A.2.6). It may drop unmappable slices and may include refit-like normalization; **this is not a penalty**. Any further narrowing is an explicit Δ‑move (ΔG−) under A.2.6. Congruence loss (CL/CL^k/CL^plane) still routes to **R only**.
+
+**Notation/plane transports.** NotationBridge and plane transports contribute to the relevant `CL*_min(P)` bottlenecks for the path; they do not “lower F” by penalty. If an author actually rewrites a claim into a different formality level, that is a new episteme (ΔF), not “transport”.
+
+#### C.2.2:4.4.A - Worked micro-example: `translate(G)` + penalty (A.2.6:12.2)
+
+**Source context:** `MaterialsLab@2026`. Claim:
+
+> `c:` “Adhesive X retains ≥85% tensile strength on Al6061 for 2 h at 120–150 °C.”
+
+* `G_src := {substrate=Al6061, temp∈[120,150]°C, dwell≤2h, Γ_time=window(1y), rig=Calib‑v3}`
+* `Loc_src(c) = ⟨F_src, G_src, R_raw⟩`
+
+**Target context:** `AssemblyFloor@EU‑PLANT‑B`. Reuse requires a declared Bridge `b`:
+
+* Bridge `Bridge#MatLab_to_PlantB` maps lab rig → plant rig and introduces a measurement correction; `CL(Bridge#MatLab_to_PlantB)=2` with loss note “±2 °C bias.”
+* **Scope translation:** `G_tgt := translate(b, G_src)` which (in this case) narrows the temperature span to `[122,148]°C` due to the correction.
+* **Penalty routing:** using policy `Φ=Φ_v1`, compute
+  `R_eff := max(0, R_src − Φ_v1(CL(Bridge#MatLab_to_PlantB)))`.
+
+**Key point:** `G` changed only because `translate(b,·)` explicitly re-expressed the *same entitlement* in the target Context’s slice vocabulary; the **congruence loss** still affects **R only**. If authors decide that only `[125,145]°C` is safe to claim on the floor, that is an explicit **ΔG−** decision (scope edit), not a congruence penalty.
+
+#### C.2.2:4.5 - Effective reliability under transport (policy-defined, monotone, bounded)
+
+When a claim is reused via bridges, `R_eff` is computed by applying penalties determined by congruence levels.
+
+**Definition DEF‑C2.2‑4 (Effective reliability under transport).**
+Let:
+
+* `CL` be the congruence level of a scope bridge (B.3).
+* `CL^k` be the congruence level of a kind bridge (C.3).
+* `CL^plane` be the congruence level of a plane transport bridge (B.3 / plane patterns).
+
+Let `Φ`, `Ψ`, and `Φ_plane` be **policy-defined**, **monotone**, **bounded**, **table-backed** penalty policies applied on the relevant edges:
+* `Φ(CL)` — scope/context Bridge penalty (CL).
+* `Ψ(CL^k)` — KindBridge penalty (CL^k) when kinds are mapped.
+* `Φ_plane(CL^plane)` — plane-crossing penalty when `ReferencePlane` differs.
+
+**Important (direction of monotonicity).** Congruence ladders are “polarity up” (higher CL = better fit). Per **CC‑G0‑Φ** and the Trust & Assurance skeleton, penalty tables are monotone **decreasing** in their CL ladders (if `CL1 < CL2` then `Φ(CL1) ≥ Φ(CL2)`, analogously for `Ψ` and `Φ_plane`) and bounded so that `R_eff` remains within `[0,1]` after clipping. Penalty magnitudes are not required to lie in `[0,1]` (tables may exceed 1 to force `R_eff → 0` under the subtractive default); what matters is monotonicity, boundedness, and published policy identifiers.
+
+Define:
+
+`R_eff(P) = clip_0^1( Π(R_raw(P); Φ(CL_min(P)), Ψ(CL^k_min(P)), Φ_plane(CL^plane_min(P))) )`
+
+where each `*_min(P)` is the **lowest** congruence level encountered on the entailment spine of `P` for that dimension (a bottleneck; no averages), and `clip_0^1(x)` truncates to `[0,1]`.
+
+**Default (safe) instantiation (subtractive).**
+When policies are expressed as subtractive penalties, a safe default is:
+
+`R_eff(P) = max(0, R_raw(P) − Φ(CL_min(P)) − Ψ(CL^k_min(P)) − Φ_plane(CL^plane_min(P)) )`
+
+This generalises the B.3 skeleton to multiple congruence ladders (scope vs kind vs plane) without introducing new axes. If a dimension is not present on the path, its penalty term is treated as neutral (`0` in the subtractive default).
+
+**Provisional marking.**
+Default admissibility thresholds for reuse are set by Bridge calibration profiles (e.g., G.7). Typically, `CL=1` requires an explicit waiver to proceed and `CL=0` is inadmissible; this pattern only specifies that such thresholds gate transport before any numeric penalty is meaningful.
+
+#### C.2.2:4.5.A - Math-by-level gating (B.1.3:4.3)
+
+* **[M‑0/M‑1]** allow **ordinal** comparisons only (no arithmetic on `R_eff`); Φ/Ψ/Φ_plane may be qualitative (“low/med/high”). Publish evidence links + lane tags.
+* **[M‑2/L1]** numeric `R_eff` requires referencing numeric, table-backed policy identifiers for Φ/Ψ/Φ_plane (and Π if not default), plus reproducibility tags for empirical legs; otherwise treat the claim as [M‑1] semantics.
+
+#### C.2.2:4.6 - Evidence lanes are not new axes
+
+KD‑CAL does not add new global coordinates beyond F–G–R. Instead, it requires that reliability be *explainable* via **assurance lanes** (B.3.3):
+
+* **TA** (Typing assurance): semantic/type alignment sufficient for transport and composition.
+* **VA** (Verification assurance): logical/algorithmic checking, proof, model checking, static guarantees.
+* **LA** (Validation assurance): empirical adequacy under declared conditions, tests, benchmarks, telemetry.
+
+Lane reporting is how KD‑CAL supports the common research distinction between logical soundness and empirical adequacy **without introducing new global axes**.
+Lanes remain **separable** in SCR/Notes; they are not averaged into a “single tradition score”.
+
+#### C.2.2:4.7 - Scope operations are kind-safe (and use the ClaimScope algebra)
+
+Reliability is meaningless if scope operations are applied to ill-typed entities.
+
+**Well-formedness constraint WFC‑C2.2‑1 (Type before scope).**
+Let `G1` and `G2` be claim scopes associated to described entities of kinds `K1` and `K2`. A scope operation that combines them (e.g., `G1 ∩ G2` for serial intersection, `SpanUnion({G_i})` for parallel coverage, or `translate(Bridge, G)` for cross‑context reuse) is defined only if:
+* `K1 = K2`, or
+* (same `U.BoundedContext`) `K1 ⊑ K2` or `K2 ⊑ K1` (an explicit kind relation/cast is named), or
+* (cross‑Context) there exists a declared **KindBridge** relating `K1` and `K2` with an explicit `CL^k` (C.3).
+
+This constraint prevents “type-by-scope” anti-patterns where scope manipulation is used to hide type mismatch.
+
+#### C.2.2:4.8 - Minimal authoring recipe
+
+A minimal, conforming KD‑CAL authoring flow for reliability is:
+
+1. **Fix the typed claim.** State the claim as a typed proposition about a described entity (Kind‑CAL, C.3).
+2. **Declare claim scope.** Write `G` explicitly using A.2.6 operators; avoid scope-by-wording.
+3. **Declare stance carriers.** Declare `K=U.BoundedContext`, `S ∈ {design, run}`, and (where relevant on Working‑Model surfaces) `validationMode ∈ {postulate, inferential, axiomatic}`; declare `ReferencePlane` if crossings are in play.
+4. **Bind evidence.** Attach evidence stubs and lane tags (TA/VA/LA) and validity windows / decay policy where applicable (B.3.3, B.3.4).
+5. **Choose Γ-mode.** Declare whether the support is **series** (required) or **parallel** (independent lines to the same claim).
+6. **Compute R_raw.** Use the weakest-link fold on the entailment spine; for parallel support, use `max` only with an explicit independence note.
+7. **Declare bridges on reuse.** If you reuse across contexts/kinds/planes/notations, declare the bridge(s) (including NotationBridge where applicable) and their CLs.
+   Cross‑Context reuse is conformant only when an explicit Bridge is declared; CL admissibility rules apply (waiver or forbid) before any numeric penalty is meaningful (see **CC‑C.2.2‑4**).
+   **Reuse note (FPF discipline).** When this section refers to “reuse/portability across contexts/planes”, interpret it as Bridge-only reuse per §4.4: e.g., Bridge `Bridge#MatLab_to_PlantB` with `CL=2` and an explicit loss note, applying policy ids `Φ=Φ_v1` (and, where applicable, `Ψ=Ψ_v2`, `Φ_plane=Φ_plane_v1`) to reduce `R_eff` only.
+
+8. **Compute R_eff.** Apply the declared penalty policies into `R` (never into `F` or `G`), and publish `⟨F,G,R_eff⟩` with traceable references and policy identifiers.
+
+A reliable claim is not a loud claim; it is a claim that can be *carried*.
+
+#### C.2.2:4.8.A - Authoring template: Path summary row (copy/paste)
+
+When publishing `R_eff` for a claim, authors SHOULD include a compact, claim-local **path summary**. This is intentionally shaped so it can be turned into tooling later (EvidenceGraph/PathId in G.6) without introducing new Core types or face-kinds.
+
+| PathId | Entailment spine (required supports) | CL_min | CL^k_min | CL^plane_min | Policy-id(s) (Φ / Ψ / Φ_plane) | R_raw | R_eff | Lane tags (TA/VA/LA) | valid_until |
+| ------ | ----------------------------------- | ------ | -------- | ----------- | ------------------------------ | ----- | ----- | --------------------- | ---------- |
+| P‑1    | `c ← {c_a, c_b, c_c}`               | 2      | 3        | —           | `Φ=Φ_v1`, `Ψ=Ψ_v2`             | 0.82  | 0.67  | {TA, LA}              | 2026‑09‑30 |
+
+Notes:
+* `CL_*_min` values are **bottlenecks** on the relevant path/dimension (no averaging).
+* `valid_until` is the **earliest** expiry across empirical legs (or `—` / “fenced to TheoryVersion” for non-decaying proof legs).
+* If you publish multiple admissible paths, include multiple rows and cite which PathId(s) your decision/guard consumed.
+
+### C.2.2:5 - Archetypal Grounding
+
+Informative; non-binding.
+
+#### C.2.2:5.1 - System illustration
+
+**System.** A brake controller `S` has a claim:
+
+> `c1:` “For road friction μ ∈ [0.2, 0.9] and vehicle mass m ∈ [900, 2200] kg, wheel slip stays in [0.05, 0.25] under ABS control.”
+
+* `F(c1)=F5` because the controller and constraints are expressed as a machine-checkable model plus executable test harness (C.2.3).
+* `G(c1)` is the declared operating envelope (A.2.6) as a product set in `(μ, m, speed, tire)` space.
+* Evidence:
+
+  * VA: model-checking of a simplified plant/controller model (strong, but only for the simplified plant).
+  * LA: HIL simulation + track tests under sampled conditions with recorded telemetry windows (freshness required).
+  * TA: typed alignment between “μ” in simulations, “μ” in the estimation pipeline, and “μ” inferred from real-world sensors.
+
+If telemetry is reused from the track context to the road context, a scope bridge is declared with `CL=2`. Using the default monotone penalty table (B.3), the LA contribution is reduced, and the derived `R_eff(c1)` drops accordingly. The claim’s envelope `G(c1)` does not change; only the warrant for transporting the evidence does.
+
+#### C.2.2:5.2 - Episteme illustration
+
+**Episteme.** A paper asserts two claims about an algorithm `A`:
+
+* `c2:` “A terminates for all inputs in domain D.” (axiomatic / proof-carrying)
+* `c3:` “A achieves ≥ 0.92 F1 on dataset family F under deployment preprocessing P.” (empirical)
+
+`c2` can achieve high VA with a proof artifact; its LA lane may be N/A, but its TA lane remains relevant because the intended meaning of “domain D” must align with the implementation’s input model.
+`c3` requires LA evidence and a freshness/shift policy because dataset and preprocessing drift change the scope and the warrant. If `c3` is reused from a lab dataset context to a production context, a bridge with explicit CL is required, and `R_eff` is reduced until new in-context evidence is attached.
+
+### C.2.2:6 - Bias-Annotation
+
+Informative; non-binding.
+
+Lenses tested: **Gov**, **Arch**, **Onto/Epist**, **Prag**, **Did**. Scope: **Universal**.
+
+* **Onto/Epist bias:** High formality is often mistaken for high warrant (“proof therefore true in the world”). This pattern mitigates by forcing LA/TA visibility and by routing transport loss into R rather than mutating the claim.
+* **Prag bias:** Teams may Goodhart R by narrowing scope or selecting easy tests. This pattern mitigates by requiring explicit scope declaration and by making scope changes first-class (A.2.6).
+* **Gov bias:** Overconfident reuse across contexts is a recurring failure mode in governance settings. This pattern mitigates by forcing explicit bridges and penalties for reuse.
+* **Did bias:** A single scalar is seductive; it hides what kind of warrant exists. Lane reporting keeps the scalar honest.
+
+### C.2.2:7 - Conformance Checklist
+
+Normative.
+
+| ID                                            | Requirement                                                                                                                                                                                                                 | Purpose                                                                       |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **CC‑C.2.2‑1 (Triad publication).**           | Authors of a KD‑CAL location **SHALL** publish `⟨F,G,R_eff⟩` as a bundle for a specific claim, rather than publishing `R` alone.                                                                                            | Prevents decontextualised confidence scores.                                  |
+| **CC‑C.2.2‑2 (R-only penalty routing).**      | A conforming implementation of KD‑CAL transport **SHALL** satisfy **INV‑C2.2‑1**.                                                                                                                                           | Ensures bridges reduce warrant without silently mutating expression or scope. |
+| **CC‑C.2.2‑3 (Weakest-link fold).**           | A conforming implementation of KD‑CAL reliability propagation **SHALL** use **DEF‑C2.2‑3** as the default for required supports, unless an alternative Γ‑fold is explicitly declared and remains monotone and conservative. | Prevents confidence laundering through aggregation.                           |
+| **CC‑C.2.2‑4 (Bridge visibility for reuse).** | Authors **SHALL** declare explicit bridges with CL values for any cross-context, cross-kind, or cross-plane reuse that affects `R_eff`.                                                                                     | Makes transport loss auditable and machine-checkable.                         |
+| **CC‑C.2.2‑5 (Penalty policy visibility).**   | Authors or tooling **SHALL** reference the active policy identifiers used for `Φ`, `Ψ`, `Φ_plane` **and** the penalty aggregation rule `Π` (if not the default) when computing `R_eff`.                                   | Ensures repeatability and prevents hidden policy drift.                       |
+| **CC‑C.2.2‑6 (Type before scope).**           | Authors and validators **SHALL** enforce **WFC‑C2.2‑1** for scope composition operations.                                                                                                                                   | Prevents ill-typed scope algebra from creating incoherent reliability claims. |
+| **CC‑C.2.2‑7 (Evidence binding).**            | Authors **SHALL** bind any asserted `R_eff` to evidence references that enable TA/VA/LA inspection, consistent with the assurance lane discipline (B.3.3) and evidence decay discipline (B.3.4).                            | Keeps R grounded and updateable.                                              |
+| **CC‑C.2.2‑8 (No ordinal arithmetic).**       | Validators **SHALL** reject any computation that treats `F` or `CL` as if they were ratio-scale numbers (e.g., averaging, subtraction), except where explicitly permitted as a policy-defined penalty function on `R`. Validators **SHALL** also reject arithmetic over `R_eff` when it is published as an **ordinal proxy** ([M‑0/M‑1]). | Enforces CSLC legality and prevents silent scalarisation.                     |
+| **CC‑C.2.2‑9 (Stance carriers declared).**    | Authors **SHALL** declare `U.BoundedContext K`, `S ∈ {design, run}`, and (where applicable) `ReferencePlane` and `validationMode`, and **SHALL NOT** merge design- and run-time assurance into one score.                 | Prevents design/run chimera and makes interpretation auditable.              |
+| **CC‑C.2.2‑10 (Parallel requires independence).** | Authors **SHALL** treat `max`-composition of support paths as admissible **only** when an explicit independence justification is recorded; otherwise supports are treated as one entangled line and remain weakest-link. | Prevents confidence inflation by double-counting correlated evidence.         |
+
+### C.2.2:8 - Common Anti-Patterns and How to Avoid Them
+
+Informative; non-binding.
+
+| Anti-pattern               | Symptom                                                                                       | Why it fails                                                     | How to avoid / repair                                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Averaging assurance**    | A mean/weighted sum of `R` values is reported as “confidence”.                               | It violates WLNK and is usually illegal scale arithmetic.        | Use weakest-link `min` on the entailment spine, then apply congruence penalties into `R` only.          |
+| **Truth-by-score**         | `R=0.9` is treated as “the claim is true.”                                                    | R is warrant strength, not ontological truth.                    | Require explicit evidence links and scope; treat R as decision warrant only.                             |
+| **Scope laundering**       | The claim’s applicability grows by wording changes while `G` is unchanged.                    | It silently widens scope, making comparisons meaningless.        | Use A.2.6 operators and treat scope changes as explicit revisions.                                       |
+| **Bridge laundering**      | A claim is reused in a new context without a bridge, and R is carried over unchanged.         | It hides semantic loss and encourages overconfident reuse.       | Declare bridges with CL and recompute `R_eff` using penalties.                                           |
+| **Design/run chimera**     | Design-time proofs and run-time telemetry are mixed as if they were the same evidence object. | Evidence belongs to different stances and decays differently.    | Separate lanes and validity windows; treat crossings explicitly.                                         |
+| **Ordinal arithmetic**     | CL or F levels are averaged to produce a pseudo-score.                                        | It violates scale legality and produces non-auditable numbers.   | Keep CL/F ordinal; convert only via declared penalty tables on R.                                        |
+| **Many-weak-makes-strong** | Numerous low-quality supports are combined to inflate confidence.                             | It violates the weakest-link intent of conservative propagation. | Default to `min` for required supports; allow `max` only with explicit independence arguments.          |
+
+### C.2.2:9 - Consequences
+
+Informative; non-binding.
+
+| Benefits                                                                                                     | Trade-offs and mitigations                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Comparability.** Different claims can be compared in a disciplined way when F and G are explicit.          | **Conservatism.** Weakest-link propagation can feel pessimistic; mitigate by making support structure explicit and improving the weakest evidence. |
+| **Auditability.** Transport loss is visible and localised to R.                                              | **Overhead.** Declaring bridges and evidence links is work; mitigate with templates and reuse of standard lane schemas.                            |
+| **Upgradeable knowledge.** R can improve incrementally as evidence accumulates, without rewriting the claim. | **Scalar temptation.** People still want one number; mitigate by requiring lane breakdown visibility behind the number.                            |
+
+### C.2.2:10 - Rationale
+
+A triad only works if each coordinate has a single job.
+
+* **G carries entitlement.** It states where the claim is asserted to apply. If G is implicit, teams argue about “what was meant” instead of updating scope.
+* **F carries checkability.** It states how much the claim’s form supports mechanised scrutiny and reuse. If F is conflated with R, formalisation becomes a rhetorical weapon.
+* **R carries warrant.** It states how much evidence supports relying on the claim under G. If R is not conservative, weak supports can be laundered into strong confidence.
+
+Routing congruence loss into **R only** prevents a subtle but pervasive failure mode: transport across contexts/kinds/planes does not silently rewrite the claim; it only reduces how confidently we should carry it.
+
+Weakest-link propagation is chosen because it is the simplest rule that is monotone, conservative, and auditable. When better combination rules exist, they can be introduced as explicit Γ‑policies, but the default must be safe.
+
+### C.2.2:11 - SoTA-Echoing
+
+Normative.
+
+**SoTA pack binding note.** If a SoTA Synthesis Pack exists for KD‑CAL reliability / cross‑context warrant transport in your Context (G.2), cite its ClaimSheet IDs / CorpusLedger entries / BridgeMatrix rows here. Otherwise, record `SoTA-Pack: TBD/none` and treat this section as the seed (do not fork it silently elsewhere).
+
+| Practice claim                                                                                                      | Post‑2015 source anchor                                                                   | Alignment to this pattern                                                                                                                                                           | Adoption status                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Verification and validation should be distinguished and tied to evidence quality, not to rhetoric.                  | ASME V&V 40‑2018 (model credibility assessment).                                          | This pattern separates VA and LA lanes and binds `R_eff` to evidence and declared scope rather than to narrative confidence.                                                        | **Adopt**, with KD‑CAL’s conservative fold as an explicit default.                                                   |
+| Trustworthiness is context- and risk-dependent and requires explicit documentation of limits.                       | NIST AI Risk Management Framework 1.0 (2023).                                             | This pattern makes limits first-class via `G` and makes reuse loss explicit via CL penalties rather than informal caveats.                                                          | **Adapt**, because FPF treats transport loss as an epistemic penalty, not as a purely organisational risk statement. |
+| Safety arguments should make claims, evidence, and assumptions explicit and reviewable.                             | UL 4600 (2020) and related assurance-case practice in autonomous systems.                 | This pattern treats `R` as an auditable warrant signal whose inputs are explicit evidence items and whose reuse requires explicit transport justification.                          | **Adopt**, while remaining notation-independent and avoiding tool mandates.                                          |
+| Empirical results should be accompanied by structured provenance and usage conditions to enable reuse and critique. | “Datasheets for Datasets” (Gebru et al., 2018) and “Model Cards” (Mitchell et al., 2019). | This pattern’s scope discipline and lane reporting make empirical warrant portable only when its conditions are explicit; cross‑Context reuse is Bridge-only (e.g., `Bridge#MatLab_to_PlantB`, `CL=2`, `Φ=Φ_v1`), and congruence loss routes to `R_eff` only. | **Adopt**, with congruence penalties as the reuse control mechanism.                                                 |
+| Reproducibility requires packaging evidence and making it re-checkable by others.                                   | ACM Artifact Review and Badging (updated practices post‑2015) and The Turing Way (2019).  | This pattern treats evidence as something that can be inspected across TA/VA/LA lanes and allows reliability to decay when evidence becomes stale or non-replayable.                | **Adapt**, because FPF treats decay and transport penalties as first-class calculus elements.                        |
+| Strong inference benefits from “severe tests” rather than from accumulation of weak confirmations.                  | Mayo (2018) on severity in statistical inference.                                         | Weakest-link propagation and explicit scope declarations discourage superficial confirmation piling and encourage explicit, discriminating evidence.                                | **Adapt**, because KD‑CAL is agnostic to frequentist vs Bayesian inference but requires auditability.                |
+
+### C.2.2:12 - Relations
+
+**Builds on:** C.2 (KD‑CAL overview), A.2.6 (Claim scope and operators), C.2.3 (Formality F), B.3 (Trust & Assurance calculus), B.1.3 (Γ‑fold patterns), B.3.3 (assurance lanes), B.3.4 (refresh/decay), C.3 (Kind‑CAL and kind bridges), F.9 (Bridges & CL), G.6 (EvidenceGraph PathId discipline), G.7 (Bridge calibration / admissibility thresholds).
+**Coordinates with:** C.16 (MM‑CHR evidence discipline), E.14 (working-model assertions), E.18/A.27 (crossing surfaces), C.25 (Q‑Bundle, for avoiding confusion between epistemic reliability and system reliability).
+**Used by:** C.3.3 (cross-kind reuse discipline), guard macro bundles in C.3.A and C.21, and any acceptance/gating logic that consumes `R_eff` while preserving `F` and `G`.
+**Clarifies:** The KD‑CAL meaning of reliability implicit in C.2:4.1 and the transport clauses referenced across B.3 and C.3.
+
+### C.2.2:End
+

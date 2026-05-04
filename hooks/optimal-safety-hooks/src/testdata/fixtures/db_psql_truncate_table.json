@@ -1,0 +1,16 @@
+{
+  "name": "db_psql_truncate_table",
+  "description": "psql TRUNCATE",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "psql \"$DB\" -c \"TRUNCATE TABLE users\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "db_client",
+    "reason_code": "db_client.sql_destructive"
+  }
+}

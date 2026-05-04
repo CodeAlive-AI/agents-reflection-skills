@@ -1,0 +1,305 @@
+## F.16 - Worked‑Example Template (Cross‑Domain)
+
+**“Show the thought, not the tooling.”**
+**Status.** Architectural pattern.
+**Builds on:** E.10.D1 **Lexical Discipline for “Context” (D.CTX)**; F.1–F.15.
+**Coordinates with.** B.3 **Trust & Assurance Calculus** (CL on Bridges); Part C patterns (Sys‑CAL, KD‑CAL, Kind-CAL, Method‑CAL).
+
+
+### F.16:1 - Intent & applicability
+
+**Intent.** Provide a **single, didactic page template** for cross‑domain worked examples that makes every claim **local to a Context** (Context), every Cross‑context step **explicit via a Bridge**, and every named role/status **traceably tied** to one **SenseCell**. The template is **notation‑free** and **tool‑agnostic**; it captures **how to think** the example so others can replay it.
+
+**Applicability.** Use whenever you illustrate **any** FPF construct that spans more than one Context: **Role Assignment & Enactment** bindings, acceptance checks, measurement-driven claims, type alignment, control/actuation stories, etc.
+
+**Non‑goals.** No registries, workflows, editors, or storage formats; no step‑by‑step “team procedures.” This pattern shapes **the page a reader sees**, not how it was produced.
+
+
+### F.16:2 - Problem frame
+
+Cross‑domain examples often fail in four predictable ways:
+
+1. **Global words.** *Process*, *role*, *service*, *execution* used without the Context, inviting drift.
+2. **Hidden bridges.** “It’s basically the same” across disciplines, with losses left implicit.
+3. **Name without sense.** A **Role Description** name appears with no visible tie to a SenseCell.
+4. **List without structure.** Facts line up but never meet in a single **Concept‑Set row**.
+
+The template counters these by forcing **Contexts → senses → row → bridges**, in that order.
+
+
+### F.16:3 - Core idea (didactic)
+
+A robust worked example is a **compact theatre**:
+
+* **Stage** = a declared **unification line** (which threads of Part C are in play).
+* **Backdrop** = **Context set** (Contexts from F.1), each with a one‑line Card.
+* **Actors** = **SenseCells** (⟨Context, Local‑Sense⟩) you will actually use.
+* **Plot** = **one Concept‑Set row** where those cells stand as “the same thing” for this example.
+* **Cues** = **Role Descriptions** that reference exactly one SenseCell each.
+* **Cross‑talk** = **Bridges** across Contexts (with kind, CL, and loss).
+* **Timing** = **Windows** (if status varies across time/scale) and **SoD** (if duties must remain separate).
+* **Moral** = a handful of **harness checks** (F.15) that the reader can verify mentally.
+
+
+### F.16:4 - Minimal vocabulary (this pattern only)
+
+* **Context / Context** — always **U.BoundedContext** (E.10.D1).
+* **Local‑Sense** — a sense clustered within one context (F.3).
+* **SenseCell** — address `⟨Context, Local‑Sense⟩`.
+* **Concept‑Set row (ρ)** — a Cross‑context alignment for “what we treat as one” in this example (F.7/F.8).
+* **Role Description (τ)** — a Role or Status that **points to one SenseCell** (F.4–F.6).
+* **Bridge (β)** — explicit Cross‑context relation with **kind** (≡ / overlaps / broader‑than / narrower‑than), **CL**, and **loss note** (F.9).
+* **Window** — a bounded interval (time/scale/phase) tied to a Status (F.10).
+* **SoD** — Separation-of-Duties constraint among **Roles** (F.14).
+
+
+### F.16:5 - The one‑page **Worked‑Example Canvas**
+
+> Each bullet is a **thought you make visible**, not a form field.
+
+1. **Title & claim.** A short name + one‑sentence claim you will demonstrate.
+   *Example:* *“Service Uptime as Evaluated by Runtime Executions”* — “We compare **Execution (IEC)** observations to **SLO (ITIL)** within a declared window.”
+
+2. **Unification line.** Which Part C threads are active.
+   *Example:* *Enactment + KD‑CAL (sensing) + Sys‑CAL (execution).*
+
+3. **Context set (compact Cards).** 3–6 Contexts from F.1 with one‑line scope and, if inherent, **design vs run** stance.
+   *Example:* *BPMN 2.0 (design: workflow graph); PROV‑O (run: Activity uses/generates); ITIL 4 (design: SLO/SLA); SOSA/SSN (run: Observation); IEC 61131‑3 (run: task executes).*
+
+4. **SenseCells in play.** List exactly the **Local‑Senses** you will use, each prefixed by its Context.
+   *Example:* ⟨**ITIL**: service‑level‑objective⟩, ⟨**SOSA**: observation⟩, ⟨**IEC**: execution‑task⟩, ⟨**PROV**: activity⟩.
+
+5. **The Concept‑Set row (ρ).** A **single line** that places the cells you treat as “the same” for the claim, with a one‑breath justification.
+   *Example row ρ:* { ⟨ITIL\:SLO⟩ ↔ ⟨SOSA\:observed‑availability⟩ } — *We treat “target availability” and “observed availability” as comparable magnitudes in a specific window.*
+
+6. **Bridges (β).** For any Cross‑context relation **not captured by ρ** (or that requires nuance), state **kind, CL, loss**.
+   *Example β₁:* ⟨**IEC\:execution‑task**⟩ **overlaps** ⟨**PROV\:activity**⟩, **CL=2**, *loss:* PROV lacks cyclic scheduling semantics.
+   *Example β₂:* ⟨**SOSA\:observation**⟩ **narrower‑than** ⟨**ITIL\:measurement**⟩, **CL=2**, *loss:* ITIL omits procedure metadata.
+
+7. **Role-Description hooks.** Name the Role/Status templates and the **one SenseCell** each references.
+   *Example:* `AvailabilityStatus` → ⟨ITIL\:SLO⟩; `Execution` → ⟨IEC\:execution‑task⟩; `EvidenceObservation` → ⟨SOSA\:observation⟩.
+
+8. **Windows & SoD (if relevant).** Spell any **status windows** and any **SoD** you rely on.
+   *Example:* Window: *monthly, business‑hours*; SoD: *Operator* ⟂ *SLO‑Owner*.
+
+9. **Micro‑narrative (5–7 lines).** Walk the reader through the claim using **Context‑prefixed words** and the row/bridges above.
+   *Example (abridged):* “A **task (IEC)** runs the control program. Its **observations (SOSA)** yield availability over the *monthly* window. We compare those to the **SLO (ITIL)** in the same window. Where we refer to **activity (PROV)** we do so via **β₁** (overlap, CL=2). The row ρ is the locus of comparison; the Bridge **β₂** explains why ‘measurement’ in ITIL is broader than ‘observation’ in SOSA.”
+
+**Harness pings (F.15).** *S-Row-Cross*, **S-RoleDesc-SingleCell**, *E-NoSilentEdition*.
+    *Example:* *S‑Row‑Cross*, *S‑RoleDescription‑SingleCell*, *E‑NoSilentEdition*.
+
+> **Memory rule.** If your Canvas cannot fit on a single page (or one slide), the example is teaching the wrong thing.
+
+
+### F.16:6 - Invariants (normative)
+
+1. **Locality of meaning.** Every term in the narrative appears **with its Context** at first mention (*process (BPMN)*, *activity (PROV)*, …).
+2. **At least one row.** The example **MUST** include ≥ 1 **Concept‑Set row** spanning ≥ 2 Contexts.
+3. **Single-cell Role Description.** Every **Role Description** in the example **MUST** point to **one** SenseCell.
+4. **Explicit bridges.** Any Cross‑context step **not explained by the row** **MUST** appear as a **Bridge** with kind, CL, and loss.
+5. **Temporal honesty.** If a Context fixes **design vs run**, the narrative respects it.
+6. **Window discipline.** If comparison depends on time/scale/phase, a **window** is stated rather than minting a new Status type.
+7. **SoD integrity.** If duties are involved, **SoD** is explicit and unbroken.
+8. **Didactic parsimony.** One page, one claim, one row (or a tiny bundle of closely related rows).
+
+
+### F.16:7 - The row panel (how to show it without notation)
+
+Show the row as a **compact two‑to‑five‑column list**:
+
+* **Column header** = Context.
+* **Cell** = `Local‑Sense label` (tech register; optional plain label on next line).
+* **Footline** (one line) = “row reason”—why these cells count as “the same thing **for this claim**.”
+
+*Example visual (linear text):*
+**ITIL 4:** *service‑level‑objective* | **SOSA/SSN:** *observed‑availability* → **Row reason:** *both quantify availability for the same window; units harmonised by KD‑CAL; procedural metadata differs (captured in loss of β₂).*
+
+
+### F.16:8 - Worked micro‑example (didactic)
+
+> **Title.** *Alarms Should Not Satisfy Uptime*
+> **Claim.** An **alarm‑only Execution (IEC)** cannot satisfy the **SLO (ITIL)** because **observation (SOSA)** windows exclude time in “alarm state.”
+
+**Contexts.** IEC 61131‑3 (run), SOSA/SSN (run), ITIL 4 (design).
+**SenseCells.** ⟨IEC\:execution‑task⟩, ⟨SOSA\:observation⟩, ⟨ITIL\:SLO⟩.
+**Row ρ.** { ⟨ITIL\:uptime‑SLO⟩ ↔ ⟨SOSA\:observed‑availability⟩ } — comparable magnitudes in the *calendar‑month* window.
+**Bridge β.** ⟨IEC\:alarm‑state⟩ **narrower‑than** ⟨SOSA\:observation‑qualifier⟩, **CL=2**, *loss:* SOSA does not prescribe plant‑specific alarm semantics.
+**Role-Description hooks.** `AvailabilityStatus` → ⟨ITIL\:SLO⟩; `EvidenceObservation` → ⟨SOSA\:observation⟩.
+**Window.** *Calendar month, business‑hours*, exclusion: *alarm‑state intervals*.
+**Micro‑narrative (4 lines).** A **task (IEC)** runs; when the plant is in **alarm state**, **observations (SOSA)** are flagged and **excluded** from the availability window. We then compare the remaining interval to the **SLO (ITIL)** via row ρ. The Bridge β clarifies why the flag is a **qualifier** in SOSA, not a Status type in ITIL.
+**Harness pings.** *S‑Row‑Cross*, *S‑RoleDescr‑SingleCell*, *S‑Window*, *S‑TemporalHonesty*.
+
+
+### F.16:9 - Relations (with other patterns)
+
+**Builds on:**
+F.1 (Contexts), F.2–F.3 (terms & senses), F.4–F.6 (roles), F.7–F.8 (rows), F.9 (bridges), F.10 (windows), F.14 (SoD), F.15 (harness).
+
+**Constrains:**
+Any example placed in Part C or Part B **must** render its claim through this canvas (or a faithful reduction), so readers can run F.15 mentally.
+
+
+### F.16:10 - Didactic distillation (60‑second script)
+
+> “A good cross‑domain example fits on **one page**. First, name the **claim**. Then show the **Contexts** you’re using. List the **SenseCells** you will actually touch. Draw **one row** that makes them the same **for this claim**. Every Cross‑context nuance you can’t justify in that row becomes a **Bridge** with a **kind**, a **CL**, and a **loss** sentence. Point each **Role Description** to **one** cell. If time/scale matters, state the **window**; if duties matter, state **SoD**. Finish with two or three **harness pings** from F.15. That’s it—no tooling, no long procedures. The reader can now replay your thought and agree (or disagree) at the right place.”
+
+### F.16:11 - Anti‑patterns & remedies
+
+| #         | Anti‑pattern               | Symptom in the page                                            | Why it breaks thinking                                         | Remedy (point to this template & sibling patterns)                        |
+| --------- | -------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **AP‑1**  | **Row‑less tour**          | A list of facts from many Contexts with no **Concept‑Set row**.   | Reader cannot see *what is treated as the same* for the claim. | Include **≥ 1 row ρ** spanning ≥ 2 Contexts (§5‑5, §6‑2).                    |
+| **AP‑2**  | **Stealth bridging**       | Phrases like “basically the same” with no Bridge.              | Imports meaning Cross‑context; hides losses.                      | State a **Bridge β** with **kind, CL, loss** (§5‑6, F.9).                 |
+| **AP-3**  | **Role-Description vagueness**          | A Role/Status named without a SenseCell.                       | Why it breaks thinking                                         | Remedy (point to this template & sibling patterns)                        |
+| **AP‑4**  | **Global words**           | *process, role, service* appear unprefixed.                    | Context‑less words drift mid‑example.                             | Prefix first mention with the **Context** (*process (BPMN)*) (§6‑1, E.10.D1). |
+| **AP‑5**  | **Window‑free comparison** | Numbers/targets compared with no stated window.                | Apples‑to‑oranges across time/scale.                           | Declare a **Window** for the Status (§5‑8, F.10).                         |
+| **AP‑6**  | **SoD leakage**            | Duties named but the same actor implicitly holds both.         | Violates Separation‑of‑Duties intent.                          | State **SoD** and keep duties disjoint (§5‑8, F.14).                      |
+| **AP‑7**  | **Design/run blur**        | A design‑time notion used as if it were a run‑time occurrence. | Category error; wrong Context claims.                             | Mark Context stance and keep claims in‑stance (§5‑3, §6‑5).                  |
+| **AP‑8**  | **Edition haze**           | “BPMN”, “ITIL” without edition/profile.                        | Debates about “what the book says”.                            | Put **name + edition** on each Card (§5‑3).                               |
+| **AP‑9**  | **CL silence**             | Bridge kind given, no CL or loss note.                         | Reader cannot assess translation risk.                          | Add **CL** and **loss** in every Bridge (§5‑6, B.3).                      |
+| **AP‑10** | **Over‑row**               | Ten cells glued into one row “for convenience”.                | Collapses distinct senses; unreadable.                         | Prefer **one tight row**; split into **two rows** if needed (§5‑5, §8).   |
+
+
+### F.16:12 - Extended worked micro‑examples
+
+> Each example fits the **one‑page canvas** (§5) and makes the **row** and **bridges** do the work.
+
+#### F.16:12.1 - Type alignment: OWL class vs FCA concept (design‑time only)
+
+**Title & claim.** *“Two Lenses on *Pump*: OWL class and FCA concept align for catalogue reasoning.”*
+**Unification line.** Kind-CAL (design) + FCA (design).
+**Contexts.** **OWL 2 (profiles)** — classes, `subClassOf` (design). **FCA corpus** — formal concepts, lattice order (design).
+**SenseCells.** ⟨OWL\:class ‘Pump’⟩, ⟨FCA\:formal‑concept ‘Pump’⟩.
+**Row ρ.** { ⟨OWL\:Pump⟩ ↔ ⟨FCA\:Pump⟩ } — *same practical extension in this product catalogue*.
+**Bridge β.** ⟨FCA\:lattice‑order⟩ **overlaps** ⟨OWL\:subclass‑order⟩, **CL=2**, *loss:* FCA intents may include context attributes not modeled in OWL restrictions.
+**Role-Description hooks.** `TypeLabel` → ⟨OWL\:class⟩ (for naming), no runtime **Role Assignment/Enactment**.
+**Micro‑narrative (3 lines).** For catalogue queries, the **instances** covered by OWL class *Pump* match those of the FCA concept created from the same attributes; we treat them as one row. The **orderings** diverge in nuance (β), but not for membership in this example.
+**Harness pings.** *S‑Row‑Cross*, *S‑TemporalHonesty* (design only), *S‑Bridge‑Kind‑CL*.
+
+
+#### F.16:12.2 - Role vs permission: SoD in enactment vs access control
+
+**Title & claim.** *“Behavioral role (BPMN) is disjoint from access role (RBAC); keep duties separate.”*
+**Unification line.** Role Assignmnent and Enactment (design & run) + access/deontics (design).
+**Contexts.** **BPMN 2.0** — participant/lanes (design). **NIST RBAC (2004)** — roles/permissions (design).
+**SenseCells.** ⟨BPMN\:participant⟩, ⟨RBAC\:role⟩.
+**Row ρ.** — *(intentionally none)* — we do **not** treat them as the same.
+**Bridge β.** ⟨BPMN\:participant⟩ **disjoint** ⟨RBAC\:role⟩, **CL=3**, *loss:* none—*different dimensions* (behavioral mask vs permission grouping).
+**Role-Description hooks.** `Operator` → ⟨BPMN\:participant⟩; `AccessRole` → ⟨RBAC\:role⟩. **SoD:** `Operator` ⟂ `AccessRole‑Admin`.
+**Window.** Not applicable.
+**Micro‑narrative (3 lines).** We show SoD by prohibiting the same actor from holding **Operator** and **AccessRole‑Admin**. The disjoint **β** prevents leakage between behavioral masks and permission bundles.
+**Harness pings.** *S‑RoleDescr‑SingleCell*, *S‑SoD*, *S‑Bridge‑Disjoint*.
+
+
+#### F.16:12.3 - Method quartet: from MethodDescription to Work with observations
+
+**Title & claim.** *“Behavioral role (BPMN) is disjoint from access role (RBAC); keep duties separate.”*
+**Unification line.** **Role Assignment & Enactment** (design & run) + access/deontics (design).
+**Contexts.** **SPEM 2.0** (design: Method/MethodDescription), **PROV‑O** (run: Activity), **SOSA/SSN** (run: Observation), **ITIL 4** (design: SLO).
+**SenseCells.** ⟨SPEM\:MethodDescription⟩, ⟨PROV\:activity⟩, ⟨SOSA\:observation⟩, ⟨ITIL\:SLO⟩.
+**Row ρ.** { ⟨ITIL\:SLO\:build‑time⟩ ↔ ⟨SOSA\:observed‑build‑duration⟩ } — *compare promised vs observed duration on the same window*.
+**Bridges.** β₁: ⟨SPEM\:MethodDescription⟩ **narrower‑than** ⟨PROV\:activity‑plan⟩, **CL=2**, *loss:* PROV lacks prescriptive structure; β₂: ⟨SOSA\:observation⟩ **narrower‑than** ⟨ITIL\:measurement⟩, **CL=2**, *loss:* ITIL abstracts from procedure.
+**Role-Description hooks.** `Operator` → ⟨BPMN\:participant⟩; `AccessRole` → ⟨RBAC\:role⟩. **SoD:** `Operator` ⟂ `AccessRole-Admin`.
+**Window.** *Release window: calendar week*.
+**Micro‑narrative (4 lines).** The **MethodDescription (SPEM)** implies a target **build‑time**; **Work (PROV activity)** occurs; **observations (SOSA)** provide actuals; we compare against the **SLO (ITIL)** via row ρ over the *calendar week* window. Bridges β₁–β₂ explain why plan/measure semantics do not collapse.
+**Harness pings.** *S‑Row‑Cross*, *S‑Window*, *S‑RoleDesc‑SingleCell*, *S‑TemporalHonesty*.
+
+
+### F.16:13 - Reasoning primitives (judgement schemas)
+
+> These are **mental checks** you can perform on any example page.
+
+1. **Row validity**
+   `cells(ρ) = {⟨Cᵢ,Sᵢ⟩} with |Contexts(ρ)| ≥ 2 ⊢ validRow(ρ)`
+   *Reading:* A row is valid only if it spans at least two Contexts and all entries are legitimate **SenseCells** (from F.3).
+
+2. **Bridge coverage**
+   `coRef(Ca,Cb) ∧ ¬sameRow(Ca,Cb) ⊢ requires β(Ca↔Cb)`
+   *Reading:* If two Contexts are co‑referenced in the narrative but their senses are not placed in the same row, an explicit **Bridge** is needed.
+
+3. **Role-Description single-cell**
+   `Role Description τ used ⊢ ∃!⟨C,S⟩ : ref(τ)=⟨C,S⟩`
+
+4. **Window sufficiency**
+   `compare(qᵢ@Cᵢ, qⱼ@Cⱼ) ⊢ windowDeclared`
+   *Reading:* Any Cross‑context quantitative comparison calls for a stated **Window**.
+
+5. **Temporal honesty**
+   `C has stance s ∈ {design, run} ⊢ claims@C must respect s`
+   *Reading:* Do not assert run‑facts in a design‑only Context, or vice versa.
+
+6. **SoD integrity**
+   `SoD(D₁ ⟂ D₂) ∧ assign(actor, D₁) ∧ assign(actor, D₂) ⊢ violation`
+   *Reading:* A declared SoD cannot be violated inside the example.
+
+7. **Bridge clarity**
+   `β given ⊢ kind(β) ∧ CL(β) ∧ loss(β)`
+   *Reading:* Every Bridge shows **kind**, **CL**, and a **one‑line loss**.
+
+8. **Edition clarity**
+   `card(C) ⊢ has(name, edition)`
+   *Reading:* Each Context Card specifies name + edition/profile.
+
+9. **Harness ping mapping**
+   `ping ∈ {S‑*, E‑*} ⊢ ping ⇒ subset of judgements above`
+   *Reading:* Each named harness check (F.15) has a clear reading in these judgements.
+
+
+### F.16:14 - Acceptance tests (SCR/RSCR)
+
+#### F.16:14.1 - Static conformance (SCR)
+
+* **SCR‑F16‑S01 (Row present).** The page contains **≥ 1** Concept‑Set row spanning **≥ 2 Contexts**.
+* **SCR‑F16‑S02 (Bridge explicit).** Every Cross‑context assertion not justified by a row is shown as a **Bridge** with **kind, CL, loss**.
+* **SCR-F16-S03 (Role-Description anchoring).** Each **Role Description** appearing in the page references **exactly one SenseCell**.
+* **SCR‑F16‑S04 (Context prefixes).** First mention of each ambiguous term is **Context‑prefixed**.
+* **SCR‑F16‑S05 (Window discipline).** Any numeric comparison across Contexts names a **Window**.
+* **SCR‑F16‑S06 (DesignRunTag).** Claims respect each Context’s **design/run** stance.
+* **SCR‑F16‑S07 (SoD).** If duties are named and SoD is relevant, **SoD is stated** and unviolated.
+* **SCR‑F16‑S08 (One‑page parsimony).** The example fits the **one‑page canvas**; if extended, each sub‑page still respects §6 invariants.
+
+#### F.16:14.2 - Regression (RSCR)
+
+* **RSCR‑F16‑E01 (Edition drift).** When a Context’s edition changes, the example either (a) is unaffected or (b) adds a note adjusting **β** or the **row**; no silent rewrites.
+* **RSCR‑F16‑E02 (Bridge re‑score).** If an upstream **CL** definition changes (B.3), affected Bridges on the page show the new CL and, if needed, an updated **loss** sentence.
+* **RSCR‑F16‑E03 (Row resilience).** If a SenseCell is split in F.3 (sense refinement), the example either keeps the same row using one child sense, or splits into two rows with a short justification.
+* **RSCR‑F16‑E04 (Window clarity).** If organisational cadence changes (e.g., from monthly to weekly), windows on the page are updated explicitly.
+
+
+### F.16:15 - Migration notes (conceptual)
+
+1. **Refactor long tutorials.** Extract the **claim**; pick **3–6 Contexts** (Cards); list the **SenseCells** you actually use; craft **one tight row**; surface any cross‑talk as **Bridges** with loss notes; delete everything else.
+2. **Split crowded rows.** If a row tries to carry more than \~4 cells, split into two rows and write a **one‑line purpose** for each.
+3. **Stabilise vocabulary.** If you find yourself rewriting terms mid‑page, you likely forgot a Context; return to F.1 and add a Card.
+4. **Teach the bridge itch.** Leave “*these are the same*” feelings ungratified until you can articulate **kind, CL, loss** in one sentence.
+5. **DesignRunTag respect.** If a design‑only Context tempts you into runtime talk, move that part of the narrative into a **run‑Context** and Bridge as needed.
+6. **Keep the page living.** When upstream rows/bridges evolve (F.7–F.9), adjust the page *minimally* and call out the change in a margin note (conceptual, not procedural).
+
+
+### F.16:16 - Teaching variants (all obey §6 invariants)
+
+* **Two‑Context equivalence.** Smallest case: 1 row, 2 Contexts, **β (≡, CL=3)** to explain why they’re truly the same *for this claim*.
+* **Triangulation.** 1 row, 3 Contexts; typical for *measurement ↔ service ↔ execution*.
+* **Disjointness lesson.** No row; one **β (disjoint)** plus a short SoD story.
+* **Window primer.** Same sense across Contexts but different default windows; the page is about the **window choice**, not the term.
+
+
+### F.16:17 - Didactic checklist (author’s quick scan)
+
+* One sentence **claim**?
+* **Contexts** (with editions) visible?
+* **SenseCells** named (tech & plain labels acceptable)?
+* **Exactly one** tight **row** (or two, each justified)?
+* All Cross‑context steps shown as **β(kind, CL, loss)**?
+* **Role Description → one SenseCell** each?
+* **Window** present where numbers meet?
+* **SoD** stated where duties appear?
+* Page fits a **single view**?
+
+
+### F.16:18 - Closing distillation (30‑second echo)
+
+> A strong worked example is a **one‑page alignment**: claim → Contexts → cells → **one row** → explicit **bridges** → Role-Description hooks → window/SoD if needed. No tooling, no process charts—just **visible thinking** that any careful reader can replay and critique at the right place.
+
+### F.16:End
+
+

@@ -1,0 +1,16 @@
+{
+  "name": "gcloud_describe_allow",
+  "description": "gcloud projects describe (read-only)",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gcloud projects describe my-proj"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

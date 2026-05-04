@@ -1,0 +1,16 @@
+{
+  "name": "cloud_az_group_delete",
+  "description": "az group delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "az group delete --name prod --yes"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.azure_destructive"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "django_migrate",
+  "description": "manage.py migrate",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "python manage.py migrate"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase"
+  }
+}

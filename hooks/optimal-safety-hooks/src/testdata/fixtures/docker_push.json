@@ -1,0 +1,16 @@
+{
+  "name": "docker_push",
+  "description": "docker push image",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "docker push myreg.io/img:tag"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.docker_destructive"
+  }
+}

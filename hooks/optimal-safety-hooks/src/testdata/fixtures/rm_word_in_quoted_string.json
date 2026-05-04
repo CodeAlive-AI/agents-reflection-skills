@@ -1,0 +1,15 @@
+{
+  "name": "rm_word_in_quoted_string",
+  "description": "rm as English word inside quoted string",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo \"rm -rf is dangerous\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

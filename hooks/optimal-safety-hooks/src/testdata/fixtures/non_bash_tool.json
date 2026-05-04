@@ -1,0 +1,16 @@
+{
+  "name": "non_bash_tool",
+  "description": "non-Bash tool input \u2192 allow",
+  "input": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "command": "rm -rf /etc"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

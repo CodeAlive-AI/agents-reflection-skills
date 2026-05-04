@@ -1,0 +1,16 @@
+{
+  "name": "curl_get_opensearch_allow",
+  "description": "curl GET on opensearch",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "curl https://os.local:9200/_cat/indices"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

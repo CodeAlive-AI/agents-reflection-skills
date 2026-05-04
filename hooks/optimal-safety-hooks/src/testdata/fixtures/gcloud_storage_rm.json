@@ -1,0 +1,15 @@
+{
+  "name": "gcloud_storage_rm",
+  "description": "gcloud storage rm gs://bucket/x",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gcloud storage rm gs://my-bucket/file.txt"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra"
+  }
+}

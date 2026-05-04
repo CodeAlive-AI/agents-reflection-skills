@@ -1,0 +1,16 @@
+{
+  "name": "find_delete_etc",
+  "description": "find /etc -delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "find /etc -name '*.bak' -delete"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

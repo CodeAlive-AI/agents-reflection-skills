@@ -1,0 +1,16 @@
+{
+  "name": "rm_rf_etc",
+  "description": "rm -rf /etc/nginx",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf /etc/nginx"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "rm",
+    "reason_code": "rm.catastrophic"
+  }
+}

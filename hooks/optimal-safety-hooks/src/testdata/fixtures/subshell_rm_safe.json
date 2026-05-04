@@ -1,0 +1,16 @@
+{
+  "name": "subshell_rm_safe",
+  "description": "subshell with rm in safe path",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "(cd /tmp && rm -rf x)"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default",
+    "reason_code": "no_rule_matched"
+  }
+}

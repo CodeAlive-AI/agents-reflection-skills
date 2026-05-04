@@ -1,0 +1,16 @@
+{
+  "name": "malformed_after_trigger",
+  "description": "malformed quote with rm trigger → ask",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "rm -rf 'unclosed/path"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "guard",
+    "reason_code": "guard.parse_error_after_trigger"
+  }
+}

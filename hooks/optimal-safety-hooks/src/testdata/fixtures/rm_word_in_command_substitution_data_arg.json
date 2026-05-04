@@ -1,0 +1,15 @@
+{
+  "name": "rm_word_in_command_substitution_data_arg",
+  "description": "rm in echo arg passed to subshell",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo \"$(date) rm log\""
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "allow",
+    "rule": "default"
+  }
+}

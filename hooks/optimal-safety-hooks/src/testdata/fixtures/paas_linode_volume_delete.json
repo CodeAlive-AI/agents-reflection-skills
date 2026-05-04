@@ -1,0 +1,16 @@
+{
+  "name": "paas_linode_volume_delete",
+  "description": "linode-cli volumes delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "linode-cli volumes delete 67890"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "paas",
+    "reason_code": "paas.linode-cli_destructive"
+  }
+}

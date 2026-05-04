@@ -1,0 +1,16 @@
+{
+  "name": "gcloud_compute_delete",
+  "description": "gcloud compute instances delete",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "gcloud compute instances delete vm-1 --zone=us-central1-a"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "infra",
+    "reason_code": "infra.gcloud_destructive"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "knex_migrate_latest",
+  "description": "knex migrate:latest",
+  "input": {
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "knex migrate:latest"
+    },
+    "cwd": "/Users/test/myproject"
+  },
+  "expect": {
+    "decision": "ask",
+    "rule": "supabase",
+    "reason_code": "supabase.knex_migration"
+  }
+}

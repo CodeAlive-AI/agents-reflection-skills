@@ -1,0 +1,153 @@
+## E.3 - Principle Taxonomy & Precedence Model
+
+### E.3:1 - Problem frame
+Pattern E.2 supplies eleven immutable pillars, yet experience shows that a **flat list of principles invites ambiguity**: reviewers cannot decide which pillar overrules another  and “dead‑letter” rules accumulate. 
+
+### E.3:2 - Problem
+
+When two pillars or derived principles pull in opposite directions, architectural decisions stall—or worse, drift toward the loudest voice. Without an explicit **taxonomy and precedence cascade**, FPF risks devolving into subjective debate, breaking its claim to be a rigorously *auditable* “operating system for thought.”
+
+### E.3:3 - Forces
+| Force                                 | Tension                                                            |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| **Categorical Clarity**               | Coherent grouping ↔ preservation of individual nuance              |
+| **Deterministic Conflict Resolution** | Predictable hierarchy ↔ flexibility for context‑specific overrides |
+| **Evolutionary Stability**            | Durable core ↔ adaptability to new knowledge                       |
+
+### E.3:4 - Solution
+#### E.3:4.1 - **Principle Taxonomy**
+   Every principle is an instance of `U.Principle` assigned **exactly one** class ∈ { `Gov`, `Arch`, `Epist`, `Prag`, `Did` }.
+
+   | Class                                    | Scope & Purpose                           | Example Pillars                                   |   |
+   | ---------------------------------------- | ----------------------------------------- | ------------------------------------------------- | - |
+   | **Gov** (Governance)                     | Change process, community decision‑making | P‑10 Open‑Ended Evolution - P‑11 SoTA             |   |
+   | **Arch** (Architectural)                 | Macro‑structure & invariants              | P‑1 Cognitive Elegance - P‑4 Kernel               |   |
+   | **Epist** (Epistemological and Ontological) | Semantics, evidence, trust                | P‑3 Scalable Formality - P‑8 Consistency          |   |
+   | **Prag** (Pragmatic)                     | Real‑world value & cost/benefit           | P‑7 Pragmatic Utility                             |   |
+   | **Did** (Didactic)                       | Cognition & learnability                  | P‑2 Didactic Primacy - P‑6 Lexical Stratification |   |
+
+   *Epistemological* sub‑concerns (reasoning, falsifiability) reside inside **Onto**, avoiding category sprawl yet keeping semantics and trust in one bucket.
+
+ #### E.3:4.2 - **Precedence Stack**
+
+   | Level | Governing Artefact                    | Overrides        |
+   | ----- | ------------------------------------- | ---------------- |
+   | 0     | **Vision & Mission** (E.1)            | everything       |
+   | 1     | **Eleven Pillars** (E.2)              | all below        |
+   | 2     | **Principles** (this pattern)         | patterns & DRRs  |
+   | 3     | Architectural / Definitional patterns | local rules      |
+   | 4     | Tooling & Pedagogy                    | informative only |
+
+**Within the precedence stack** the default order is:
+`Gov ≫ Arch ≫ Epist ≫ Prag ≫ Did`
+
+ **Graph Rule** — The precedence graph MUST be acyclic; any new edge that would form a cycle is **rejected**.
+ 
+Governance principle vs Architectural principle clash: e.g. Core release schedule (Gov) outranks performance‑tuning (Prag)
+
+### E.3:5 - Conformance Checklist
+
+| ID          | Requirement                                                                                                          | Purpose                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **CC‑PT.1** | Every principle record **MUST** state `class` and may list `precedence_over[]`.                                      | Enables deterministic overrides. |
+| **CC‑PT.2** | Precedence graph **MUST** be acyclic.    | Prevents circular law.           |
+| **CC‑PT.3** | Any DRR introducing/modifying a principle **MUST** include a *Pillar Impact Analysis* and proposed precedence edges impact on each affected Pillar (P‑1… P‑11)| Aligns evolution with Pillars.   |
+
+### E.3:6 - Illustrative Conflict Resolution
+
+1. **The Conflict**  
+   * **P‑1 Cognitive Elegance** (`Arch`) demands an unambiguous term for “part–whole” entities, pushing us toward **Holon**.  
+   * **P‑2 Didactic Primacy** (`Did`) values immediate practitioner familiarity, pushing us to retain **System**.
+
+2. **Risk of Stalemate**  
+   Without a precedence cascade, the discussion would collapse into subjective argument: *“purity beats clarity!”* vs *“clarity beats purity!”*.
+
+3. **Applying the Precedence Model**  
+   * Default order: **Gov ≫ Arch ≫ Epist ≫ Prag ≫ Did**.  
+   * `Arch` outranks `Did`; therefore **P‑1** takes formal precedence over **P‑2**.
+
+4. **Principled Decision**  
+   We adopted **Holon** to satisfy the higher‑priority principle and mitigated the didactic cost by:  
+   * declaring `System ≡ U.System ⊑ U.Holon`,  
+   * providing aliases and an “On‑Ramp” tutorial.
+
+> *The precedence rule did not merely name a winner; it compelled a solution that honoured both principles in proportion to their rank.*
+
+**Precedence (high → low).** Law & Regulation → **E.5 Guard‑Rails** → **B.3 Trust & Assurance** → **E.3 governance decisions** → **E/E‑LOG policies** (editioned) → **BLP (E.2)** → Product Policies → Implementation Tactics.
+
+**Notes.**
+* BLP is a constitutional policy (see E.2 / “BLP”), but **does not supersede** E.5 Guard‑Rails nor B.3 assurance floors; it **does govern** ties among lawful, comparable‑assurance options.
+* Wherever **NQD/E/E‑LOG** promotes illumination telemetry to dominance (via an explicit **CAL** policy; **policy‑id recorded in SCR**), **BLP adopts that lens** rather than overriding it (see E.2 BLP‑6).
+* Any exception to policy **MUST** include a DRR with rationale and expiry.
+* **BLP Override (Waiver).** When a narrower hand‑engineered method is selected over a general/scalable alternative **within declared tolerances** (α = budget, δ = assurance), the DRR **MUST** include:
+  - a **BLP Scale‑Audit** (see E.2 **BLP‑1**) covering compute/data/**freedom‑of‑action** sweeps and slope/uncertainty reporting,
+  - the **tolerances** α/δ and objective vector used (E.2 **BLP‑1e**),
+  - a **Heuristic‑Debt** entry (owner, scope, expiry/review, de‑hardening plan) per E.2 **BLP‑4**,
+  - an **AutonomyProfileId** (see **E.3‑ABL**) and the GateDecision authority (see **Gate‑decision authority map** below).
+**Portfolio‑first parity.** All precedence decisions that compare methods **MUST** use the G.5/G.9 parity harness and **Pareto** dominance; scalarisation across mixed scales/units is **prohibited** (B.3).
+
+**BLP — Bitter‑Lesson Hooks into Precedence**
+1) **Tie‑breaking.** If two lawful options are **within δ** assurance and **within α** budget, prefer the option whose **slope vector Pareto‑dominates** over the audited window; if no dominance, prefer the **more general** method. (E.2 **BLP‑2**.)
+2) **Script‑vs‑Search conflicts.** For conflicts between **procedural scripts** and **general search/learning**, scripts prevail **only** when mandated by E.5 or regulation, or when a DRR records a **BLP‑waiver** with expiry and hazard rationale (E.2 **BLP‑3/6**).
+3) **Publication.** Precedence rulings that reference BLP **MUST** publish editioned policy‑IDs, edition pins, and **Resrc‑CAL** accounts to the SCR (E.2 **BLP‑1d**; G.11).
+
+**ABL — Autonomy‑Budget & Oversight Profiles (GateProfile)**
+This section defines an **extensible family of autonomy oversight profiles** for agentic tool use: each profile specifies (i) a budget envelope, (ii) a Freedom‑of‑Action (FoA) descriptor, and (iii) the required **gate‑decision publication** to authorize execution under that envelope. The familiar labels **L0…L4** are treated here as **profile identifiers** (not a fixed managerial ladder): projects MAY introduce additional profiles or sub‑profiles by minting new profile ids, provided they publish the same fields (budgets, FoA, decision roles, telemetry contracts) and keep profile changes explicit and auditable.
+
+| ProfileId | Name                         | Freedom‑of‑Action (FoA)                  | Explore‑Share (default) | Typical Use                                     | GateDecision authority |
+|---------:|------------------------------|------------------------------------------|-------------------------|-------------------------------------------------|------------------------|
+| **L0** | Scripted Execution           | **Whitelist only**; fixed scripts        | 0                       | Compliance‑critical, deterministic procedures   | Engineer‑of‑Record (EoR) |
+| **L1** | Constrained Sequencing       | Negative constraints; **single‑tool**    | ≤ 0.10                  | Low‑risk automation with bounded novelty        | EoR + Peer Review |
+| **L2** | Supervised Autonomy          | Multi‑tool plans; bounded replanning     | 0.20 (±0.10)            | Ambiguous tasks; moderate budget                | Team Lead + Safety |
+| **L3** | Auditable Autonomy           | Multi‑step, self‑replanning; adaptive    | 0.30 (±0.10)            | Production agents with learning under guard‑rails | Product + Safety + Legal |
+| **L4** | Open‑Ended / Research Mode   | Broad FoA within sandbox & rails         | 0.40–0.50               | Illumination‑first exploration, sandboxes only  | Governance Board (Gov‑CAL) |
+
+**Normative requirements by profile.**
+* **Budgets.** Each profile **MUST** declare ceilings for **time / compute / cost / risk** and a FoA descriptor; units must be explicit (Resrc‑CAL). Budgets are **hard gates** at run‑time (C.Agent‑Tools‑CAL **ATC‑3**).
+* **Profile binding & change visibility.** Every CallPlan **MUST** declare the active profile id. Any profile change is a **GateCrossing** (E.18) and **MUST** be published (DecisionLog entry + pinned policy‑ids), so an auditor can reconstruct which profile governed which Window.
+* **Assurance floors.** **B.3** WLNK minima on **F** and **R** apply at all profiles. Any profile‑specific tightening (e.g., higher required **R_eff** or stricter CL/Φ policies for broader FoA) **MUST** be declared on the profile and pinned by policy‑id. Pre‑deployment **assurance deltas** MUST be recorded for L2+.
+* **Exploration discipline.** `explore_share` MUST be explicit in the **CallPlan** (C.Agent‑Tools‑CAL **ATC‑4**). Deviations from defaults require DRR justification.
+* **Provenance.** L1+ MUST emit a **CallGraph** with Service/Method editions, EmitterPolicyRef, budget deltas, and observation hooks (C.Agent‑Tools‑CAL **ATC‑5/6**).
+* **BLP conformance.** For L2+, selection MUST apply **BLP** (E.2 **BLP‑2**) with **α/δ** tolerances declared in the plan policy. Any admitted heuristic requires a **Heuristic‑Debt** entry (E.2 **BLP‑4**).
+* **Learning/Adaptation.** L3–L4 MAY enable **feedback‑driven adaptation** within E.5 Guard‑Rails and privacy controls; L0–L2 default **off** unless a DRR documents mitigation (E.2 **BLP‑5**).
+* **Human‑in‑the‑Loop (HITL).** HITL obligations are expressed as **gate decisions and pause/resume hooks**, not an implicit “approval ladder”:
+  * **L0–L1:** execution MAY start only after an explicit **GateDecision** authorizing the CallPlan is present in the declared window.
+  * **L2:** sentinels MUST be able to pause execution; resumption requires a new **GateDecision** recorded in the DecisionLog.
+  * **L3:** the profile MUST declare periodic review windows; continued execution across a review boundary requires an explicit **GateDecision**.
+  * **L4:** continuous telemetry review; the default locus is **sandboxed**; leaving the sandbox requires an explicit **GateCrossing** with a published CrossingSurface (E.18 + F.9/A.27).
+
+**Gate‑decision authority map (default signers; who may author GateDecisions).**
+* **L0:** EoR or appointed maintainer.
+* **L1:** EoR **and** peer reviewer (two‑person rule).
+* **L2:** Team Lead **and** Safety representative.
+* **L3:** Product Owner **and** Safety **and** Legal/Privacy.
+* **L4:** **Gov‑CAL Board** (multi‑disciplinary) with documented scope, time‑boxed **trial budget**, and rollback criteria.
+
+**Profile promotion / demotion triggers.**
+* **Promote** a profile when repeated **BLP‑consistent** results show stable assurance within δ and budget adherence within α for ≥ **N_policy** runs (declare **N_policy** in the active profile). Promotion is not implicit: a **GateDecision** **MUST** authorize the profile change and cite the slope evidence (E.2 **BLP‑1c**).
+* **Demote** a profile when: (i) a sentinel breaches risk or budget, (ii) assurance drops below floors, (iii) policy changes, or (iv) a significant **heuristic‑debt** item expires without replacement. Demotion **MUST** be published as a GateCrossing with updated budgets/policies pinned.
+
+### E.3:7 - **Conformance Checklist — E.3 ↔ BLP Interop**
+
+| ID          | Requirement                                                                                                          | Purpose                          |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **CC‑E3.10** | Precedence list includes **BLP** explicitly **below** E/E‑LOG and **above** product tactics; conflicts handled via **BLP‑waiver** discipline. | Makes BLP’s standing auditable. |
+| **CC‑E3.11** | Every DRR that overrides BLP **MUST** include a **Scale‑Audit** (E.2 **BLP‑1**) and a **Heuristic‑Debt** entry (E.2 **BLP‑4**). | Prevents silent heuristic drift. |
+| **CC‑E3.12** | Each agentic plan declares an **AutonomyProfileId** (e.g., L0–L4) with explicit budgets, `explore_share`, and **E/E‑LOG EmitterPolicyRef**. | Aligns autonomy with assurance. |
+| **CC‑E3.13** | L1+ executions emit **CallGraphs** with editioned policy/method ids and budget deltas; L3+ include adaptation status. | Ensures replayability & audit. |
+| **CC‑E3.14** | Profile changes follow **promotion/demotion** triggers and are published as GateCrossings with edition pins in the SCR. | Keeps autonomy under control. |
+
+### E.3:8 - Consequences
+*Positive* — Turns subjective debate into objective, traceable decisions; high‑impact conflicts surface early.
+
+### E.3:9 - Rationale
+The chosen taxonomy mirrors FPF’s layered dependency: **Governance** rules how change occurs; **Architecture** shapes what can exist; **Epistemology** secures meaning and trust; **Pragmatics** and **Didactics** ensure usefulness and learnability. Explicit override edges supply the flexibility experts need, while the default hierarchy keeps day‑to‑day design deterministic—a “living constitution” that remains both human‑intelligible and machine‑enforceable.
+
+### E.3:10 - Relations
+* **Depends on:** `pat:constitutional/vision`, `pat:constitutional/pillars`
+* **Governs:** All subsequent patterns and DRRs; Guard‑Rail patterns reference CC‑PT.\
+
+> *“A taxonomy sorts principles; precedence gives them order—together they convert debate into design.”*
+
+### E.3:End
+
