@@ -57,7 +57,7 @@ When skill/hook/plugin files change:
 3. Create and push tag: `git tag -a vX.Y.Z -m "Version X.Y.Z" && git push origin vX.Y.Z`
 4. Create GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z — Title" --notes "Release notes"`
 
-The bash-guard hook ships its own pre-built binary release with a separate tag (`bash-guard-vX.Y.Z`) — see [hooks/optimal-safety-hooks/](hooks/optimal-safety-hooks/) for that release flow.
+The bash-guard hook ships its own pre-built binary release with a separate tag (`bash-guard-vX.Y.Z`) — see [hooks/balanced-safety-hooks/](hooks/balanced-safety-hooks/) for that release flow.
 
 ## Repository structure
 
@@ -86,7 +86,7 @@ ai-driven-development/
 ## Adding a new hook
 
 1. Create `hooks/<hook-name>/` with the hook implementation, `install.sh`, and `README.md`.
-2. If the hook ships pre-built binaries, add a release flow (see `hooks/optimal-safety-hooks/` as the canonical example: cross-platform Go build via `make build-all`, GitHub release with `SHA256SUMS`, `install-prebuilt.sh` that pins by tag).
+2. If the hook ships pre-built binaries, add a release flow (see `hooks/balanced-safety-hooks/` as the canonical example: cross-platform Go build via `make build-all`, GitHub release with `SHA256SUMS`, `install-prebuilt.sh` that pins by tag).
 3. Update the Hooks section in the root `README.md`.
 4. Bump `version` in both `.claude-plugin/*.json` files.
 5. Commit, tag, release.

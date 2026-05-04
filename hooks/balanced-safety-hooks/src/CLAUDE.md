@@ -4,7 +4,7 @@ This is the Claude Code PreToolUse:Bash safety hook source. Architecture, design
 
 ## Locations
 
-- **Source** (this dir): `<repo>/hooks/optimal-safety-hooks/src/` in the `ai-driven-development` checkout
+- **Source** (this dir): `<repo>/hooks/balanced-safety-hooks/src/` in the `ai-driven-development` checkout
 - **Symlink** (where Claude Code calls it): `~/.claude/hooks/bash-guard/` → source dir
 - **Audit log**: `~/.claude/logs/bash-guard.jsonl` (newest entries last)
 - **Settings entry**: `~/.claude/settings.json` → `hooks.PreToolUse[matcher=Bash]`
@@ -18,7 +18,7 @@ This is the Claude Code PreToolUse:Bash safety hook source. Architecture, design
 ## Edit + rebuild loop
 
 ```bash
-cd <repo>/hooks/optimal-safety-hooks/src
+cd <repo>/hooks/balanced-safety-hooks/src
 # edit any .go file
 make build     # ~50 ms warm; produces bash_guard.bin
 make test      # full suite, ~700 ms

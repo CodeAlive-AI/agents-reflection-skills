@@ -38,7 +38,7 @@ npx skills add CodeAlive-AI/ai-driven-development --skill prompt-engineering
 # Restart Claude Code for changes to take effect
 ```
 
-The Bash safety hook (`bash-guard`) ships separately — see [hooks/optimal-safety-hooks/](hooks/optimal-safety-hooks/) for its install one-liner.
+The Bash safety hook (`bash-guard`) ships separately — see [hooks/balanced-safety-hooks/](hooks/balanced-safety-hooks/) for its install one-liner.
 
 ---
 
@@ -102,7 +102,7 @@ Standalone agent-safety tooling that doesn't fit the skill format — typically 
 
 | Hook | What It Does | Install |
 |------|--------------|---------|
-| [optimal-safety-hooks](hooks/optimal-safety-hooks/) | `bash-guard` — Claude Code `PreToolUse:Bash` safety hook in Go. Real Bash AST parsing via [`mvdan.cc/sh`](https://github.com/mvdan/sh) (heredocs, single-quoted prose, `sudo`/`env`/`xargs`/`bash -c`/`eval`/`ssh`/pipe-to-shell). Catastrophic-path matrix with safe-path carve-outs. **Default rule set uses `ask`, not `deny`** — agents trivially bypass `deny` by rephrasing. Covers `rm`/`unlink`/`shred`, ORM migrations, infra (kubectl/gcloud/helm/docker/terraform/`git push -f`), PaaS CLIs (railway/fly/heroku), DB clients (psql/redis-cli), and cloud control-plane API mutations | `curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh \| sh` |
+| [balanced-safety-hooks](hooks/balanced-safety-hooks/) | `bash-guard` — Claude Code `PreToolUse:Bash` safety hook in Go. Real Bash AST parsing via [`mvdan.cc/sh`](https://github.com/mvdan/sh) (heredocs, single-quoted prose, `sudo`/`env`/`xargs`/`bash -c`/`eval`/`ssh`/pipe-to-shell). Catastrophic-path matrix with safe-path carve-outs. **Default rule set uses `ask`, not `deny`** — agents trivially bypass `deny` by rephrasing. Covers `rm`/`unlink`/`shred`, ORM migrations, infra (kubectl/gcloud/helm/docker/terraform/`git push -f`), PaaS CLIs (railway/fly/heroku), DB clients (psql/redis-cli), and cloud control-plane API mutations | `curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh \| sh` |
 
 ---
 
@@ -144,7 +144,7 @@ ai-driven-development/
 │   ├── ubiquitous-language/
 │   └── windows-qa-engineer/
 ├── hooks/
-│   └── optimal-safety-hooks/    ← bash-guard (Go, pre-built binaries via release)
+│   └── balanced-safety-hooks/    ← bash-guard (Go, pre-built binaries via release)
 ├── README.md (+ ru/zh/pt-BR translations)
 ├── CLAUDE.md
 └── LICENSE

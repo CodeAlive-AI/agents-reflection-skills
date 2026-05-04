@@ -1,4 +1,4 @@
-module github.com/codealive-ai/ai-driven-development/hooks/optimal-safety-hooks
+module github.com/codealive-ai/ai-driven-development/hooks/balanced-safety-hooks
 
 go 1.25.5
 

@@ -2,7 +2,7 @@ src/bash_guard.bin
 src/build.log
 src/trusted-projects.toml
 # Stray default-named binary from `go build ./...` (we always use -o bash_guard.bin)
-src/optimal-safety-hooks
+src/balanced-safety-hooks
 # Cross-compiled release artefacts produced by `make build-all`. Uploaded
 # to GitHub Releases instead of committed.
 src/dist/

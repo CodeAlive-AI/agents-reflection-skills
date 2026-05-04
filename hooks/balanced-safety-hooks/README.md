@@ -1,6 +1,6 @@
-# bash-guard — a Claude Code PreToolUse:Bash safety hook
+# bash-guard — Balanced Bash safety for autonomous coding agents
 
-[![bash-guard — a Claude Code Bash safety hook for autonomous agents](assets/banner.png)](https://github.com/CodeAlive-AI/ai-driven-development)
+[![bash-guard — Balanced Bash safety for autonomous coding agents](assets/banner.png)](https://github.com/CodeAlive-AI/ai-driven-development)
 
 [![GitHub stars](https://img.shields.io/github/stars/CodeAlive-AI/ai-driven-development?style=social)](https://github.com/CodeAlive-AI/ai-driven-development/stargazers)
 
@@ -13,13 +13,13 @@ A small Go program that sits between Claude Code and your shell, parses every Ba
 Downloads the prebuilt binary for your OS/arch (darwin / linux × arm64 / amd64) from the latest GitHub release, verifies the SHA-256 checksum, and patches `~/.claude/settings.json`. Requires `curl` and `jq`.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh
+curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh | sh
 ```
 
 To install in `--shadow` mode (or `--dry-run`, `--uninstall`), forward args through the pipe:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh -s -- --shadow
+curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh | sh -s -- --shadow
 ```
 
 To pin a specific release, set `BASH_GUARD_VERSION=bash-guard-vX.Y.Z` in the environment before running.
@@ -30,7 +30,7 @@ Requires Go ≥ 1.21 and `jq`.
 
 ```bash
 git clone https://github.com/CodeAlive-AI/ai-driven-development.git
-cd ai-driven-development/hooks/optimal-safety-hooks
+cd ai-driven-development/hooks/balanced-safety-hooks
 
 ./install.sh --live       # real enforcement — emits ask for risky commands (the normal mode)
 ./install.sh --shadow     # observe-only: logs every decision, never prompts. For tuning safe paths before going live.

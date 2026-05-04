@@ -5,7 +5,7 @@
 # patches ~/.claude/settings.json with a PreToolUse[matcher=Bash] entry.
 #
 # Pipe-friendly:
-#   curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh | sh
 #
 # With args (note `sh -s --` to forward args through the pipe):
 #   curl -fsSL …install-prebuilt.sh | sh -s -- --shadow

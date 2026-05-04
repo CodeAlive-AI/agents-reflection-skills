@@ -50,10 +50,10 @@ Root causes: brittle parser (shlex breaks on heredocs), trigger keywords matched
 
 ### 3.1 Layout
 
-Source lives in the `ai-driven-development` repo (under `hooks/optimal-safety-hooks/`); deployed via symlink to `~/.claude/hooks/bash-guard/` so edits in git pick up live (build-on-stale wrapper rebuilds on next invocation).
+Source lives in the `ai-driven-development` repo (under `hooks/balanced-safety-hooks/`); deployed via symlink to `~/.claude/hooks/bash-guard/` so edits in git pick up live (build-on-stale wrapper rebuilds on next invocation).
 
 ```
-my-projects/ai-driven-development/hooks/optimal-safety-hooks/
+my-projects/ai-driven-development/hooks/balanced-safety-hooks/
 ├── DESIGN.md                # this file
 ├── README.md                # short user-facing intro
 ├── install.sh               # idempotent installer (symlinks src/ + writes settings.json)
@@ -99,7 +99,7 @@ my-projects/ai-driven-development/hooks/optimal-safety-hooks/
 }
 ```
 
-`~/.claude/hooks/bash-guard/` is a symlink to `ai-driven-development/hooks/optimal-safety-hooks/src/`. Editing a `.go` file requires an explicit rebuild — `make build` from the source dir, or `make watch` (entr-based) during development. The Go binary itself is gitignored.
+`~/.claude/hooks/bash-guard/` is a symlink to `ai-driven-development/hooks/balanced-safety-hooks/src/`. Editing a `.go` file requires an explicit rebuild — `make build` from the source dir, or `make watch` (entr-based) during development. The Go binary itself is gitignored.
 
 **Performance** (measured on M-series macOS):
 - Cold first call (kernel page-cache miss): ~180 ms (one-time after reboot or upgrade).
@@ -588,7 +588,7 @@ Rollback: at any phase, set `BASH_GUARD_SHADOW=1` instantly disables enforcement
 
 ```bash
 # Idempotent installer
-# - symlinks ai-driven-development/hooks/optimal-safety-hooks/src to ~/.claude/hooks/bash-guard
+# - symlinks ai-driven-development/hooks/balanced-safety-hooks/src to ~/.claude/hooks/bash-guard
 # - ensures Go toolchain
 # - first build (warm cache)
 # - patches ~/.claude/settings.json: append bash_guard hook with BASH_GUARD_SHADOW=1
