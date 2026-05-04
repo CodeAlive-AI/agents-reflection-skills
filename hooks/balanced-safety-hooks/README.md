@@ -1,4 +1,4 @@
-# bash-guard — Balanced Bash safety for autonomous coding agents
+# Balanced Bash safety for autonomous coding agents
 
 [![bash-guard — Balanced Bash safety for autonomous coding agents](assets/banner.png)](https://github.com/CodeAlive-AI/ai-driven-development)
 
