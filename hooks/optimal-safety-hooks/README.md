@@ -2,6 +2,47 @@
 
 A small Go program that sits between Claude Code and your shell, parses every Bash command the agent is about to run with a real shell AST, and decides whether to **allow** it or **ask** you. The default rule set uses `ask` rather than `deny` — see [why](#why-we-default-to-ask).
 
+## Install
+
+### Quick install (no Go required)
+
+Downloads the prebuilt binary for your OS/arch (darwin / linux × arm64 / amd64) from the latest GitHub release, verifies the SHA-256 checksum, and patches `~/.claude/settings.json`. Requires `curl` and `jq`.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh
+```
+
+To install in `--shadow` mode (or `--dry-run`, `--uninstall`), forward args through the pipe:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh -s -- --shadow
+```
+
+To pin a specific release, set `BASH_GUARD_VERSION=bash-guard-vX.Y.Z` in the environment before running.
+
+### Build from source
+
+Requires Go ≥ 1.21 and `jq`.
+
+```bash
+git clone https://github.com/CodeAlive-AI/ai-driven-development.git
+cd ai-driven-development/hooks/optimal-safety-hooks
+
+./install.sh --live       # real enforcement — emits ask for risky commands (the normal mode)
+./install.sh --shadow     # observe-only: logs every decision, never prompts. For tuning safe paths before going live.
+./install.sh --dry-run    # same effect as --shadow, with a distinct log label
+./install.sh --uninstall  # remove hook entry + symlink
+```
+
+What `install.sh` does, idempotently:
+
+1. Verifies Go is on `PATH`.
+2. Symlinks `~/.claude/hooks/bash-guard` → this directory's `src/`.
+3. Builds `bash_guard.bin` (warms the Go cache).
+4. Patches `~/.claude/settings.json` with a `PreToolUse[matcher=Bash]` entry pointing at the binary. Existing hooks are preserved; previous `bash-guard` entries are replaced. A timestamped backup is written next to the file.
+
+Switching modes later is the same command — `settings.json` is re-read on every hook fire, so no Claude Code restart is needed.
+
 ## Why this exists
 
 Anyone who has spent a few days with coding agents has watched one go off the rails — deleting the wrong folder, nuking docker images, or dropping a production database along with the surrounding infra (see [what a Cursor agent on Claude Opus 4.6 did to PocketOS](https://neuraltrust.ai/blog/pocketos-railway-agent) — one POST to Railway's `volumeDelete` mutation, the whole prod gone). Hooks are the most important guardrail you can put in front of a coding agent: they bring both determinism and safety to an otherwise non-deterministic loop.
@@ -99,47 +140,6 @@ Claude Code's hook protocol supports three decisions: `allow`, `ask`, `deny`. Th
 `deny` is hostile to the agent's planner without informing the human. `ask` keeps the human in the loop — which is the only durable defence — and gives the agent a clear signal that the destructive intent was recognised. Empirically (and per the consilium review of the design), `ask` reduces both false-negative escapes ("agent worked around the block") and operator fatigue ("why does this keep silently failing?").
 
 If your environment requires hard blocks for specific commands (e.g. compliance constraints, shared infra), nothing in the design prevents you from forking and extending the `Level` enum with a `LevelDeny` tier and emitting it from your own rules. Just be aware of the workaround behaviour above and pair `deny` with platform-side guardrails (scoped tokens, server-side gates) so it isn't your only line of defence.
-
-## Install
-
-### Quick install (no Go required)
-
-Downloads the prebuilt binary for your OS/arch (darwin / linux × arm64 / amd64) from the latest GitHub release, verifies the SHA-256 checksum, and patches `~/.claude/settings.json`. Requires `curl` and `jq`.
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh
-```
-
-To install in `--shadow` mode (or `--dry-run`, `--uninstall`), forward args through the pipe:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/optimal-safety-hooks/install-prebuilt.sh | sh -s -- --shadow
-```
-
-To pin a specific release, set `BASH_GUARD_VERSION=bash-guard-vX.Y.Z` in the environment before running.
-
-### Build from source
-
-Requires Go ≥ 1.21 and `jq`.
-
-```bash
-git clone https://github.com/CodeAlive-AI/ai-driven-development.git
-cd ai-driven-development/hooks/optimal-safety-hooks
-
-./install.sh --live       # real enforcement — emits ask for risky commands (the normal mode)
-./install.sh --shadow     # observe-only: logs every decision, never prompts. For tuning safe paths before going live.
-./install.sh --dry-run    # same effect as --shadow, with a distinct log label
-./install.sh --uninstall  # remove hook entry + symlink
-```
-
-What `install.sh` does, idempotently:
-
-1. Verifies Go is on `PATH`.
-2. Symlinks `~/.claude/hooks/bash-guard` → this directory's `src/`.
-3. Builds `bash_guard.bin` (warms the Go cache).
-4. Patches `~/.claude/settings.json` with a `PreToolUse[matcher=Bash]` entry pointing at the binary. Existing hooks are preserved; previous `bash-guard` entries are replaced. A timestamped backup is written next to the file.
-
-Switching modes later is the same command — `settings.json` is re-read on every hook fire, so no Claude Code restart is needed.
 
 ## Tuning
 
