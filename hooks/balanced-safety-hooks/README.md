@@ -16,12 +16,6 @@ Downloads the prebuilt binary for your OS/arch (darwin / linux × arm64 / amd64)
 curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh | sh
 ```
 
-To install in `--shadow` mode (or `--dry-run`, `--uninstall`), forward args through the pipe:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/hooks/balanced-safety-hooks/install-prebuilt.sh | sh -s -- --shadow
-```
-
 To pin a specific release, set `BASH_GUARD_VERSION=bash-guard-vX.Y.Z` in the environment before running.
 
 ### Build from source
