@@ -1,0 +1,50 @@
+<input kind="{{INPUT_KIND}}" source="{{INPUT_LABEL}}">
+<![CDATA[
+{{INPUT_BODY}}
+]]>
+</input>
+
+<task>
+You are running AFTER a panel of broad reviewers and specialists has already
+been over this code. Your job: identify the **single highest-risk defect class**
+that broad reviewers reliably miss for code shaped like this input, then audit
+exhaustively for that class.
+
+Pick exactly one focus area from the list below — whichever fits the input best:
+
+  - Value-object / equality contracts (Equals, GetHashCode, immutability)
+  - Async / cancellation / continuation semantics
+  - Resource lifecycle (IDisposable, IAsyncDisposable, ownership transfer)
+  - Concurrency (lock targets, shared state, atomicity, ordering)
+  - Layering / dependency direction (DI, abstract dependencies, ports)
+  - Persistence consistency (transaction boundaries, dual-writes)
+  - Error propagation (catch-and-swallow, lost stack traces, retry storms)
+
+Emit one <finding> per distinct defect you find within that focus area. Do not
+emit findings outside it. If your chosen area is clean, pick the second-best
+area and re-audit. If the input is too small to host any of these patterns,
+emit <findings/>.
+
+Begin your output with one HTML comment naming your focus, then the findings:
+
+  <!-- probe focus: <area-name> -->
+  <finding ...>...</finding>
+  ...
+</task>
+
+<schema>
+<finding severity="critical|high|medium|low" category="correctness|performance|architecture|consistency|security" file="{{INPUT_LABEL}}" line-start="N" line-end="N" confidence="0.0..1.0">
+  <title>one-sentence summary</title>
+  <rationale><![CDATA[why; include ONE reason this might be a false positive]]></rationale>
+  <suggested-fix><![CDATA[concrete code or steps]]></suggested-fix>
+  <quoted-code><![CDATA[verbatim source at line-start..line-end]]></quoted-code>
+</finding>
+</schema>
+
+<rules>
+- HALLUCINATION GATE / ACTIONABILITY GATE / FIX-CONSISTENCY GATE — same as the standard specialist prompt.
+- {{CAP_DIRECTIVE}}
+- The <input> is the entire scope. Do not read external files.
+- Keep rationale under 6 sentences.
+- Pick a focus that matches what's actually in the input — don't audit for async hazards in pure-CRUD code.
+</rules>

@@ -58,12 +58,14 @@ CONSILIUM_AGENTS='codex,opencode-go-kimi' scripts/code-review.sh file.py  # env 
 
 ## What it does
 
-Two modes:
+Four modes:
 
-| Mode | When | Entry point |
-|------|------|-------------|
-| **Consensus query** | Open-ended problems (architecture, design, root-cause, brainstorming) — you want multiple independent takes | `scripts/consensus-query.sh` |
-| **Code review** | Focused review of a file or diff — runs 2 fixed specializations (security + correctness), returns XML findings | `scripts/code-review.sh` |
+| Mode | When | Entry point | Cost (12KB file) |
+|------|------|-------------|------------------|
+| **Consensus query** | Open-ended problems (architecture, design, root-cause, brainstorming) — you want multiple independent takes | `scripts/consensus-query.sh` | varies |
+| **Code review** | Focused review — 2 fixed specializations (security + correctness) round-robin, caller adjudicates | `scripts/code-review.sh` | $0.10–0.30 |
+| **Superreview** | Multi-stage h9 — 7 small + 2 frontier passes + LLM judge filtering. Pareto sweet-spot from the bench | `scripts/superreview.sh` | $0.90–1.50 |
+| **Ultrareview** | Multi-stage h3 — 4 broad + 15 specialists + 1 probe + Opus judge with fallback. Highest sev-weighted recall | `scripts/ultrareview.sh` | $1.50–3.00 |
 
 ### Consensus query
 
@@ -92,6 +94,84 @@ Findings come back as XML:
 ```
 
 Every finding's `<quoted-code>` is cross-checked against the real file on disk — mismatches are flagged `quote-valid="false"` so the caller can drop probable hallucinations.
+
+### Multi-stage modes (superreview / ultrareview)
+
+For higher-stakes reviews — code touching money, auth, persistence, or any path you'd otherwise pull two senior engineers off other work for — the skill ships two multi-stage pipelines ported from an internal *ultrareview-bench* (65-issue C# pilot, 9 architectures, severity-weighted scoring). Each one prescribes a fixed agent set and stage layout; configurations were tuned by marginal-uplift analysis against ground truth.
+
+**`scripts/superreview.sh`** — h9-style. 10 LLM calls.
+
+```
+Stage 1: discovery-small (7 parallel)    DeepSeek V4 Flash + Qwen 3.6 Plus matrix
+Stage 2: discovery-frontier (2 parallel) GPT-5.5 xhigh analyst + Opus lateral
+Stage 3: dedup (deterministic union)
+Stage 4: judge — Claude Sonnet (default)
+```
+
+**`scripts/ultrareview.sh`** — h3-style. 21 LLM calls.
+
+```
+Stage 1: broad (4 parallel)         Codex gpt-5.5 + Opus + Gemini-3.1-Pro + DeepSeek V4 Pro
+Stage 2: specialists (15 parallel)  3 small models × 5 roles, uniform cap=10
+Stage 3: probe (1, sequential)      generic gap-probe, model picks focus
+Stage 4: dedup
+Stage 5: judge — Opus (claude-code), fallback opencode-gpt5.5-xhigh on timeout
+```
+
+Both modes filter findings via the LLM judge before printing. Verdicts: **VALID** (kept), **DOWNGRADE** (kept, severity adjusted), **DUPLICATE** (dropped), **FALSE_POSITIVE** (dropped).
+
+```bash
+scripts/superreview.sh path/to/file.cs
+scripts/superreview.sh --xml path/to/file.cs
+scripts/superreview.sh --dry-run path/to/file.cs       # config + plan check, no LLM calls
+scripts/ultrareview.sh path/to/file.cs
+scripts/ultrareview.sh --no-fallback path/to/file.cs   # disable judge fallback (CI)
+```
+
+These modes hardcode their agent IDs. The default `config.json` already defines all of them (most are `enabled=false` — multi-stage ignores `enabled` and looks up by id directly). See [SKILL.md → Multi-Stage Review Modes](SKILL.md#multi-stage-review-modes-superreview--ultrareview) for the full schema.
+
+## Benchmark results
+
+We benchmarked 9 review architectures on a 65-issue C# pilot snippet. Severity weights: low=1, medium=3, high=9, critical=27 (max sev-w score = 191). Two architectures from the bench are now shipped as multi-stage modes:
+
+| Skill mode | Bench preset | Recall | Sev-weighted | Real cost | Notes |
+|------------|---|---:|---:|:---|---|
+| `superreview.sh` | h9 (small + 2 frontier) | **67.7%** | **82.7%** | **$0.90–1.53** | Pareto sweet-spot — 96% of ultrareview's sev-w at 55% the cost |
+| `ultrareview.sh` | h3 (broad-grid + probe) | 72.3% | **86.4%** | $1.47–2.96 | Best sev-w + lowest FP rate (2/52 findings) |
+
+<details>
+<summary>Full bench scoreboard (9 architectures, sorted by severity-weighted recall)</summary>
+
+| # | Preset | Recall | Sev-w | Real cost | Architectural class |
+|---|---|---:|---:|:---|---|
+| h3 | broad-grid + probe (= **ultrareview**) | 72.3% | **86.4%** | $1.47–2.96 | Codex broad + uniform-cap specialist matrix + surgical probe |
+| h7 | adaptive-pipeline | **73.8%** | 85.9% | $1.98–3.59 | classifier-gated specialists + 8 probe templates |
+| h9 | small + 2 frontier (= **superreview**) | 67.7% | 82.7% | $0.90–1.53 | small base + marginal-uplift frontier picks |
+| h1 | Opus full grid | 69.2% | 82.2% | $2.18–4.45 | Opus broad + mixed-cap specialist sweep |
+| h4 | Kimi P2 dual-wrapper | 61.5% | 81.7% | $2.33–4.46 | peer-context cross-pollination |
+| h8 | small-only set-cover | 61.5% | 78.5% | $0.73–1.08 | 0 frontier, 7 small (cost-frontier extreme) |
+| h5 | MiMo hard-partition | 58.5% | 76.4% | $1.40–2.30 | role-partition (no cross-role bleed) |
+| h6 | frontier broad set-cover | 55.4% | 75.4% | $1.51–2.59 | 6 frontier + 3 small specialists |
+| h2 | specialists-only | 60.0% | 73.8% | $1.16–1.67 | no broad pass, 5 specialists from one model |
+
+Total real cost across all 9 presets: **$13.66–$24.63**. Three presets needed Opus-judge rescue (claude-code timed out at 1200s on 200+ findings; rescue via `opencode-gpt5.5-xhigh` ~$0.40–0.50). The Opus-judge fallback shipped in `ultrareview.sh` is the production-hardened version of that rescue.
+
+</details>
+
+### Per-reviewer contribution (averaged across the bench)
+
+Aggregated across all 9 presets, per agent × role (MATCH = judge-confirmed match against ground truth):
+
+| Agent | Best role | Bench appearances | Avg unique GT contributed |
+|-------|-----------|------------------:|--------------------------:|
+| **Claude Opus 4.7** | analyst (45× lateral) | 6 presets | 37 unique GT (analyst mode) |
+| **Codex gpt-5.5 (xhigh)** | analyst + specialist hybrid | 5 presets | up to 47 MATCH per pass |
+| **OC-Go DeepSeek V4 Flash** | **architecture specialist** | 9 presets | 47 unique GT (specialist 4× analyst) |
+| **OC-Go Qwen 3.6 Plus** | analyst | 9 presets | 15 unique GT |
+| **OpenCode Gemini 3.1 Pro** | **lateral** | 7 presets | rare but unique angles (arch/design) |
+| **OC-Go Kimi K2.6** | analyst | 1 preset (evidence-thin) | 2 unique GT |
+
+Default config roles are calibrated from this data: Opus/Codex/Qwen/Kimi/DeepSeek-Flash → `analyst`, Gemini-3.1-Pro → `lateral`. DeepSeek V4 Flash gets specialist passes (architecture/correctness) in `ultrareview.sh` because the bench showed its specialist signal dominates analyst signal 4×.
 
 ## Key features
 
@@ -142,16 +222,28 @@ agents-consilium/
 ├── README.md                        # This file
 ├── config.json                      # Default agent config
 ├── config.example.json              # Fuller template with all backends
+├── prompts/                         # Multi-stage mode prompts (superreview/ultrareview)
+│   ├── broad-analyst.txt            # Rigorous-analyst broad pass
+│   ├── broad-lateral.txt            # Lateral-thinker broad pass
+│   ├── specialist.txt               # Parametric specialist (security/correctness/perf/arch/consistency)
+│   ├── probe-generic.txt            # Generic gap-probe (model picks focus class)
+│   └── judge.txt                    # Production judge (no GT — VALID/DUPLICATE/FP/DOWNGRADE)
 └── scripts/
     ├── consensus-query.sh           # Parallel dispatch across enabled agents
-    ├── code-review.sh               # 2-specialist code review pipeline
+    ├── code-review.sh               # 2-specialist code review pipeline (single-stage)
+    ├── superreview.sh               # h9 multi-stage: 9 discovery + sonnet judge
+    ├── ultrareview.sh               # h3 multi-stage: 20 discovery + opus judge w/ fallback
     ├── code_review_validate.py      # Parses findings, validates quoted-code, renders XML/markdown
     ├── common.sh                    # Shared role prompts, exit codes, helpers
     ├── config.sh                    # JSON config loader (Python-backed)
     ├── codex-query.sh               # Codex CLI backend
     ├── claude-query.sh              # Claude Code headless backend
     ├── opencode-query.sh            # OpenCode backend (Zen + Google direct)
-    └── gemini-query.sh              # Gemini CLI backend
+    ├── gemini-query.sh              # Gemini CLI backend
+    └── lib/                         # Shared building blocks for multi-stage modes
+        ├── discovery-pass.sh        # One LLM discovery pass, tmp-isolated
+        ├── judge-runner.sh          # LLM judge runner (no GT)
+        └── dedup-findings.py        # Union per-pass XML files into one report
 ```
 
 ## License

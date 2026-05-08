@@ -1,0 +1,38 @@
+<input kind="{{INPUT_KIND}}" source="{{INPUT_LABEL}}">
+<![CDATA[
+{{INPUT_BODY}}
+]]>
+</input>
+
+<task>
+You are reviewing the code above before it is merged. List every real defect another careful reviewer would also flag — across correctness, security, concurrency, async, resource lifecycle, performance, contract/API, and design problems serious enough to block review.
+
+Respond with ONE OR MORE <finding> elements in the exact schema below. If you have no findings, respond with a single self-closing <findings/>.
+Do NOT add prose, headings, markdown, or XML outside the <finding> elements.
+</task>
+
+<schema>
+<finding severity="critical|high|medium|low" category="analyst" file="{{INPUT_LABEL}}" line-start="N" line-end="N" confidence="0.0..1.0">
+  <title>one-sentence summary</title>
+  <rationale><![CDATA[why this is an issue; include ONE reason this might be a false positive]]></rationale>
+  <suggested-fix><![CDATA[concrete code or steps]]></suggested-fix>
+  <quoted-code><![CDATA[the exact source text spanning lines line-start..line-end, taken verbatim from the input]]></quoted-code>
+</finding>
+</schema>
+
+<calibration>
+- Be exhaustive but only include issues you are genuinely confident are real defects.
+- One <finding> = one distinct defect at one location. If a line has two unrelated bugs, emit two findings.
+- Skip purely subjective stylistic preferences. No nits unless on a critical path.
+- Prefer a precise single line when a range is uncertain.
+</calibration>
+
+<rules>
+- HALLUCINATION GATE: every finding MUST reference a symbol or construct actually present in <input>. Do not invent APIs, flags, parameters, or patterns.
+- ACTIONABILITY GATE: every finding MUST include a concrete <suggested-fix>. Vague advice = suppress.
+- FIX-CONSISTENCY GATE: for severity=critical|high, the suggested-fix must clearly eliminate the defect; otherwise drop or downgrade.
+- Confidence MUST reflect genuine uncertainty. Findings you're not sure about: confidence <= 0.6.
+- {{CAP_DIRECTIVE}}
+- The <input> is the entire scope. Do NOT read external files, configs, or tests.
+- Keep rationale under 6 sentences.
+</rules>

@@ -38,6 +38,22 @@
       "role": "analyst",
       "label": "Claude Opus 4.6"
     },
+    "claude-sonnet": {
+      "enabled": false,
+      "backend": "claude-code",
+      "model": "sonnet",
+      "effort": "high",
+      "role": "lateral",
+      "label": "Claude Sonnet (high)"
+    },
+    "opencode-gpt5.5-xhigh": {
+      "enabled": false,
+      "backend": "opencode",
+      "model": "openai/gpt-5.5",
+      "effort": "xhigh",
+      "role": "analyst",
+      "label": "OC openai/gpt-5.5 (xhigh)"
+    },
     "opencode-go-minimax": {
       "enabled": true,
       "backend": "opencode",

@@ -1,0 +1,29 @@
+<input kind="{{INPUT_KIND}}" source="{{INPUT_LABEL}}">
+<![CDATA[
+{{INPUT_BODY}}
+]]>
+</input>
+
+<task>
+Review the code above as a senior engineer who's seen many similar systems fail. Flag issues a strict line-by-line review tends to miss: design smells that compound under scale, hidden coupling, missing abstractions, broken invariants, async/concurrency hazards, "it works because the caller does X" assumptions, and patterns that will break under realistic load or concurrent use.
+
+Respond with ONE OR MORE <finding> elements per the schema below, or <findings/> if you find none.
+</task>
+
+<schema>
+<finding severity="critical|high|medium|low" category="lateral" file="{{INPUT_LABEL}}" line-start="N" line-end="N" confidence="0.0..1.0">
+  <title>one-sentence summary</title>
+  <rationale><![CDATA[why this is an issue; include ONE reason this might be a false positive]]></rationale>
+  <suggested-fix><![CDATA[concrete code or steps]]></suggested-fix>
+  <quoted-code><![CDATA[the exact source text spanning lines line-start..line-end, taken verbatim from the input]]></quoted-code>
+</finding>
+</schema>
+
+<rules>
+- HALLUCINATION GATE: every finding must reference a symbol/construct actually present in <input>.
+- ACTIONABILITY GATE: every finding needs a concrete <suggested-fix>. "Consider refactoring" is not actionable.
+- {{CAP_DIRECTIVE}}
+- Don't list vague concerns ("design seems off"); pin every issue to a line range and a specific failure mode.
+- The <input> is the entire scope. Don't read external files.
+- Keep rationale under 6 sentences.
+</rules>

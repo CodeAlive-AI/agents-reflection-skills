@@ -28,6 +28,7 @@ The skill keeps each agent independent (no debate, no cross-contamination) and l
 - [Scripts](#scripts)
   - [Flags & Exit Codes](#flags--exit-codes)
 - [Code Review Mode](#code-review-mode)
+- [Multi-Stage Review Modes: superreview & ultrareview](#multi-stage-review-modes-superreview--ultrareview)
 - [When to Use Which](#when-to-use-which)
 - [Synthesizing Responses](#synthesizing-responses)
 - [Prompt Patterns](#prompt-patterns)
@@ -372,6 +373,126 @@ You are the adjudicator. Specialists emit independent findings — your job is t
 - **Open-ended architecture questions** → use `consensus-query.sh`; specialists will be too narrow.
 - **Huge files (>1000 lines)** → split into function-sized diffs first; LLMs degrade past that length.
 - **Multi-file cross-references** → not modelled here; rerun per file and stitch findings.
+
+## Multi-Stage Review Modes: superreview & ultrareview
+
+`code-review.sh` is single-stage and caller-judged. For higher-stakes reviews
+where you want the union of many panels filtered automatically by an LLM judge,
+the skill ships two multi-stage pipelines ported from the *ultrareview-bench*
+(see `docs/blog/code-review-2pass-pilot/` if you have access). Each one
+prescribes a fixed agent set and stage layout — they're not configurable
+per-call, by design, because the configurations were tuned by marginal-uplift
+analysis on a 65-issue ground-truth pilot.
+
+> **Important:** these are heavy modes. Don't run them on every diff. Use them
+> when you'd otherwise pull two senior engineers off other work for a deep
+> review, or for code that touches money / auth / persistence.
+
+### `scripts/superreview.sh` — h9-style
+
+10 LLM calls; ~$0.90–1.50 on a 12KB file (linear with size). Pareto sweet-spot
+in the bench at 67.7% recall / 82.7% sev-w on snippet1.cs.
+
+```
+Stage 1: discovery-small (parallel)    7 small/cheap passes
+  - opencode-go-deepseek-flash analyst       uncapped
+  - opencode-go-qwen36-plus    analyst       uncapped
+  - opencode-go-qwen36-plus    lateral       uncapped
+  - opencode-go-deepseek-flash architecture  uncapped
+  - opencode-go-deepseek-flash correctness   cap=10
+  - opencode-go-qwen36-plus    architecture  cap=3
+  - opencode-go-qwen36-plus    security      uncapped
+Stage 2: discovery-frontier (parallel) 2 hand-picked add-ons
+  - opencode-gpt5.5-xhigh      analyst       uncapped
+  - claude-code (Opus 4.7 max) lateral       uncapped
+Stage 3: dedup (deterministic union)
+Stage 4: judge — claude-sonnet (default)
+```
+
+Usage:
+```bash
+scripts/superreview.sh path/to/file.cs
+scripts/superreview.sh --xml path/to/file.cs
+git diff HEAD | scripts/superreview.sh --diff
+scripts/superreview.sh --dry-run path/to/file.cs   # plan + config check, no LLM calls
+scripts/superreview.sh --judge claude-code path/to/file.cs   # override judge
+```
+
+### `scripts/ultrareview.sh` — h3-style
+
+21 LLM calls; ~$1.50–3.00 on a 12KB file. Best severity-weighted recall in the
+bench (86.4%). Slower and more expensive than superreview; use when you need
+maximum coverage and lowest false-positive rate.
+
+```
+Stage 1: broad (parallel)         4 frontier analysts
+  - codex (gpt-5.5 high)         analyst      uncapped
+  - claude-code (Opus 4.7 max)   analyst      uncapped
+  - opencode (gemini-3.1-pro)    lateral      uncapped
+  - opencode-go-deepseek (Pro)   analyst      uncapped
+Stage 2: specialists (parallel)   5×3 matrix, uniform cap=10
+  - 3 small models × 5 roles (security/correctness/performance/architecture/consistency)
+Stage 3: probe (sequential)       1 generic gap probe (model picks focus)
+  - opencode-go-deepseek-flash auditor cap=10
+Stage 4: dedup
+Stage 5: judge — claude-code (Opus 4.7 max)
+                fallback: opencode-gpt5.5-xhigh on primary failure
+```
+
+Usage:
+```bash
+scripts/ultrareview.sh path/to/file.cs
+scripts/ultrareview.sh --xml path/to/file.cs
+scripts/ultrareview.sh --dry-run path/to/file.cs       # plan check
+scripts/ultrareview.sh --no-fallback path/to/file.cs   # disable judge fallback
+```
+
+The Opus-judge fallback is intentional — Claude Code's `claude -p` backend
+timed out at 1200s on 200+ findings during the bench. Setting `--no-fallback`
+lets you treat a primary judge failure as fatal (useful in CI).
+
+### Output filtering
+
+Both modes filter findings via the LLM judge before printing. Verdicts are:
+
+- **VALID** — kept as-is.
+- **DOWNGRADE** — kept, severity adjusted to `new_severity` from the judge.
+- **DUPLICATE** — dropped (judge marks the canonical finding it duplicates).
+- **FALSE_POSITIVE** — dropped (hallucination, vague advice, fix doesn't fit
+  the defect, etc.).
+
+The default markdown output groups kept findings by severity. The `--xml`
+form preserves the full `<code-review-report>` schema and adds a
+`<judge-summary>` element with verdict counts.
+
+### Required `config.json` entries
+
+These modes hardcode their agent IDs. The default `config.json` already has
+all of them defined (most are `enabled=false`, which is fine — multi-stage
+modes ignore `enabled` and look up the entry by id directly):
+
+| ID | Where used |
+|---|---|
+| `codex` | ultrareview broad |
+| `opencode` | ultrareview broad |
+| `claude-code` | both, plus ultrareview judge |
+| `claude-sonnet` | superreview judge |
+| `opencode-go-deepseek` | ultrareview broad |
+| `opencode-go-deepseek-flash` | both, specialist + probe |
+| `opencode-go-qwen36-plus` | both |
+| `opencode-gpt5.5-xhigh` | superreview frontier add-on, ultrareview judge fallback |
+| `opencode-gemini-3-flash` | ultrareview specialist |
+
+If any are missing the script exits 4 with the list of missing IDs.
+
+### When NOT to use multi-stage modes
+
+- **Quick diff review** → use `code-review.sh`. Multi-stage adds 5-10× cost.
+- **Code under 50 lines** → judge has nothing to do; use `code-review.sh`.
+- **CI without a judge LLM** → use `--xml` from `code-review.sh` and parse
+  findings yourself.
+- **Files >2000 lines** → split first; even with the judge, the union XML
+  becomes hard to score reliably.
 
 ## When to Use Which
 
