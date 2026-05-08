@@ -1,0 +1,6 @@
+interface:
+  display_name: "Repository History Investigator"
+  short_description: "Find GitHub PR, blame, review-comment, and anomaly-aware provenance before risky code edits."
+  default_prompt: "Use the investigating-repository-history skill to inspect code provenance and produce a cited history note before changing risky code."
+policy:
+  allow_implicit_invocation: true

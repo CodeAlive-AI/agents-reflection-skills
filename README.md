@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Agent_Skills-Collection-blueviolet?style=for-the-badge" alt="Agent Skills Collection">
-  <img src="https://img.shields.io/badge/Skills-18-blue?style=for-the-badge" alt="18 Skills">
+  <img src="https://img.shields.io/badge/Skills-19-blue?style=for-the-badge" alt="19 Skills">
   <img src="https://img.shields.io/badge/Hooks-1-yellow?style=for-the-badge" alt="1 Hook">
   <img src="https://img.shields.io/badge/Agents-12+-orange?style=for-the-badge" alt="12+ Agents">
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  An umbrella collection of 18 skills + 1 hook that work across <strong>Claude Code, Codex CLI, OpenCode, Cursor, Gemini CLI, Antigravity</strong>, and any other agent that supports the <a href="https://agentskills.io">Agent Skills</a> standard.
+  An umbrella collection of 19 skills + 1 hook that work across <strong>Claude Code, Codex CLI, OpenCode, Cursor, Gemini CLI, Antigravity</strong>, and any other agent that supports the <a href="https://agentskills.io">Agent Skills</a> standard.
 </p>
 
 ---
@@ -23,7 +23,7 @@
 **Via Skills CLI** (recommended — works in 12+ agents):
 
 ```bash
-# Install all 18 skills
+# Install all 19 skills
 npx skills add CodeAlive-AI/ai-driven-development
 
 # Or pick a single skill
@@ -58,7 +58,7 @@ Meta-skills that let AI coding agents configure themselves. No more editing conf
 | [plugins-management](skills/plugins-management/) | Package and publish plugins for Claude Code and OpenCode (validate, scaffold, submit to Anthropic's directory) |
 | [optimizing-claude-code](skills/optimizing-claude-code/) | Audit repos and optimise CLAUDE.md for agent work |
 
-### Engineering practices (3)
+### Engineering practices (4)
 
 Disciplined approaches that improve how agents and humans collaborate on code.
 
@@ -67,6 +67,7 @@ Disciplined approaches that improve how agents and humans collaborate on code.
 | [prompt-engineering](skills/prompt-engineering/) | Universal prompt-engineering toolkit. 14 reference docs covering Claude / GPT / Gemini family-specific guidance, prompting techniques, evaluation & red-teaming, common failure modes (hallucinations, security, structure, debt) |
 | [fpf-problem-solving](skills/fpf-problem-solving/) | First Principles Framework — a transdisciplinary "operating system for thought". Decompose cross-domain problems, audit conclusions, and reason rigorously about complex systems. Based on Anatoly Levenchuk's [FPF](https://github.com/ailev/FPF) |
 | [bug-fix-protocol](skills/bug-fix-protocol/) | 8-step bug-fix protocol. Treats every production bug as **two** failures (the code defect + the testing system that allowed it through) and enforces a step-8 audit that closes the gap |
+| [investigating-repository-history](skills/investigating-repository-history/) | Reconstruct historical intent before risky edits. Local `git blame`/`log` + GitHub PR/review evidence (via `gh`, never direct API), with squash/rebase/cherry-pick/rename/revert anomaly handling, decision-atom extraction, and confidence-scored output — produces a cited history note instead of guessing |
 
 ### Research & docs (3)
 
@@ -131,6 +132,7 @@ ai-driven-development/
 │   ├── fetch-url-as-markdown/
 │   ├── fpf-problem-solving/
 │   ├── hooks-management/
+│   ├── investigating-repository-history/
 │   ├── maintaining-macos-health/
 │   ├── mcp-management/
 │   ├── optimizing-claude-code/
