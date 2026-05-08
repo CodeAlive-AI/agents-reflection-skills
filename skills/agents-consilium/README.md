@@ -1,6 +1,6 @@
 # agents-consilium
 
-Multi-agent orchestration skill. Dispatches a query to **Codex (GPT-5.4)**, **Claude Code (Opus)**, **OpenCode (Gemini 3.1 Pro via Zen or Google direct)**, and **Gemini CLI** in parallel, each with a distinct thinking role, then hands the raw responses back to the caller as markdown or XML.
+Multi-agent orchestration skill. Dispatches a query to **Codex**, **Claude Code**, **OpenCode** (Gemini via Zen or Google direct), and **Gemini CLI** in parallel, each with a distinct thinking role, then hands the raw responses back to the caller as markdown or XML.
 
 ## Why this skill
 
@@ -28,7 +28,7 @@ At least one backend CLI must be installed and authenticated:
 | [Claude Code](https://docs.claude.com/claude-code) | See site | `claude /login` |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm i -g @google/gemini-cli` | `GEMINI_API_KEY` |
 
-Default config enables **codex** + **opencode** (Zen / Gemini 3.1 Pro) + five **OpenCode Go** models (`MiniMax M2.7`, `DeepSeek V4 Pro`, `MiMo V2.5 Pro`, `Kimi K2.6`, `GLM-5.1`). Each model uses the highest reasoning tier its provider exposes — `effort: max` for `DeepSeek V4 Pro` (and for `claude-code`/Opus when enabled), `effort: high` everywhere else (the rest top out at `high` or expose no variants). See [SKILL.md → Discovering OpenCode reasoning variants](SKILL.md#discovering-opencode-reasoning-variants-per-model) for how to enumerate variants per model. `gemini-cli` and `claude-code` are disabled by default — flip `enabled: true` in `config.json` to add them, or disable any OC-Go entry to trim parallelism.
+Default config enables **codex** + **opencode** (Zen / Gemini Pro) + five **OpenCode Go** models (MiniMax, DeepSeek Pro, MiMo, Kimi, GLM). Each model uses the highest reasoning tier its provider exposes — `effort: max` for DeepSeek Pro (and for Claude Code Opus when enabled), `effort: high` everywhere else (the rest top out at `high` or expose no variants). See [SKILL.md → Discovering OpenCode reasoning variants](SKILL.md#discovering-opencode-reasoning-variants-per-model) for how to enumerate variants per model. `gemini-cli` and `claude-code` are disabled by default — flip `enabled: true` in `config.json` to add them, or disable any OC-Go entry to trim parallelism. The exact model id and reasoning tier used for each entry live in `config.json` so they can be bumped without touching this README.
 
 Multiple agents can share one backend (e.g. five OpenCode-Go models all use `backend: "opencode"`). Per-agent config is selected by the entry's id; the dispatcher passes it through `CONSILIUM_AGENT_ID`.
 
@@ -44,8 +44,9 @@ scripts/consensus-query.sh "Should we use Postgres or SQLite for this CLI tool?"
 # 3. Agent-friendly output (stable XML, CDATA-escaped).
 scripts/consensus-query.sh --xml "Review this function" < src/auth.py
 
-# 4. Code review mode (2 specialists, quoted-code validated).
-scripts/code-review.sh path/to/file.py
+# 4. Code review mode (basic = 2 specialists; opt-in 5-specialist deep mode).
+scripts/code-review.sh path/to/file.py                       # basic: security + correctness
+scripts/code-review.sh --mode specialists path/to/file.py    # +performance, architecture, consistency
 git diff HEAD | scripts/code-review.sh --xml --diff
 
 # 5. Ad-hoc agent selection (no config edit). Repeatable; globs supported.
@@ -63,7 +64,7 @@ Four modes:
 | Mode | When | Entry point | Cost (12KB file) |
 |------|------|-------------|------------------|
 | **Consensus query** | Open-ended problems (architecture, design, root-cause, brainstorming) — you want multiple independent takes | `scripts/consensus-query.sh` | varies |
-| **Code review** | Focused review — 2 fixed specializations (security + correctness) round-robin, caller adjudicates | `scripts/code-review.sh` | $0.10–0.30 |
+| **Code review** | Focused review — `--mode basic` (2 specialists: security + correctness) or `--mode specialists` (adds performance + architecture + consistency = 5). Round-robin across enabled agents; caller adjudicates | `scripts/code-review.sh` | basic $0.10–0.30 · specialists $0.30–0.80 |
 | **Superreview** | Multi-stage h9 — 7 small + 2 frontier passes + LLM judge filtering. Pareto sweet-spot from the bench | `scripts/superreview.sh` | $0.90–1.50 |
 | **Ultrareview** | Multi-stage h3 — 4 broad + 15 specialists + 1 probe + Opus judge with fallback. Highest sev-weighted recall | `scripts/ultrareview.sh` | $1.50–3.00 |
 
@@ -72,13 +73,18 @@ Four modes:
 Each agent is assigned a `role` in config:
 
 - **analyst** — Rigorous Analyst (precision, edge cases, implementation depth). Default: Codex, Claude Opus.
-- **lateral** — Lateral Thinker (cross-domain patterns, questioning premises, creative alternatives). Default: OpenCode (Gemini 3.1 Pro), Gemini CLI.
+- **lateral** — Lateral Thinker (cross-domain patterns, questioning premises, creative alternatives). Default: OpenCode (Gemini Pro), Gemini CLI.
 
 Agents respond with a shared structure (Assessment / Key Findings / Blind Spots / Alternatives / Recommendation + confidence) so the caller can compare section by section.
 
 ### Code review
 
-Runs **exactly two specialist passes** — `security` and `correctness` — in parallel across whichever agents are enabled (round-robin; adding a 3rd agent does not add a 3rd pass, cost stays fixed).
+Two modes:
+
+- **`--mode basic`** (default) — 2 fixed specializations: `security` + `correctness`. Empirically the highest-precision pair; readability/perf agents tend to spam nits and drag precision down.
+- **`--mode specialists`** — 5 specializations: + `performance`, `architecture`, `consistency`. ~2.5× the cost; use it for high-stakes diffs (auth, money, persistence), not every PR.
+
+Both modes run their N specialists in parallel across whichever agents are enabled (round-robin; adding a 3rd/4th enabled agent does not add a 3rd/4th pass — cost stays fixed at N specializations regardless of agent count).
 
 Findings come back as XML:
 
