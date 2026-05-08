@@ -388,7 +388,7 @@ analysis on a 65-issue ground-truth pilot.
 > when you'd otherwise pull two senior engineers off other work for a deep
 > review, or for code that touches money / auth / persistence.
 
-### `scripts/superreview.sh` — h9-style
+### `scripts/superreview.sh` — small-swarm + 2 frontier add-ons
 
 10 LLM calls; ~$0.90–1.50 on a 12KB file (linear with size). Pareto sweet-spot
 in the bench at 67.7% recall / 82.7% sev-w on snippet1.cs.
@@ -418,7 +418,7 @@ scripts/superreview.sh --dry-run path/to/file.cs   # plan + config check, no LLM
 scripts/superreview.sh --judge claude-code path/to/file.cs   # override judge
 ```
 
-### `scripts/ultrareview.sh` — h3-style
+### `scripts/ultrareview.sh` — broad-grid + specialists + probe
 
 21 LLM calls; ~$1.50–3.00 on a 12KB file. Best severity-weighted recall in the
 bench (86.4%). Slower and more expensive than superreview; use when you need

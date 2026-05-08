@@ -65,8 +65,8 @@ Four modes:
 |------|------|-------------|------------------|
 | **Consensus query** | Open-ended problems (architecture, design, root-cause, brainstorming) — you want multiple independent takes | `scripts/consensus-query.sh` | varies |
 | **Code review** | Focused review — `--mode basic` (2 specialists: security + correctness) or `--mode specialists` (adds performance + architecture + consistency = 5). Round-robin across enabled agents; caller adjudicates | `scripts/code-review.sh` | basic $0.10–0.30 · specialists $0.30–0.80 |
-| **Superreview** | Multi-stage h9 — 7 small + 2 frontier passes + LLM judge filtering. Pareto sweet-spot from the bench | `scripts/superreview.sh` | $0.90–1.50 |
-| **Ultrareview** | Multi-stage h3 — 4 broad + 15 specialists + 1 probe + Opus judge with fallback. Highest sev-weighted recall | `scripts/ultrareview.sh` | $1.50–3.00 |
+| **Superreview** | Multi-stage — 7 small-model passes + 2 hand-picked frontier add-ons + LLM judge filtering. Pareto sweet-spot from the bench | `scripts/superreview.sh` | $0.90–1.50 |
+| **Ultrareview** | Multi-stage — 4 frontier broad passes + 15 specialists matrix + 1 probe + Opus judge with fallback. Highest severity-weighted recall in the bench | `scripts/ultrareview.sh` | $1.50–3.00 |
 
 ### Consensus query
 
@@ -105,24 +105,36 @@ Every finding's `<quoted-code>` is cross-checked against the real file on disk �
 
 For higher-stakes reviews — code touching money, auth, persistence, or any path you'd otherwise pull two senior engineers off other work for — the skill ships two multi-stage pipelines ported from an internal *ultrareview-bench* (65-issue C# pilot, 9 architectures, severity-weighted scoring). Each one prescribes a fixed agent set and stage layout; configurations were tuned by marginal-uplift analysis against ground truth.
 
-**`scripts/superreview.sh`** — h9-style. 10 LLM calls.
+**`scripts/superreview.sh`** — small-swarm + 2 frontier add-ons. 10 LLM calls. Pareto sweet-spot — chosen by marginal-uplift analysis (the small-model base alone closed all `high`-severity issues; the 2 frontier picks were selected to add the medium-severity gaps cheapest).
 
 ```
-Stage 1: discovery-small (7 parallel)    DeepSeek V4 Flash + Qwen 3.6 Plus matrix
-Stage 2: discovery-frontier (2 parallel) GPT-5.5 xhigh analyst + Opus lateral
+Stage 1: discovery-small (7 parallel)    Two cheap models in a 7-pass matrix
+                                         (analyst + lateral + 4 specialists)
+Stage 2: discovery-frontier (2 parallel) Frontier analyst + frontier lateral,
+                                         hand-picked to maximise marginal recall
 Stage 3: dedup (deterministic union)
-Stage 4: judge — Claude Sonnet (default)
+Stage 4: judge                           Sonnet-class model (default)
 ```
 
-**`scripts/ultrareview.sh`** — h3-style. 21 LLM calls.
+**`scripts/ultrareview.sh`** — broad-grid + specialists + probe. 21 LLM calls. Highest severity-weighted recall in the bench, lowest false-positive rate (heavier judge does the filtering).
 
 ```
-Stage 1: broad (4 parallel)         Codex gpt-5.5 + Opus + Gemini-3.1-Pro + DeepSeek V4 Pro
-Stage 2: specialists (15 parallel)  3 small models × 5 roles, uniform cap=10
-Stage 3: probe (1, sequential)      generic gap-probe, model picks focus
+Stage 1: broad (4 parallel)         4 frontier analysts of different families
+                                    (analyst-roled + one lateral)
+Stage 2: specialists (15 parallel)  3 small models × 5 roles
+                                    (security/correctness/performance/architecture/consistency),
+                                    uniform cap=10 each
+Stage 3: probe (1, sequential)      Generic gap-probe — model picks the
+                                    highest-risk defect class for THIS input
 Stage 4: dedup
-Stage 5: judge — Opus (claude-code), fallback opencode-gpt5.5-xhigh on timeout
+Stage 5: judge                      Opus-class judge, with a fallback to a
+                                    second model if the primary times out
+                                    (the bench saw Opus judges drop on
+                                    200+ findings; the fallback is the
+                                    production-hardened rescue path)
 ```
+
+The exact model bound to each slot lives in `config.json` and the script's hardcoded agent set — see `--dry-run` or [SKILL.md → Multi-Stage Review Modes](SKILL.md#multi-stage-review-modes-superreview--ultrareview) for the current binding.
 
 Both modes filter findings via the LLM judge before printing. Verdicts: **VALID** (kept), **DOWNGRADE** (kept, severity adjusted), **DUPLICATE** (dropped), **FALSE_POSITIVE** (dropped).
 
@@ -140,25 +152,27 @@ These modes hardcode their agent IDs. The default `config.json` already defines 
 
 We benchmarked 9 review architectures on a 65-issue C# pilot snippet. Severity weights: low=1, medium=3, high=9, critical=27 (max sev-w score = 191). Two architectures from the bench are now shipped as multi-stage modes:
 
-| Skill mode | Bench preset | Recall | Sev-weighted | Real cost | Notes |
+| Skill mode | Architecture | Recall | Sev-weighted | Real cost | Notes |
 |------------|---|---:|---:|:---|---|
-| `superreview.sh` | h9 (small + 2 frontier) | **67.7%** | **82.7%** | **$0.90–1.53** | Pareto sweet-spot — 96% of ultrareview's sev-w at 55% the cost |
-| `ultrareview.sh` | h3 (broad-grid + probe) | 72.3% | **86.4%** | $1.47–2.96 | Best sev-w + lowest FP rate (2/52 findings) |
+| `superreview.sh` | small-swarm + 2 frontier add-ons | **67.7%** | **82.7%** | **$0.90–1.53** | Pareto sweet-spot — 96% of ultrareview's sev-w at 55% the cost |
+| `ultrareview.sh` | broad-grid + specialists + probe | 72.3% | **86.4%** | $1.47–2.96 | Best sev-w + lowest FP rate (2/52 findings) |
 
 <details>
 <summary>Full bench scoreboard (9 architectures, sorted by severity-weighted recall)</summary>
 
-| # | Preset | Recall | Sev-w | Real cost | Architectural class |
-|---|---|---:|---:|:---|---|
-| h3 | broad-grid + probe (= **ultrareview**) | 72.3% | **86.4%** | $1.47–2.96 | Codex broad + uniform-cap specialist matrix + surgical probe |
-| h7 | adaptive-pipeline | **73.8%** | 85.9% | $1.98–3.59 | classifier-gated specialists + 8 probe templates |
-| h9 | small + 2 frontier (= **superreview**) | 67.7% | 82.7% | $0.90–1.53 | small base + marginal-uplift frontier picks |
-| h1 | Opus full grid | 69.2% | 82.2% | $2.18–4.45 | Opus broad + mixed-cap specialist sweep |
-| h4 | Kimi P2 dual-wrapper | 61.5% | 81.7% | $2.33–4.46 | peer-context cross-pollination |
-| h8 | small-only set-cover | 61.5% | 78.5% | $0.73–1.08 | 0 frontier, 7 small (cost-frontier extreme) |
-| h5 | MiMo hard-partition | 58.5% | 76.4% | $1.40–2.30 | role-partition (no cross-role bleed) |
-| h6 | frontier broad set-cover | 55.4% | 75.4% | $1.51–2.59 | 6 frontier + 3 small specialists |
-| h2 | specialists-only | 60.0% | 73.8% | $1.16–1.67 | no broad pass, 5 specialists from one model |
+The `ID` column is an internal scoreboard handle (preset name in the harness) — kept here for reproducibility, not meaningful by itself.
+
+| ID | Architecture | Recall | Sev-w | Real cost | Notes |
+|----|---|---:|---:|:---|---|
+| h3 | broad-grid + specialists + probe (= **ultrareview**) | 72.3% | **86.4%** | $1.47–2.96 | best sev-w + lowest FP |
+| h7 | classifier-gated adaptive pipeline | **73.8%** | 85.9% | $1.98–3.59 | highest absolute recall, expensive, not shipped |
+| h9 | small-swarm + 2 frontier add-ons (= **superreview**) | 67.7% | 82.7% | $0.90–1.53 | Pareto sweet-spot |
+| h1 | frontier-broad + mixed-cap specialist sweep | 69.2% | 82.2% | $2.18–4.45 | dominated by h3 on every axis |
+| h4 | peer-context cross-pollination (P2) | 61.5% | 81.7% | $2.33–4.46 | P2 mechanism didn't pay off |
+| h8 | small-only set-cover (no frontier) | 61.5% | 78.5% | $0.73–1.08 | cheapest, but recall capped at 61% |
+| h5 | role-partition (no cross-role bleed) | 58.5% | 76.4% | $1.40–2.30 | partition cost real signal |
+| h6 | frontier-broad set-cover | 55.4% | 75.4% | $1.51–2.59 | 6 frontier + 3 specialists, overfit |
+| h2 | specialists-only (no broad pass) | 60.0% | 73.8% | $1.16–1.67 | narrow findings, no broad context |
 
 Total real cost across all 9 presets: **$13.66–$24.63**. Three presets needed Opus-judge rescue (claude-code timed out at 1200s on 200+ findings; rescue via `opencode-gpt5.5-xhigh` ~$0.40–0.50). The Opus-judge fallback shipped in `ultrareview.sh` is the production-hardened version of that rescue.
 
@@ -237,8 +251,8 @@ agents-consilium/
 └── scripts/
     ├── consensus-query.sh           # Parallel dispatch across enabled agents
     ├── code-review.sh               # 2-specialist code review pipeline (single-stage)
-    ├── superreview.sh               # h9 multi-stage: 9 discovery + sonnet judge
-    ├── ultrareview.sh               # h3 multi-stage: 20 discovery + opus judge w/ fallback
+    ├── superreview.sh               # multi-stage: small-swarm + 2 frontier add-ons + sonnet judge
+    ├── ultrareview.sh               # multi-stage: broad-grid + specialists + probe + opus judge (w/ fallback)
     ├── code_review_validate.py      # Parses findings, validates quoted-code, renders XML/markdown
     ├── common.sh                    # Shared role prompts, exit codes, helpers
     ├── config.sh                    # JSON config loader (Python-backed)
