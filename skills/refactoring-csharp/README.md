@@ -16,6 +16,26 @@ Windows PowerShell:
 irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
 ```
 
+Default install targets Codex and Claude Code. Install to a specific agent:
+
+```bash
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash -s -- --agent cursor
+```
+
+```powershell
+iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1) } -Agent cursor"
+```
+
+Install to all supported global agent skill directories:
+
+```bash
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash -s -- --all-agents
+```
+
+```powershell
+iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1) } -AllAgents"
+```
+
 Pin a release:
 
 ```bash
@@ -38,6 +58,24 @@ irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refa
 - Safely moves matching type files by default so git can detect a rename.
 - Uses the target solution's normal MSBuild/Roslyn cache instead of creating a second project cache.
 - Ships source with the skill so agents can build, inspect, patch, and test it locally.
+
+## Supported agents
+
+The installer follows the global skill directories from the Skills CLI ecosystem and supports:
+
+`adal`, `amp`, `antigravity`, `augment`, `claude-code`, `cline`, `codebuddy`,
+`codex`, `command-code`, `continue`, `crush`, `cursor`, `droid`, `gemini-cli`,
+`github-copilot`, `goose`, `iflow-cli`, `junie`, `kilo`, `kimi-cli`, `kiro-cli`,
+`kode`, `mcpjam`, `mistral-vibe`, `mux`, `neovate`, `openclaw`, `opencode`,
+`openhands`, `pi`, `pochi`, `qoder`, `qwen-code`, `replit`, `roo`, `trae`,
+`trae-cn`, `windsurf`, and `zencoder`.
+
+Useful flags:
+
+- `--agent <id>` / `-Agent <id>` installs to one agent. Repeatable in bash.
+- `--all-agents` / `-AllAgents` installs to every supported global skill directory.
+- `--detected` / `-Detected` installs only to agents whose global config directory exists.
+- `--no-binary` / `-NoBinary` installs only the skill source.
 
 ## Use directly
 
