@@ -231,7 +231,7 @@ elseif ($Detected) {
     }
 }
 elseif ($selectedAgents.Count -eq 0) {
-    $selectedAgents = @("codex", "claude-code")
+    $selectedAgents = @("codex", "claude-code", "opencode")
 }
 
 $destinations = [ordered]@{}

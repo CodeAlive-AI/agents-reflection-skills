@@ -24,9 +24,10 @@ Usage:
   install.sh [--agent ID ...] [--all-agents|--detected] [--no-binary] [--source PATH]
 
 Defaults:
-  Installs to Codex and Claude Code global skill directories:
+  Installs to Codex, Claude Code, and OpenCode global skill directories:
     ~/.codex/skills/refactoring-csharp
     ~/.claude/skills/refactoring-csharp
+    ~/.config/opencode/skills/refactoring-csharp
 
 Agent selection:
   --agent codex          Install to one agent. Repeat for multiple agents.
@@ -310,7 +311,7 @@ build_agent_list() {
       fi
     done
   elif [[ ${#selected_agents[@]} -eq 0 ]]; then
-    selected_agents=(codex claude-code)
+    selected_agents=(codex claude-code opencode)
   fi
 }
 

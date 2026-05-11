@@ -16,7 +16,7 @@ Windows PowerShell:
 irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
 ```
 
-Default install targets Codex and Claude Code. Install to a specific agent:
+Default install targets Codex, Claude Code, and OpenCode. Install to a specific agent:
 
 ```bash
 curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash -s -- --agent cursor
