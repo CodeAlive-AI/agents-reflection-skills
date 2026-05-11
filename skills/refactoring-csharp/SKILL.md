@@ -5,16 +5,22 @@ description: Rename and refactor C# symbols in a solution with a one-shot Roslyn
 
 # Refactoring C# Symbols
 
-This skill documents the one-shot Roslyn rename contract used by a C# refactoring CLI.
-It is intentionally one-shot and stateless: one call resolves the target, validates the request,
-and returns either a preview or an applied rename. There is no public prepare step.
+This skill ships a Roslyn-based C# rename CLI in `src/`. It is intentionally one-shot and
+stateless: one call resolves the target, validates the request, and returns either a preview
+or an applied rename. There is no public prepare step.
 
 ## Canonical CLI
 
-Use the current workspace's Roslyn refactoring CLI. The command shape is:
+Run the bundled CLI from the skill directory:
 
 ```bash
-dotnet run --project <rename-cli-project> -- rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=true|false]
+dotnet run --project src/CSharpRefactoring.Cli -- rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=true|false]
+```
+
+When invoked from outside the skill directory, use an absolute project path:
+
+```bash
+dotnet run --project /path/to/refactoring-csharp/src/CSharpRefactoring.Cli -- rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=true|false]
 ```
 
 ## Contract
@@ -46,6 +52,7 @@ dotnet run --project <rename-cli-project> -- rename-symbol <sln> <file> <line> <
 - Do not invent a session or hidden prepare state.
 - Do not ask for a column number. The tool resolves from `file_path`, `line_number`, and `old_name`.
 - `old_name` is mandatory because it disambiguates the target when a line contains more than one renameable identifier.
+- The bundled source requires .NET 10 and restores NuGet packages on first run.
 - If the tool returns a preview, say preview. If it returns applied changes, say applied.
 - Keep responses concise and action-oriented. Tell the user what changed and whether a file move happened.
 

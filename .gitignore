@@ -44,3 +44,7 @@ env/
 
 # Logs
 *.log
+
+# .NET
+**/bin/
+**/obj/

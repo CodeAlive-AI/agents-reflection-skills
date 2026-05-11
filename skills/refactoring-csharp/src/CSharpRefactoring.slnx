@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CSharpRefactoring.Core/CSharpRefactoring.Core.csproj" />
+  <Project Path="CSharpRefactoring.Cli/CSharpRefactoring.Cli.csproj" />
+  <Project Path="CSharpRefactoring.Core.Tests/CSharpRefactoring.Core.Tests.csproj" />
+</Solution>
