@@ -7,45 +7,45 @@ Inspired by ReSharper. A Roslyn-based refactorer for C# solutions (`.sln` / `.sl
 macOS / Linux:
 
 ```bash
-curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
+irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.ps1 | iex
 ```
 
 Default install targets Codex, Claude Code, and OpenCode. Install to a specific agent:
 
 ```bash
-curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash -s -- --agent cursor
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.sh | bash -s -- --agent cursor
 ```
 
 ```powershell
-iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1) } -Agent cursor"
+iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.ps1) } -Agent cursor"
 ```
 
 Install to all supported global agent skill directories:
 
 ```bash
-curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash -s -- --all-agents
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.sh | bash -s -- --all-agents
 ```
 
 ```powershell
-iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1) } -AllAgents"
+iex "& { $(irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.ps1) } -AllAgents"
 ```
 
 Pin a release:
 
 ```bash
 REFACTORING_CSHARP_VERSION=refactoring-csharp-v0.1.0 \
-  curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash
+  curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.sh | bash
 ```
 
 ```powershell
 $env:REFACTORING_CSHARP_VERSION = "refactoring-csharp-v0.1.0"
-irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
+irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install-refactoring-csharp.ps1 | iex
 ```
 
 ## What it does

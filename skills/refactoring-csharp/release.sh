@@ -35,6 +35,8 @@ make_skill_archive() {
 copy_installers() {
   cp "$SKILL_DIR/install.sh" "$DIST_DIR/install.sh"
   cp "$SKILL_DIR/install.ps1" "$DIST_DIR/install.ps1"
+  cp "$SKILL_DIR/install.sh" "$DIST_DIR/install-refactoring-csharp.sh"
+  cp "$SKILL_DIR/install.ps1" "$DIST_DIR/install-refactoring-csharp.ps1"
 }
 
 publish_tar() {
@@ -88,6 +90,8 @@ publish_zip win-x64 win-x64
     refactoring-csharp-skill.tar.gz \
     install.sh \
     install.ps1 \
+    install-refactoring-csharp.sh \
+    install-refactoring-csharp.ps1 \
     csharp-refactor-darwin-arm64.tar.gz \
     csharp-refactor-darwin-x64.tar.gz \
     csharp-refactor-linux-arm64.tar.gz \
