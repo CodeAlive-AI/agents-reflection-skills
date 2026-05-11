@@ -1,0 +1,6 @@
+bin/
+obj/
+TestResults/
+dist/
+*.binlog
+*.trx

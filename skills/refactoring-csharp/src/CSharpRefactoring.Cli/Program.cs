@@ -38,7 +38,7 @@ internal static class Program
 
             string oldName = args[4];
             string newName = args[5];
-            bool dryRun = args.Length < 7 || (bool.TryParse(args[6], out bool parsedDryRun) && parsedDryRun);
+            bool dryRun = args.Length >= 7 && bool.TryParse(args[6], out bool parsedDryRun) && parsedDryRun;
 
             var result = await CSharpSymbolRenamer.Tool.RenameSymbol(
                 solutionPath,
@@ -78,6 +78,6 @@ internal static class Program
     private static void PrintUsage()
     {
         Console.WriteLine("Usage:");
-        Console.WriteLine("  rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=true|false]");
+        Console.WriteLine("  rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=false|true]");
     }
 }

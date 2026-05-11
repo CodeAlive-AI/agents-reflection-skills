@@ -89,12 +89,12 @@ public static class CSharpSymbolRenamer
 
         [McpServerTool, Description("Rename a C# symbol in a solution using file, line, and old symbol name.")]
         public static async Task<RenameResult> RenameSymbol(
-            [Description("Absolute path to .sln file")] string solutionPath,
+            [Description("Absolute path to .sln or .slnx file")] string solutionPath,
             [Description("Absolute path to target document inside that solution")] string filePath,
             [Description("1-based line number")] int lineNumber,
             [Description("Expected current symbol name on the selected line")] string oldName,
             [Description("New symbol name")] string newName,
-            [Description("When true, do not apply changes, return dry-run diff only")] bool dryRun = true,
+            [Description("When true, do not apply changes, return dry-run diff only")] bool dryRun = false,
             [Description("Rename overloads for method symbols as well")] bool renameOverloads = false,
             [Description("Rename identifiers in string literals too")] bool renameInStrings = false,
             [Description("Rename identifiers in comments too")] bool renameInComments = true,
@@ -105,7 +105,7 @@ public static class CSharpSymbolRenamer
             {
                 if (string.IsNullOrWhiteSpace(solutionPath) || !File.Exists(solutionPath))
                 {
-                    return Error("invalid_solution_path", "solutionPath must be an existing .sln file.");
+                    return Error("invalid_solution_path", "solutionPath must be an existing .sln or .slnx file.");
                 }
 
                 if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
@@ -113,9 +113,9 @@ public static class CSharpSymbolRenamer
                     return Error("invalid_file_path", "filePath must be an existing file inside the solution.");
                 }
 
-                if (!string.Equals(Path.GetExtension(solutionPath), ".sln", StringComparison.OrdinalIgnoreCase))
+                if (!IsSupportedSolutionFile(solutionPath))
                 {
-                    return Error("invalid_solution_extension", "solutionPath must have .sln extension.");
+                    return Error("invalid_solution_extension", "solutionPath must have .sln or .slnx extension.");
                 }
 
                 if (lineNumber < 1)
@@ -135,134 +135,157 @@ public static class CSharpSymbolRenamer
 
                 using (CancellationTokenSource cts = CreateCancellationTokenSource(timeoutSeconds))
                 {
-                    using (MSBuildWorkspace workspace = MSBuildWorkspace.Create())
+                    string? solutionDirectory = Path.GetDirectoryName(Path.GetFullPath(solutionPath));
+                    string previousCurrentDirectory = Directory.GetCurrentDirectory();
+                    try
                     {
-                        Solution solution = await workspace.OpenSolutionAsync(solutionPath, cancellationToken: cts.Token);
-                        if (solution is null)
+                        if (!string.IsNullOrWhiteSpace(solutionDirectory))
                         {
-                            return Error("workspace_open_failed", "Could not open solution workspace.");
+                            Directory.SetCurrentDirectory(solutionDirectory);
                         }
 
-                        string normalizedFilePath = Path.GetFullPath(filePath);
-                        Document? doc = FindDocument(solution, normalizedFilePath);
-                        if (doc is null)
+                        using (MSBuildWorkspace workspace = MSBuildWorkspace.Create())
                         {
-                            return Error("file_not_in_solution", "Could not find file in loaded solution documents.");
-                        }
-
-                        (RenameCandidate? candidate, string? errorCode, string? message) =
-                            await ResolveRenameCandidateAsync(doc, lineNumber, oldName, cts.Token);
-
-                        if (candidate is null)
-                        {
-                            return Error(errorCode ?? "invalid_rename_target", message ?? "Cannot determine rename target.");
-                        }
-
-                        if (!CanRenameSymbol(candidate.Symbol))
-                        {
-                            return Error("unsupported_symbol_kind", $"Symbol kind '{candidate.Symbol.Kind}' is not supported for rename.");
-                        }
-
-                        if (!IsSourceSymbol(candidate.Symbol))
-                        {
-                            return Error("symbol_not_in_source", "Can only rename symbols declared in source files.");
-                        }
-
-                        string normalizedCurrentName = NormalizeIdentifierText(candidate.Symbol.Name);
-                        string normalizedNewName = NormalizeIdentifierText(newName);
-                        if (string.Equals(normalizedCurrentName, normalizedNewName, StringComparison.Ordinal))
-                        {
-                            return Error("same_name", "newName is same as current name.");
-                        }
-
-                        string? fileMoveFromPath = null;
-                        string? fileMoveToPath = null;
-                        (fileMoveFromPath, fileMoveToPath) = GetFileRenamePlan(candidate.Document, candidate.Symbol, newName, renameFile);
-
-                        SymbolRenameOptions renameOptions = new(renameOverloads, renameInStrings, renameInComments, false);
-
-                        Solution renamedSolution = await Renamer.RenameSymbolAsync(
-                            solution,
-                            candidate.Symbol,
-                            renameOptions,
-                            newName,
-                            cts.Token);
-
-                        List<ChangedDocument> changed = new();
-                        foreach (Document oldDoc in solution.Projects.SelectMany(project => project.Documents))
-                        {
-                            Document? newDoc = renamedSolution.GetDocument(oldDoc.Id);
-                            if (newDoc is null)
+                            Solution solution = await workspace.OpenSolutionAsync(solutionPath, cancellationToken: cts.Token);
+                            if (solution is null)
                             {
-                                continue;
+                                return Error("workspace_open_failed", "Could not open solution workspace.");
                             }
 
-                            string oldFilePath = oldDoc.FilePath ?? string.Empty;
-                            string newFilePath = newDoc.FilePath ?? oldFilePath;
-                            bool fileMoved = !string.Equals(oldFilePath, newFilePath, StringComparison.OrdinalIgnoreCase);
-                            SourceText oldText = await oldDoc.GetTextAsync(cts.Token);
-                            SourceText newText = await newDoc.GetTextAsync(cts.Token);
-                            int changes = oldText.GetTextChanges(newText).Count();
-                            if (!fileMoved && changes <= 0)
+                            string normalizedFilePath = Path.GetFullPath(filePath);
+                            Document? doc = FindDocument(solution, normalizedFilePath);
+                            if (doc is null)
                             {
-                                continue;
+                                return Error("file_not_in_solution", "Could not find file in loaded solution documents.");
                             }
 
-                            changed.Add(new ChangedDocument
-                            {
-                                FilePath = newFilePath,
-                                Changes = changes
-                            });
+                            (RenameCandidate? candidate, string? errorCode, string? message) =
+                                await ResolveRenameCandidateAsync(doc, lineNumber, oldName, cts.Token);
 
-                            if (fileMoved && string.IsNullOrWhiteSpace(fileMoveFromPath))
+                            if (candidate is null)
                             {
-                                fileMoveFromPath = oldFilePath;
-                                fileMoveToPath = newFilePath;
+                                return Error(errorCode ?? "invalid_rename_target", message ?? "Cannot determine rename target.");
                             }
+
+                            if (!CanRenameSymbol(candidate.Symbol))
+                            {
+                                return Error("unsupported_symbol_kind", $"Symbol kind '{candidate.Symbol.Kind}' is not supported for rename.");
+                            }
+
+                            if (!IsSourceSymbol(candidate.Symbol))
+                            {
+                                return Error("symbol_not_in_source", "Can only rename symbols declared in source files.");
+                            }
+
+                            string normalizedCurrentName = NormalizeIdentifierText(candidate.Symbol.Name);
+                            string normalizedNewName = NormalizeIdentifierText(newName);
+                            if (string.Equals(normalizedCurrentName, normalizedNewName, StringComparison.Ordinal))
+                            {
+                                return Error("same_name", "newName is same as current name.");
+                            }
+
+                            string? fileMoveFromPath = null;
+                            string? fileMoveToPath = null;
+                            (fileMoveFromPath, fileMoveToPath) = GetFileRenamePlan(candidate.Document, candidate.Symbol, newName, renameFile);
+
+                            SymbolRenameOptions renameOptions = new(renameOverloads, renameInStrings, renameInComments, false);
+
+                            Solution renamedSolution = await Renamer.RenameSymbolAsync(
+                                solution,
+                                candidate.Symbol,
+                                renameOptions,
+                                newName,
+                                cts.Token);
+
+                            List<ChangedDocument> changed = new();
+                            foreach (Document oldDoc in solution.Projects.SelectMany(project => project.Documents))
+                            {
+                                Document? newDoc = renamedSolution.GetDocument(oldDoc.Id);
+                                if (newDoc is null)
+                                {
+                                    continue;
+                                }
+
+                                string oldFilePath = oldDoc.FilePath ?? string.Empty;
+                                string newFilePath = newDoc.FilePath ?? oldFilePath;
+                                bool plannedFileMove = !string.IsNullOrWhiteSpace(fileMoveFromPath)
+                                    && !string.IsNullOrWhiteSpace(fileMoveToPath)
+                                    && string.Equals(Path.GetFullPath(oldFilePath), Path.GetFullPath(fileMoveFromPath), StringComparison.OrdinalIgnoreCase);
+                                if (plannedFileMove)
+                                {
+                                    newFilePath = fileMoveToPath!;
+                                }
+
+                                bool fileMoved = plannedFileMove
+                                    || !string.Equals(oldFilePath, newFilePath, StringComparison.OrdinalIgnoreCase);
+                                SourceText oldText = await oldDoc.GetTextAsync(cts.Token);
+                                SourceText newText = await newDoc.GetTextAsync(cts.Token);
+                                int changes = oldText.GetTextChanges(newText).Count();
+                                if (!fileMoved && changes <= 0)
+                                {
+                                    continue;
+                                }
+
+                                changed.Add(new ChangedDocument
+                                {
+                                    FilePath = newFilePath,
+                                    Changes = changes
+                                });
+
+                                if (fileMoved && string.IsNullOrWhiteSpace(fileMoveFromPath))
+                                {
+                                    fileMoveFromPath = oldFilePath;
+                                    fileMoveToPath = newFilePath;
+                                }
+                            }
+
+                            if (changed.Count == 0)
+                            {
+                                return Error("no_changes", "Rename produced no document changes.");
+                            }
+
+                            if (!dryRun)
+                            {
+                                await ApplyRenamedSolutionToDiskAsync(solution, renamedSolution, fileMoveFromPath, fileMoveToPath, cts.Token);
+                            }
+
+                            string resultMessage = dryRun
+                                ? $"Dry-run: '{candidate.Symbol.Name}' -> '{newName}'. {changed.Count} documents would change."
+                                : $"Renamed '{candidate.Symbol.Name}' -> '{newName}'. {changed.Count} documents changed.";
+
+                            if (!string.IsNullOrWhiteSpace(fileMoveFromPath) && !string.IsNullOrWhiteSpace(fileMoveToPath))
+                            {
+                                resultMessage += $" File moved: '{fileMoveFromPath}' -> '{fileMoveToPath}'.";
+                            }
+
+                            RenameResult result = new()
+                            {
+                                Success = true,
+                                Mode = dryRun ? "dry_run" : "applied",
+                                OriginalName = candidate.Symbol.Name,
+                                NewName = newName,
+                                SymbolKind = candidate.Symbol.Kind.ToString(),
+                                SymbolDisplay = candidate.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
+                                FilePath = normalizedFilePath,
+                                FileMoveFromPath = fileMoveFromPath,
+                                FileMoveToPath = fileMoveToPath,
+                                StartLine = candidate.StartLine,
+                                StartColumn = candidate.StartColumn,
+                                EndLine = candidate.EndLine,
+                                EndColumn = candidate.EndColumn,
+                                DryRun = dryRun,
+                                ChangedDocumentCount = changed.Count,
+                                TotalTextChanges = changed.Sum(c => c.Changes),
+                                ChangedDocuments = changed,
+                                Message = resultMessage
+                            };
+
+                            return result;
                         }
-
-                        if (changed.Count == 0)
-                        {
-                            return Error("no_changes", "Rename produced no document changes.");
-                        }
-
-                        if (!dryRun)
-                        {
-                            await ApplyRenamedSolutionToDiskAsync(solution, renamedSolution, fileMoveFromPath, fileMoveToPath, cts.Token);
-                        }
-
-                        string resultMessage = dryRun
-                            ? $"Dry-run: '{candidate.Symbol.Name}' -> '{newName}'. {changed.Count} documents would change."
-                            : $"Renamed '{candidate.Symbol.Name}' -> '{newName}'. {changed.Count} documents changed.";
-
-                        if (!string.IsNullOrWhiteSpace(fileMoveFromPath) && !string.IsNullOrWhiteSpace(fileMoveToPath))
-                        {
-                            resultMessage += $" File moved: '{fileMoveFromPath}' -> '{fileMoveToPath}'.";
-                        }
-
-                        RenameResult result = new()
-                        {
-                            Success = true,
-                            Mode = dryRun ? "dry_run" : "applied",
-                            OriginalName = candidate.Symbol.Name,
-                            NewName = newName,
-                            SymbolKind = candidate.Symbol.Kind.ToString(),
-                            SymbolDisplay = candidate.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
-                            FilePath = normalizedFilePath,
-                            FileMoveFromPath = fileMoveFromPath,
-                            FileMoveToPath = fileMoveToPath,
-                            StartLine = candidate.StartLine,
-                            StartColumn = candidate.StartColumn,
-                            EndLine = candidate.EndLine,
-                            EndColumn = candidate.EndColumn,
-                            DryRun = dryRun,
-                            ChangedDocumentCount = changed.Count,
-                            TotalTextChanges = changed.Sum(c => c.Changes),
-                            ChangedDocuments = changed,
-                            Message = resultMessage
-                        };
-
-                        return result;
+                    }
+                    finally
+                    {
+                        Directory.SetCurrentDirectory(previousCurrentDirectory);
                     }
                 }
             }
@@ -294,7 +317,7 @@ public static class CSharpSymbolRenamer
 
         [Description("Validate and prepare a rename target in a document position.")]
         private static async Task<RenamePrepareResult> PrepareRenameAtPosition(
-            [Description("Absolute path to .sln file")] string solutionPath,
+            [Description("Absolute path to .sln or .slnx file")] string solutionPath,
             [Description("Absolute path to target document inside that solution")] string filePath,
             [Description("1-based line number")] int line,
             [Description("1-based column number")] int column,
@@ -304,7 +327,7 @@ public static class CSharpSymbolRenamer
             {
                 if (string.IsNullOrWhiteSpace(solutionPath) || !File.Exists(solutionPath))
                 {
-                    return ErrorPrepare("invalid_solution_path", "solutionPath must be an existing .sln file.");
+                    return ErrorPrepare("invalid_solution_path", "solutionPath must be an existing .sln or .slnx file.");
                 }
 
                 if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
@@ -312,9 +335,9 @@ public static class CSharpSymbolRenamer
                     return ErrorPrepare("invalid_file_path", "filePath must be an existing file inside the solution.");
                 }
 
-                if (!string.Equals(Path.GetExtension(solutionPath), ".sln", StringComparison.OrdinalIgnoreCase))
+                if (!IsSupportedSolutionFile(solutionPath))
                 {
-                    return ErrorPrepare("invalid_solution_extension", "solutionPath must have .sln extension.");
+                    return ErrorPrepare("invalid_solution_extension", "solutionPath must have .sln or .slnx extension.");
                 }
 
                 if (line < 1 || column < 1)
@@ -437,6 +460,13 @@ public static class CSharpSymbolRenamer
             }
 
             return SyntaxFacts.IsValidIdentifier(newName);
+        }
+
+        private static bool IsSupportedSolutionFile(string solutionPath)
+        {
+            string extension = Path.GetExtension(solutionPath);
+            return string.Equals(extension, ".sln", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(extension, ".slnx", StringComparison.OrdinalIgnoreCase);
         }
 
         private static Document? FindDocument(Solution solution, string normalizedFilePath)

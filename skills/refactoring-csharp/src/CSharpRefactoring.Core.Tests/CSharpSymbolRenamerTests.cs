@@ -1,6 +1,7 @@
 using CSharpRefactoring.Core;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace CSharpRefactoring.Core.Tests;
@@ -244,9 +245,9 @@ public sealed class CSharpSymbolRenamerTests
         }
     }
 
-    private static string LocateTestDataDirectory()
+    private static string LocateTestDataDirectory([CallerFilePath] string callerFilePath = "")
     {
-        DirectoryInfo? directory = new DirectoryInfo(AppContext.BaseDirectory);
+        DirectoryInfo? directory = new DirectoryInfo(Path.GetDirectoryName(callerFilePath) ?? AppContext.BaseDirectory);
         while (directory is not null)
         {
             string candidate = Path.Combine(directory.FullName, TestDataRootFolderName, SampleSolutionFolder);
