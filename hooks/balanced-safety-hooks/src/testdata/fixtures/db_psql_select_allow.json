@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "psql \"$DB\" -c \"SELECT count(*) FROM users\""
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

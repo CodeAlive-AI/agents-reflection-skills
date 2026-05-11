@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "az vm delete -g prod -n web01 --yes"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

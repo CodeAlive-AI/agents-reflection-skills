@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "mongosh --eval 'db.logs.deleteMany({old:true})'"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

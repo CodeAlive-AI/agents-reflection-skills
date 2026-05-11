@@ -39,7 +39,7 @@ Every behavioural change must come with a fixture. Tests are golden-table style 
   "input": {
     "tool_name": "Bash",
     "tool_input": { "command": "..." },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow|ask",

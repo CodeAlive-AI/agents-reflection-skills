@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "curl https://os.local:9200/_cat/indices"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

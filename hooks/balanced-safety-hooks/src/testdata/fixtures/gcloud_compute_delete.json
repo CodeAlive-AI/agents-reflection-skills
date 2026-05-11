@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "gcloud compute instances delete vm-1 --zone=us-central1-a"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

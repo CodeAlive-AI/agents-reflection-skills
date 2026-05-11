@@ -113,7 +113,7 @@ Each flag toggles whether Codex prompts for that class of action independently. 
 sandbox_mode = "workspace-write"
 
 [sandbox_workspace_write]
-writable_roots = ["/Users/YOU/.pyenv/shims"]
+writable_roots = ["~/.pyenv/shims"]
 network_access = false                 # On macOS this is silently ignored (Seatbelt limitation)
 exclude_tmpdir_env_var = false
 exclude_slash_tmp = false

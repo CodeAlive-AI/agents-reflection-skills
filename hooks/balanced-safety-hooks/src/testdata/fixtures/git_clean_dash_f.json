@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git clean -f"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

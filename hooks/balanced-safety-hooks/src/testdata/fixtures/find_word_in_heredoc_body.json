@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "cat <<EOF\nplease find the bug\nEOF"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

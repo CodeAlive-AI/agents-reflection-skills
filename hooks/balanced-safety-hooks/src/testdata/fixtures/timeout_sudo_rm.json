@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "timeout 5 sudo rm -rf /etc/old"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

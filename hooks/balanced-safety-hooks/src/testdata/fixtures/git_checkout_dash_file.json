@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git checkout -- src/main.go"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

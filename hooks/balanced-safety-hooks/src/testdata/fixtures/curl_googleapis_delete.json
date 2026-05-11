@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "curl -X DELETE https://compute.googleapis.com/compute/v1/projects/p/zones/z/disks/d -H \"Authorization: Bearer t\""
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

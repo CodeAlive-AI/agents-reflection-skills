@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git restore --source=HEAD~1 ."
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "curl -X POST https://backboard.railway.com/graphql/v2 -H \"Authorization: Bearer xxx\" -d \"{\\\"query\\\":\\\"mutation { volumeDelete(id: \\\\\\\"v1\\\\\\\") }\\\"}\""
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

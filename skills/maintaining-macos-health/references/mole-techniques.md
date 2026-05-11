@@ -132,7 +132,7 @@ Mole writes every destructive operation to `~/.config/mole/operations.log` and `
 
 ```
 TIMESTAMP\tCOMMAND\tACTION\tPATH\tSIZE\tSTATUS
-2025-01-15 09:12:43\tpurge\tREMOVED\t/Users/.../node_modules\t1.1G\tOK
+2025-01-15 09:12:43\tpurge\tREMOVED\t~/node_modules\t1.1G\tOK
 ```
 
 Adopt the same pattern for hand-rolled cleanups. It's the audit trail when "what did we delete?" comes up later.

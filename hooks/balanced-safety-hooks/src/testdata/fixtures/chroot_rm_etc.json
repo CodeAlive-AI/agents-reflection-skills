@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "chroot /mnt rm -rf /etc"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

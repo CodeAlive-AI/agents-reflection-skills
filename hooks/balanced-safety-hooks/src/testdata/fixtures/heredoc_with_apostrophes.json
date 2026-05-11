@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "cat > /tmp/x <<'EOF'\nWe use find and rm a lot. Don't break.\nEOF"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

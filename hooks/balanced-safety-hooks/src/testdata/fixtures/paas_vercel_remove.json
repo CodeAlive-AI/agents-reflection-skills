@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "vercel remove myproject --yes"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "gcloud projects describe my-proj"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

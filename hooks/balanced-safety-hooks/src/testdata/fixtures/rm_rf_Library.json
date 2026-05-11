@@ -1,13 +1,13 @@
 {
   "name": "rm_rf_Library",
-  "description": "rm -rf /Users/test/Library/<...>",
-  "env": { "HOME": "/Users/test" },
+  "description": "rm -rf /home/example-user/Library/<...>",
+  "env": { "HOME": "/home/example-user" },
   "input": {
     "tool_name": "Bash",
     "tool_input": {
-      "command": "rm -rf /Users/test/Library/Application\\ Support/X"
+      "command": "rm -rf /home/example-user/Library/Application\\ Support/X"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

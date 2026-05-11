@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "psql \"$DB\" -c \"DELETE FROM users WHERE id=1\""
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

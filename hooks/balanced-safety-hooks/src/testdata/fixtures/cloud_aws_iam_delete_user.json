@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "aws iam delete-user --user-name svc"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

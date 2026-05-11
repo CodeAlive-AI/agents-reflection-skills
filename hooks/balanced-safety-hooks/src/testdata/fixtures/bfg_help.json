@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "bfg --help"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

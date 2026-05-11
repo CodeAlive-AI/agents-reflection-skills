@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git reset --hard HEAD~3"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "kubectl apply -f manifest.yaml"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

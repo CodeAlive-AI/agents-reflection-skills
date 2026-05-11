@@ -1,13 +1,13 @@
 {
   "name": "rm_rf_Documents",
-  "description": "rm -rf /Users/test/Documents",
-  "env": { "HOME": "/Users/test" },
+  "description": "rm -rf /home/example-user/Documents",
+  "env": { "HOME": "/home/example-user" },
   "input": {
     "tool_name": "Bash",
     "tool_input": {
-      "command": "rm -rf /Users/test/Documents/important"
+      "command": "rm -rf /home/example-user/Documents/important"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

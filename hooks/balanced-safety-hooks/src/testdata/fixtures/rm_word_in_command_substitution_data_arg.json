@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "echo \"$(date) rm log\""
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

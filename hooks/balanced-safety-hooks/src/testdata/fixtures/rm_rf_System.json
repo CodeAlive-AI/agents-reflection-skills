@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "rm -rf /System/Library/Frameworks/X"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

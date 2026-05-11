@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git push origin main --force-with-lease"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

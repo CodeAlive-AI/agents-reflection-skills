@@ -1,13 +1,13 @@
 {
   "name": "cwd_is_home_rm_dot",
   "description": "cwd is $HOME → cwd subtree DOES NOT contribute",
-  "env": { "HOME": "/Users/test" },
+  "env": { "HOME": "/home/example-user" },
   "input": {
     "tool_name": "Bash",
     "tool_input": {
       "command": "rm -rf node_modules"
     },
-    "cwd": "/Users/test"
+    "cwd": "/home/example-user"
   },
   "expect": {
     "decision": "ask",

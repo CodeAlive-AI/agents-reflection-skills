@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "curl https://compute.googleapis.com/compute/v1/projects/p/zones/z/disks"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

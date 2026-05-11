@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "alembic upgrade head"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

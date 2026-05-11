@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "echo hello && true && rm /tmp/somefile"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

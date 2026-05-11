@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "find ./build -name '*.tmp' -exec rm {} \\;"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

@@ -122,7 +122,7 @@ func decisionFor(in FixtureInput) Decision {
 func BenchmarkEvaluate(b *testing.B) {
 	reg := newRegistry(RmRule{}, SupabaseRule{}, InfraRule{}, PaasRule{}, DbClientRule{}, GitRule{})
 	triggers := reg.triggerSet()
-	env := &RuleEnv{HookCwd: "/Users/test/myproject", SafePaths: NewSafePaths("/Users/test/myproject", nil)}
+	env := &RuleEnv{HookCwd: "/home/example-user/myproject", SafePaths: NewSafePaths("/home/example-user/myproject", nil)}
 
 	b.Run("no_trigger", func(b *testing.B) {
 		cmd := "echo hello && pwd && ls -la /tmp | head -5"

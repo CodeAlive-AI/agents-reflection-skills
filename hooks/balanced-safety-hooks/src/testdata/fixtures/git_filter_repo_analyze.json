@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git filter-repo --analyze"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

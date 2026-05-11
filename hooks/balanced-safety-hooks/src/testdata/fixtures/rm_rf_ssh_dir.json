@@ -1,13 +1,13 @@
 {
   "name": "rm_rf_ssh_dir",
-  "description": "rm -rf /Users/test/.ssh",
-  "env": { "HOME": "/Users/test" },
+  "description": "rm -rf /home/example-user/.ssh",
+  "env": { "HOME": "/home/example-user" },
   "input": {
     "tool_name": "Bash",
     "tool_input": {
-      "command": "rm -rf /Users/test/.ssh"
+      "command": "rm -rf /home/example-user/.ssh"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

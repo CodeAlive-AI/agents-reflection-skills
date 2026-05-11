@@ -266,9 +266,9 @@ func versionString() string {
 func runSelfTest() {
 	cases := []struct{ name, cmd, cwd string }{
 		{"FP-1 heredoc with apostrophes", "cat > /tmp/x <<'EOF'\nWe use find and rm a lot. Don't break.\nEOF", "/tmp"},
-		{"FP-2 rm in /tmp", "cd /tmp && rm -rf ci-results && mkdir ci-results", "/Users/test/myproject"},
-		{"catastrophic /etc", "rm -rf /etc/nginx", "/Users/test/myproject"},
-		{"safe cwd subdir", "rm -rf node_modules", "/Users/test/myproject"},
+		{"FP-2 rm in /tmp", "cd /tmp && rm -rf ci-results && mkdir ci-results", "/home/example-user/myproject"},
+		{"catastrophic /etc", "rm -rf /etc/nginx", "/home/example-user/myproject"},
+		{"safe cwd subdir", "rm -rf node_modules", "/home/example-user/myproject"},
 	}
 	reg := newRegistry(RmRule{})
 	triggers := reg.triggerSet()

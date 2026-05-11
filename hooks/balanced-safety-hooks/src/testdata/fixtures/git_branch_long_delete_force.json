@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git branch --delete --force feature"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",

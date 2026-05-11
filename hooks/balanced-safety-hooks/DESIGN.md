@@ -1,14 +1,14 @@
 # Optimal Safety Hooks for Claude Code — Design Doc
 
 **Status**: v3, post-consilium + Go switch. Approved for implementation.
-**Author**: rodio (with Claude Opus 4.7)
+**Author**: project maintainer (with Claude Opus 4.7)
 **Date**: 2026-05-03
 **Target**: Replace `~/.claude/hooks/validate-rm.py` and `~/.claude/hooks/safety-net-ask.sh` with a single, well-tested, false-positive-resistant Bash safety hook.
 
 **Changelog**:
 - v1 — initial Python + tree-sitter-bash design.
 - v2 — consilium (Codex gpt-5.5 + OpenCode/Gemini-3.1-Pro) addressed 5 P0/P1 must-fixes: untrusted project configs, macOS bash binary selection, executor unwrapping, asymmetric fail-open, robust assertions.
-- v3 — switched runtime to Go + [mvdan.cc/sh](https://github.com/mvdan/sh) per rodio's perf concern. Single static binary, build-on-stale wrapper for hot-reload editing.
+- v3 — switched runtime to Go + [mvdan.cc/sh](https://github.com/mvdan/sh) per project maintainer's perf concern. Single static binary, build-on-stale wrapper for hot-reload editing.
 - v3.1 — dropped the bash wrapper after measuring 80 ms per-invocation overhead from `go build` no-op. settings.json now points directly at `bash_guard.bin`; rebuilds are explicit (`make build` or `make watch`). End-to-end latency 0-10 ms warm.
 - v3.2 — phases 0/1/2 collapsed in one go: shipped `rule_supabase.go`, `rule_bw.go`, `rule_infra.go`, ran `install.sh --live --replace-legacy`. Bash hook chain reduced from 7 entries to 1; 92 fixtures (~30 of them on the new rules) all green.
 
@@ -53,7 +53,7 @@ Root causes: brittle parser (shlex breaks on heredocs), trigger keywords matched
 Source lives in the `ai-driven-development` repo (under `hooks/balanced-safety-hooks/`); deployed via symlink to `~/.claude/hooks/bash-guard/` so edits in git pick up live (build-on-stale wrapper rebuilds on next invocation).
 
 ```
-my-projects/ai-driven-development/hooks/balanced-safety-hooks/
+path/to/ai-driven-development/hooks/balanced-safety-hooks/
 ├── DESIGN.md                # this file
 ├── README.md                # short user-facing intro
 ├── install.sh               # idempotent installer (symlinks src/ + writes settings.json)
@@ -241,7 +241,7 @@ No deny tier anywhere. Compile-time invariant: the type only allows `"allow"` an
     "hookEventName": "PreToolUse",
     "permissionDecision": "ask",
     "permissionDecisionReason": "[rm] target /etc resolves outside safe paths",
-    "additionalContext": "code:rm.outside_safe_path target=/etc safe_paths=/Users/test/myproject,/tmp,/var/tmp,$TMPDIR,~/.cache"
+    "additionalContext": "code:rm.outside_safe_path target=/etc safe_paths=/home/example-user/myproject,/tmp,/var/tmp,$TMPDIR,~/.cache"
   }
 }
 ```
@@ -356,7 +356,7 @@ Standard Go testing. Golden-table fixtures under `testdata/fixtures/`:
   "input": {
     "tool_name": "Bash",
     "tool_input": { "command": "cd /tmp && rm -rf ci-results && mkdir ci-results" },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",
@@ -529,14 +529,14 @@ Per-project configs at `<repo>/.claude/bash-guard.toml` are NOT auto-loaded. The
 
 ```toml
 [[trusted]]
-root = "/Users/test/myproject"
+root = "/home/example-user/myproject"
 # extra safe paths to honour from this project's config (else the per-project config is ignored entirely)
 honor_safe_paths = true
 honor_catastrophic_overrides = false   # NEVER allow projects to relax catastrophic rules
 ```
 
 2. Even trusted project configs cannot:
-   - Add safe paths outside the project root (`/etc`, `/`, `/Users/other-user`, etc. — rejected with stderr warning).
+   - Add safe paths outside the project root (`/etc`, `/`, `/home/other-user`, etc. — rejected with stderr warning).
    - Disable catastrophic-paths protection.
    - Disable rules that aren't already in the global `disabled` list.
 

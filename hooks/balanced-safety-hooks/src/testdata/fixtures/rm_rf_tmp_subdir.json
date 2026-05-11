@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "cd /tmp && rm -rf ci-results && mkdir ci-results"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "allow",

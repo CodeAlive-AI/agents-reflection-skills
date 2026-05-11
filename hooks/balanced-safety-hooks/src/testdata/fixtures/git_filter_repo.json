@@ -6,7 +6,7 @@
     "tool_input": {
       "command": "git filter-repo --invert-paths --path secret.env"
     },
-    "cwd": "/Users/test/myproject"
+    "cwd": "/home/example-user/myproject"
   },
   "expect": {
     "decision": "ask",
