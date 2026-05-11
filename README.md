@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  An umbrella collection of 19 skills + 1 hook that work across <strong>Claude Code, Codex CLI, OpenCode, Cursor, Gemini CLI, Antigravity</strong>, and any other agent that supports the <a href="https://agentskills.io">Agent Skills</a> standard.
+  An umbrella collection of 20 skills + 1 hook that work across <strong>Claude Code, Codex CLI, OpenCode, Cursor, Gemini CLI, Antigravity</strong>, and any other agent that supports the <a href="https://agentskills.io">Agent Skills</a> standard.
 </p>
 
 ---
@@ -23,7 +23,7 @@
 **Via Skills CLI** (recommended — works in 12+ agents):
 
 ```bash
-# Install all 19 skills
+# Install all 20 skills
 npx skills add CodeAlive-AI/ai-driven-development
 
 # Or pick a single skill
@@ -58,7 +58,7 @@ Meta-skills that let AI coding agents configure themselves. No more editing conf
 | [plugins-management](skills/plugins-management/) | Package and publish plugins for Claude Code and OpenCode (validate, scaffold, submit to Anthropic's directory) |
 | [optimizing-claude-code](skills/optimizing-claude-code/) | Audit repos and optimise CLAUDE.md for agent work |
 
-### Engineering practices (4)
+### Engineering practices (5)
 
 Disciplined approaches that improve how agents and humans collaborate on code.
 
@@ -68,6 +68,7 @@ Disciplined approaches that improve how agents and humans collaborate on code.
 | [fpf-problem-solving](skills/fpf-problem-solving/) | First Principles Framework — a transdisciplinary "operating system for thought". Decompose cross-domain problems, audit conclusions, and reason rigorously about complex systems. Based on Anatoly Levenchuk's [FPF](https://github.com/ailev/FPF) |
 | [bug-fix-protocol](skills/bug-fix-protocol/) | 8-step bug-fix protocol. Treats every production bug as **two** failures (the code defect + the testing system that allowed it through) and enforces a step-8 audit that closes the gap |
 | [investigating-repository-history](skills/investigating-repository-history/) | Reconstruct historical intent before risky edits. Local `git blame`/`log` + GitHub PR/review evidence (via `gh`, never direct API), with squash/rebase/cherry-pick/rename/revert anomaly handling, decision-atom extraction, and confidence-scored output — produces a cited history note instead of guessing |
+| [refactoring-csharp](skills/refactoring-csharp/) | One-shot Roslyn contract for renaming C# symbols from `file + 1-based line + oldName`, with dry-run preview, safe file moves for supported named types, and explicit error codes |
 
 ### Research & docs (3)
 
@@ -138,6 +139,7 @@ ai-driven-development/
 │   ├── optimizing-claude-code/
 │   ├── plugins-management/
 │   ├── prompt-engineering/
+│   ├── refactoring-csharp/
 │   ├── repo-explorer/
 │   ├── semantic-scholar-deep/
 │   ├── settings-management/
