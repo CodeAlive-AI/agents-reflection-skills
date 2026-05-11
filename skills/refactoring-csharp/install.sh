@@ -100,13 +100,13 @@ install_skill_archive() {
   local tag="$1" dest="$2"
   local tmp
   tmp="$(mktemp -d)"
-  trap 'rm -rf "$tmp"' RETURN
 
   curl -fsSL "https://github.com/${REPO}/releases/download/${tag}/${SKILL_ASSET}" \
     -o "$tmp/${SKILL_ASSET}"
   rm -rf "$dest"
   mkdir -p "$dest"
   tar -xzf "$tmp/${SKILL_ASSET}" -C "$dest" --strip-components=1
+  rm -rf "$tmp"
 }
 
 install_binary() {
@@ -121,7 +121,6 @@ install_binary() {
   fi
 
   tmp="$(mktemp -d)"
-  trap 'rm -rf "$tmp"' RETURN
   base="https://github.com/${REPO}/releases/download/${tag}"
   archive="$tmp/$asset"
 
@@ -150,6 +149,7 @@ install_binary() {
 
   mv "$tmp/$binary_name" "$dest/bin/$binary_name"
   chmod +x "$dest/bin/$binary_name"
+  rm -rf "$tmp"
 }
 
 main() {
