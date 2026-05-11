@@ -7,25 +7,25 @@ Inspired by ReSharper. A Roslyn-based refactorer for C# solutions (`.sln` / `.sl
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/skills/refactoring-csharp/install.sh | bash
+curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/skills/refactoring-csharp/install.ps1 | iex
+irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
 ```
 
 Pin a release:
 
 ```bash
 REFACTORING_CSHARP_VERSION=refactoring-csharp-v0.1.0 \
-  curl -fsSL https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/skills/refactoring-csharp/install.sh | bash
+  curl -fsSL https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.sh | bash
 ```
 
 ```powershell
 $env:REFACTORING_CSHARP_VERSION = "refactoring-csharp-v0.1.0"
-irm https://raw.githubusercontent.com/CodeAlive-AI/ai-driven-development/main/skills/refactoring-csharp/install.ps1 | iex
+irm https://github.com/CodeAlive-AI/ai-driven-development/releases/download/refactoring-csharp-v0.1.0/install.ps1 | iex
 ```
 
 ## What it does
