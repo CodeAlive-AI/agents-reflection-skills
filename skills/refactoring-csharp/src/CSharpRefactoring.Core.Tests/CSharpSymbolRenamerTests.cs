@@ -1,4 +1,5 @@
 using CSharpRefactoring.Core;
+using CSharpRefactoring.Cli;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,35 @@ public sealed class CSharpSymbolRenamerTests
     private const string SampleSolutionFolder = "SampleRenameDemo";
     private const string SampleSolutionFile = "SampleRenameDemo.sln";
     private const string SampleProgramFile = "Program.cs";
+
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("true", true)]
+    [InlineData("false", false)]
+    [InlineData("dryRun=true", true)]
+    [InlineData("dryRun=false", false)]
+    [InlineData("--dry-run", true)]
+    [InlineData("--dry-run=true", true)]
+    [InlineData("--dry-run=false", false)]
+    [InlineData("--no-dry-run", false)]
+    public void TryParseDryRunArgument_AcceptsDocumentedForms(string? argument, bool expectedDryRun)
+    {
+        bool parsed = Program.TryParseDryRunArgument(argument, out bool dryRun, out string? error);
+
+        Assert.True(parsed);
+        Assert.Null(error);
+        Assert.Equal(expectedDryRun, dryRun);
+    }
+
+    [Fact]
+    public void TryParseDryRunArgument_RejectsInvalidValue_InsteadOfApplying()
+    {
+        bool parsed = Program.TryParseDryRunArgument("dryRun=maybe", out bool dryRun, out string? error);
+
+        Assert.False(parsed);
+        Assert.False(dryRun);
+        Assert.Contains("Invalid dryRun argument", error);
+    }
 
     [Fact]
     public async Task RenameSymbol_DryRun_ReportsExpectedChanges_ForProperty()

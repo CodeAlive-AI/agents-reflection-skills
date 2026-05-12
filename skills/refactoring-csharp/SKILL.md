@@ -60,7 +60,7 @@ renames benefit from the project's existing MSBuild/Roslyn design-time build cac
 
 1. Use `rg -n` to locate the symbol and copy the 1-based line number directly.
 2. Call `rename-symbol` once without the `dryRun` argument for normal rename requests. This applies the rename.
-3. Use `dryRun=true` only when the user explicitly asks for preview, when the target is ambiguous, or when the rename is unusually broad/risky and applying immediately would be irresponsible.
+3. Use `dryRun=true` only when the user explicitly asks for preview, when the target is ambiguous, or when the rename is unusually broad/risky and applying immediately would be irresponsible. The CLI also accepts `true`, `--dry-run`, `dryRun=false`, `false`, and `--no-dry-run`; invalid values fail fast and must never silently apply.
 4. Do not run a dry run just because the tool supports it. The tool loads the solution on every call, so preview+apply doubles the cost on large projects.
 5. Summarize the result by reporting the original name, new name, changed document count, total text changes, changed files, and any file move.
 

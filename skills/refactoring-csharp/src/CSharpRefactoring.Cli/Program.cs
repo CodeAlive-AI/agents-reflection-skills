@@ -3,7 +3,7 @@ using System;
 
 namespace CSharpRefactoring.Cli;
 
-internal static class Program
+public static class Program
 {
     public static int Main(string[] args)
     {
@@ -38,7 +38,19 @@ internal static class Program
 
             string oldName = args[4];
             string newName = args[5];
-            bool dryRun = args.Length >= 7 && bool.TryParse(args[6], out bool parsedDryRun) && parsedDryRun;
+            if (args.Length > 7)
+            {
+                Console.WriteLine("Too many arguments.");
+                PrintUsage();
+                return 1;
+            }
+
+            if (!TryParseDryRunArgument(args.Length >= 7 ? args[6] : null, out bool dryRun, out string? dryRunError))
+            {
+                Console.WriteLine(dryRunError);
+                PrintUsage();
+                return 1;
+            }
 
             var result = await CSharpSymbolRenamer.Tool.RenameSymbol(
                 solutionPath,
@@ -79,5 +91,49 @@ internal static class Program
     {
         Console.WriteLine("Usage:");
         Console.WriteLine("  rename-symbol <sln> <file> <line> <oldName> <newName> [dryRun=false|true]");
+    }
+
+    public static bool TryParseDryRunArgument(string? argument, out bool dryRun, out string? error)
+    {
+        dryRun = false;
+        error = null;
+
+        if (string.IsNullOrWhiteSpace(argument))
+        {
+            return true;
+        }
+
+        string value = argument.Trim();
+
+        if (string.Equals(value, "--dry-run", StringComparison.OrdinalIgnoreCase))
+        {
+            dryRun = true;
+            return true;
+        }
+
+        if (string.Equals(value, "--no-dry-run", StringComparison.OrdinalIgnoreCase))
+        {
+            dryRun = false;
+            return true;
+        }
+
+        const string dryRunPrefix = "dryRun=";
+        const string dryRunKebabPrefix = "--dry-run=";
+        if (value.StartsWith(dryRunPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            value = value[dryRunPrefix.Length..];
+        }
+        else if (value.StartsWith(dryRunKebabPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            value = value[dryRunKebabPrefix.Length..];
+        }
+
+        if (bool.TryParse(value, out dryRun))
+        {
+            return true;
+        }
+
+        error = $"Invalid dryRun argument '{argument}'. Use true, false, dryRun=true, dryRun=false, --dry-run, or --no-dry-run.";
+        return false;
     }
 }
